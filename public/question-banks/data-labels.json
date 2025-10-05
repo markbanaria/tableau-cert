@@ -1,0 +1,125 @@
+{
+  "title": "Data Labels",
+  "description": "Master Tableau's data label system for classifying and governing data assets, including certification, data quality warnings, sensitivity labels, and custom categories for enterprise data management.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate-advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What are the four built-in data label categories in Tableau?",
+      "options": [
+        "Certification, Data Quality Warning, Tags, and Permissions",
+        "Certification, Data Quality Warning, Sensitivity, and Custom Categories",
+        "Certified, Deprecated, Stale, and Warning",
+        "Databases, Tables, Columns, and Data Sources"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The four built-in data label categories are: (1) CERTIFICATION—mark trusted assets, (2) DATA QUALITY WARNING—identify problematic data (Deprecated, Stale data, Under maintenance, Warning, Extract/Flow refresh failed), (3) SENSITIVITY—relay data sensitivity information (Sensitive data), (4) CUSTOM CATEGORIES—administrator-defined categories for organizational classification (e.g., Department labels). These categories were introduced across Tableau Cloud and Server versions from 2022-2023.",
+      "difficulty": "intermediate",
+      "tags": ["data-labels", "categories", "certification", "data-quality", "sensitivity"]
+    },
+    {
+      "id": 2,
+      "question": "Which Tableau assets can have data labels applied to them?",
+      "options": [
+        "Only published data sources and workbooks",
+        "Databases, tables, columns (except certification), data sources, flows, virtual connections, and virtual connection tables",
+        "Only external assets like databases and tables",
+        "Any content type including projects, users, and groups"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data labels can be applied to: Databases, Tables, Columns (EXCEPT for certification), Data sources, Flows, Virtual connections, and Virtual connection tables. Column labels were introduced in Tableau Cloud October 2022/Server 2022.3. Note that certification labels cannot be applied to individual columns—only to the other asset types.",
+      "difficulty": "intermediate",
+      "tags": ["data-labels", "assets", "governance", "columns"]
+    },
+    {
+      "id": 3,
+      "question": "What licensing is required to use data labels in Tableau?",
+      "options": [
+        "All data label operations require a Data Management license with no exceptions",
+        "Data Management license required for all operations EXCEPT certification of published data sources",
+        "Data labels are included with all Tableau Cloud and Server licenses",
+        "Only Creator site role users need Data Management licenses"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A DATA MANAGEMENT LICENSE is required for all data label operations EXCEPT for operations related to the CERTIFICATION of published data sources. This means you can certify published data sources without Data Management, but all other labeling operations (data quality warnings, sensitivity labels, custom categories, certifying external assets) require the Data Management license.",
+      "difficulty": "intermediate",
+      "tags": ["data-management", "licensing", "certification", "data-labels"]
+    },
+    {
+      "id": 4,
+      "question": "How do data quality warning labels and sensitivity labels behave with downstream assets?",
+      "options": [
+        "Labels only appear on the asset they're directly applied to",
+        "Labels are inherited by downstream assets—if a table is marked, workbooks using it may show warnings",
+        "Labels propagate only to assets in the same project",
+        "Labels automatically apply to all assets site-wide when set"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data quality warnings and sensitivity labels are INHERITED by downstream assets. For example, if you mark a database table as deprecated, users viewing workbooks based on that table may see a warning. If you mark a table column as sensitive, users authoring workbooks based on that table may see a warning. This inheritance helps ensure data consumers are aware of issues or sensitivity throughout the data lineage. NOTE: Certification labels and custom category labels are NOT inherited.",
+      "difficulty": "advanced",
+      "tags": ["data-labels", "inheritance", "downstream-assets", "lineage"]
+    },
+    {
+      "id": 5,
+      "question": "What permissions are required to add, update, or delete a CERTIFICATION label on an asset?",
+      "options": [
+        "Write permission on the associated asset",
+        "Administrator role, OR project leader/product owner for the project the asset is in",
+        "Creator site role with Save capability",
+        "Any user with View permission on the asset"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To add, update, or delete a CERTIFICATION label: You must be an ADMINISTRATOR, OR you must be a PROJECT LEADER or PRODUCT OWNER for the project the asset is in. For external assets not in a project, you need 'change permissions' permission. This is more restrictive than other labels—non-certification labels only require write permission on the asset. This control ensures certification is managed by authorized governance roles.",
+      "difficulty": "advanced",
+      "tags": ["certification", "permissions", "project-leader", "governance"]
+    },
+    {
+      "id": 6,
+      "question": "What color coding is used for data label indicators?",
+      "options": [
+        "All labels are displayed in blue regardless of category",
+        "Green=Certified, Blue=Standard quality warning, Yellow=High visibility quality warning, Gray=Standard sensitivity/custom, Purple=High visibility sensitivity",
+        "Red=Deprecated, Orange=Warning, Green=Certified, Blue=Sensitive",
+        "Color coding is customizable by administrators"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data label color coding: GREEN=Certified asset, BLUE=Standard visibility quality warning, YELLOW=High visibility quality warning, GRAY=Standard visibility sensitivity label or custom category label, PURPLE=High visibility sensitivity label. High visibility quality warnings and sensitivity labels that affect views/web authoring cause ALERTS to be shown, informing users that data needs to be treated with care.",
+      "difficulty": "intermediate",
+      "tags": ["data-labels", "color-coding", "visibility", "user-interface"]
+    },
+    {
+      "id": 7,
+      "question": "Starting in Tableau Cloud February 2024 and Server 2024.2, how do users manage data labels on assets?",
+      "options": [
+        "Through separate dialogs for each label category",
+        "Using the consolidated Data Labels dialog with vertical tabs for categories and search functionality",
+        "Only through the REST API—no UI is provided",
+        "Via the Data Management page in Tableau settings"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Starting in Tableau Cloud February 2024 and Server 2024.2, the CONSOLIDATED DATA LABELS DIALOG is used to add, remove, and modify labels. Access it via the actions menu (...) > Data Labels. It features: Vertical tabs for categories (All labels, Selected labels, plus each category), Search bar to find labels, Check boxes to select/deselect labels, Visibility levels and messages (where applicable), Save/Cancel to commit or abandon changes. NOTE: This consolidated dialog isn't available in Tableau Server versions before 2024.2.",
+      "difficulty": "intermediate",
+      "tags": ["data-labels-dialog", "user-interface", "tableau-2024", "label-management"]
+    },
+    {
+      "id": 8,
+      "question": "How do data labels differ from tags in Tableau? (Select the most comprehensive difference)",
+      "options": [
+        "Data labels are controlled by administrators with structured categories; tags have no administrative control and are open-ended",
+        "Data labels require Data Management license; tags require no license. Data labels inherit to downstream assets; tags don't inherit",
+        "Data labels have color-coded iconography and inheritance; tags appear in fewer places with no inheritance. Administrators control data label ranges; no control over tag ranges",
+        "All of the above—structure/control, licensing, appearance, and inheritance all differ significantly"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Data labels vs. tags differ across multiple dimensions: STRUCTURE—administrators control data label ranges; no administrative control over tags. PERMISSIONS—data labels controlled by asset permissions; Explorers/Creators can tag any viewable assets. APPEARANCE—data labels have easily seen color-coded iconography; tags appear in fewer places with no iconography. INHERITANCE—some data labels (warnings/sensitivity) show on downstream assets; no tag inheritance. LICENSE—data labels require Data Management (except published data source certification); tags have no license requirements. DATA LABELS = structured governance; TAGS = open-ended categorization.",
+      "difficulty": "advanced",
+      "tags": ["data-labels", "tags", "comparison", "governance", "metadata"]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "title": "Data Security - Practice Questions",
+  "description": "Comprehensive practice questions covering Tableau data security including database authentication, extract encryption at rest, row-level security methods, user filters, data policies, and security best practices for consultant-level certification",
+  "metadata": {
+    "topic": "Data Security",
+    "domain": "domain4",
+    "difficulty": "Mixed (Intermediate to Advanced)",
+    "sourceUrl": "https://help.tableau.com/current/server/en-us/security_data.htm",
+    "relatedTopics": "Overview of Row-Level Security Options in Tableau; Row-Level Security in the Database; Governance in Tableau",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A consultant needs to recommend a row-level security (RLS) solution for a client with Tableau Data Management. The client wants centralized, low-maintenance security that separates security administration from analytics authoring. Which RLS method should the consultant recommend?",
+      "options": [
+        "Manual user filters mapped to values in each workbook",
+        "Dynamic user filters using a security field in the data",
+        "Data policies on virtual connections",
+        "Row-level security built into the database with live connections only"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data policies on virtual connections (available with Data Management license) provide centralized, secure, low-maintenance RLS that separates security and analytics responsibilities. Unlike manual and dynamic user filters, data policies are enforced on the server for every query and don't carry the risk of exposing data if an author neglects to secure permissions properly. Database RLS works but requires existing infrastructure and live connections, while user filters are high-maintenance and require proper permission management.",
+      "difficulty": "intermediate",
+      "tags": ["row-level-security", "data-policies", "virtual-connections", "data-management", "best-practices"]
+    },
+    {
+      "id": "2",
+      "question": "What are the THREE primary authentication modes available when publishing a data source or workbook with a live database connection to Tableau Server?",
+      "options": [
+        "Run As service account, Prompt user for credentials, Embedded credentials",
+        "Windows Authentication only, Database authentication only, OAuth only",
+        "Single sign-on, Multi-factor authentication, Token-based authentication",
+        "Active Directory, LDAP, SAML"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The three primary authentication modes for live database connections are: (1) Run As service account - uses the Tableau Server service account; (2) Prompt user for credentials - viewers enter their database credentials when clicking a view; (3) Embedded credentials - publisher embeds their database credentials. These can be combined with impersonation depending on the database authentication method (Windows vs. built-in). The other options describe authentication protocols or identity providers, not the Tableau publishing authentication modes.",
+      "difficulty": "intermediate",
+      "tags": ["database-authentication", "authentication-modes", "live-connections", "publishing"]
+    },
+    {
+      "id": "3",
+      "question": "An organization wants to enable extract encryption at rest for all extracts on a site. What should a Tableau Server administrator be aware of regarding performance impacts?",
+      "options": [
+        "Encryption has no performance impact; it's handled entirely by the operating system",
+        "There will be a slight to moderate increase in backgrounder load during encryption/decryption operations and initial publishing",
+        "Extract refreshes will fail and must be reconfigured after enabling encryption",
+        "Encryption only affects backup time, not query performance or backgrounder load"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Enabling extract encryption at rest causes a slight to moderate increase in backgrounder load because encryption and decryption are computationally intensive operations. This affects initial publishing, extract refreshes, changing site encryption modes, and key rotation. Additionally, there's a slight increase in viz load time for the first user loading a workbook (data must be decrypted from disk to memory). Backup file sizes may increase 50-100% due to ineffective compression on encrypted data. Extract refreshes continue to work but consume more CPU.",
+      "difficulty": "advanced",
+      "tags": ["extract-encryption", "performance", "backgrounder", "encryption-at-rest", "capacity-planning"]
+    },
+    {
+      "id": "4",
+      "question": "A client is using dynamic user filters with a security field in their data. What is a critical security consideration the consultant must emphasize?",
+      "options": [
+        "Dynamic user filters automatically encrypt all data in transit",
+        "Permissions must be set to prevent users from saving or downloading the workbook/data source, which would allow them to remove the filter and access all data",
+        "Dynamic user filters only work with Tableau Cloud, not Tableau Server",
+        "The USERNAME() function is deprecated and should not be used"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When using dynamic user filters (or manual user filters), it's critical to set permissions so users cannot save, download, or web edit the workbook/data source. If users can do so, they could remove the filter and gain access to all unfiltered data. This is a major security risk. Unlike data policies on virtual connections (which enforce security at the server level), user filters rely on proper permission configuration. Dynamic filters work on both Server and Cloud, and USERNAME() is a standard function for this purpose.",
+      "difficulty": "advanced",
+      "tags": ["dynamic-user-filters", "security-risks", "permissions", "row-level-security", "best-practices"]
+    },
+    {
+      "id": "5",
+      "question": "What is the difference between 'Enable' and 'Enforce' modes for extract encryption at rest at the site level?",
+      "options": [
+        "Enable encrypts existing extracts; Enforce requires manual encryption by users",
+        "Enable allows users to optionally encrypt extracts for specific workbooks/data sources; Enforce automatically encrypts all extracts on the site",
+        "Enable is for Tableau Server; Enforce is for Tableau Cloud only",
+        "There is no functional difference; they are synonyms"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When set to 'Enable', users can choose whether to encrypt extracts for individual published workbooks or data sources, providing flexibility. When set to 'Enforce', all extracts on the site are automatically encrypted, and users cannot opt out. 'Disable' means no extracts are encrypted and will decrypt existing encrypted extracts. Both Enable and Enforce work on Server and Cloud. This site-level setting gives administrators control over the encryption policy based on organizational requirements.",
+      "difficulty": "intermediate",
+      "tags": ["extract-encryption", "site-settings", "encryption-modes", "administration"]
+    },
+    {
+      "id": "6",
+      "question": "Which files and data are NOT encrypted by Tableau's extract encryption at rest feature?",
+      "options": [
+        "All files are encrypted, including workbooks, data sources, and cache files",
+        "Workbooks (.twb), data source files (.tds), temporary files, cache files, and non-extract data files like Excel or JSON",
+        "Only .tde files are not encrypted; all .hyper files are always encrypted",
+        "Only database connection strings are not encrypted"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Extract encryption at rest encrypts .hyper extracts stored on Tableau Server but does NOT encrypt: workbooks (.twb) and data source files (.tds) which contain metadata and potentially filter data; temporary and cache files; and other data files like Excel or JSON unless converted to extracts. Additionally, .tde files must be upgraded to .hyper format before encryption (happens automatically). When extracts are downloaded, they are decrypted. Understanding these limitations is critical for comprehensive data security planning.",
+      "difficulty": "advanced",
+      "tags": ["extract-encryption", "limitations", "file-types", "security-scope"]
+    },
+    {
+      "id": "7",
+      "question": "A client's database has existing row-level security built in. Under what circumstances would it make sense to leverage the database's existing RLS rather than implementing RLS in Tableau?",
+      "options": [
+        "Never; Tableau RLS is always superior to database RLS",
+        "When the organization has already invested in database RLS, needs to apply the same policies to multiple database clients, and can use live connections",
+        "Only when using Tableau Cloud, as Tableau Server cannot leverage database RLS",
+        "When the client wants to use extracts for better performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using existing database RLS makes sense when: (1) the organization has already invested in building RLS in the database, (2) they want to control their data security policy centrally in the database, (3) they need to apply the same security policies to other database clients besides Tableau, and (4) they can use live connections (database RLS typically doesn't work with extracts). Both Server and Cloud can leverage database RLS. The main benefit is centralized administration. However, data policies on virtual connections often provide better integration for Tableau-specific deployments.",
+      "difficulty": "advanced",
+      "tags": ["database-rls", "live-connections", "security-architecture", "centralized-administration"]
+    },
+    {
+      "id": "8",
+      "question": "When should user filters NOT be used with specific authentication modes according to Tableau recommendations?",
+      "options": [
+        "User filters should never be used with any authentication mode",
+        "User filters should not be combined with impersonation authentication modes because it can create unexpected results",
+        "User filters only work with embedded credentials authentication",
+        "User filters require Prompt User authentication mode exclusively"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau recommends NOT using user filters with impersonation authentication modes (impersonate via server Run As service account or impersonate via embedded password) because it can create unexpected results. User filters work well with prompt user or embedded credentials modes. This is important for consultants to understand when designing security architectures that combine database authentication with Tableau-level filtering.",
+      "difficulty": "advanced",
+      "tags": ["user-filters", "authentication-modes", "impersonation", "best-practices", "security-design"]
+    },
+    {
+      "id": "9",
+      "question": "A consultant is advising on row-level security for a proof-of-concept project with an unchanging small group of test users. The client does not have Data Management. Which RLS method would be most appropriate?",
+      "options": [
+        "Data policies on virtual connections",
+        "Manual user filter mapping users to values",
+        "Row-level security in the database",
+        "Dynamic user filters with USERNAME() function"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For a proof-of-concept or testing scenario with a static, unchanging group of users, manual user filters are appropriate despite being high-maintenance at scale. They are simple, easy to understand, and good for testing. Data policies require Data Management license (not available), database RLS may be overkill for a POC, and dynamic filters add unnecessary complexity for a static test group. This is specifically called out in Tableau's RLS decision guide. However, for production deployments, more scalable solutions should be used.",
+      "difficulty": "intermediate",
+      "tags": ["manual-user-filters", "proof-of-concept", "rls-selection", "testing"]
+    },
+    {
+      "id": "10",
+      "question": "An administrator needs to re-encrypt all extracts on a site with new encryption keys (key rotation). What should they expect regarding server resource consumption?",
+      "options": [
+        "Key rotation has minimal impact and can be done during business hours without concern",
+        "Key rotation will significantly increase backgrounder load as all existing extracts must be re-encrypted; consider running outside business hours",
+        "Key rotation only affects new extracts published after the rotation; existing extracts remain encrypted with old keys",
+        "Key rotation automatically pauses all other backgrounder jobs until complete"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Rotating encryption keys requires re-encrypting ALL existing extracts on the site using fresh encryption keys, which may significantly increase backgrounder load depending on the number and size of extracts. Tableau documentation recommends running the reencryptextracts command outside normal business hours due to high server resource consumption. Scheduled extract refreshes take precedence over encryption jobs, but the overall load can still impact performance. This is critical capacity planning knowledge for consultants managing enterprise deployments.",
+      "difficulty": "advanced",
+      "tags": ["key-rotation", "extract-encryption", "capacity-planning", "backgrounder", "maintenance-operations"]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "title": "Collect Data with the Tableau Server Repository",
+  "description": "Master accessing and querying the Tableau Server PostgreSQL repository including enabling repository access, connecting via readonly and tableau users, workgroup database configuration, custom administrative views, and performance monitoring best practices.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the Tableau Server repository and what critical warning must be observed?",
+      "options": [
+        "A MySQL database that can be modified as needed",
+        "A PostgreSQL database storing all user interactions, extract refreshes, and more; CRITICAL: Do not directly modify the repository—doing so can break Tableau Server and make installation unsupportable",
+        "A read-only log file with no modification restrictions",
+        "An XML configuration file that should be edited for customization"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Tableau Server repository is a POSTGRESQL DATABASE that stores data about all USER INTERACTIONS, EXTRACT REFRESHES, and more. You can enable access to the repository and use the data to help analyze and understand Tableau Server performance. CRITICAL WARNING: Do NOT DIRECTLY MODIFY the repository. Doing so can BREAK TABLEAU SERVER. Any customer modifications of the repository will make your installation UNSUPPORTABLE by Tableau. Access should be read-only for analysis purposes only.",
+      "difficulty": "advanced",
+      "tags": ["repository-overview", "postgresql", "critical-warning", "unsupported-modifications"]
+    },
+    {
+      "id": 2,
+      "question": "What are the two built-in users available for querying the Tableau Server repository, and which is recommended?",
+      "options": [
+        "admin and user; admin is recommended",
+        "tableau (access to views with underscore or hist_ prefix) and readonly (access to additional tables); readonly is recommended",
+        "root and guest; root is recommended",
+        "superuser and viewer; superuser is recommended"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Two built-in users for querying the repository: (1) User named 'TABLEAU'—has access to several DATABASE VIEWS you can use for building analyses of server activity; (2) User named 'READONLY'—has access to ADDITIONAL DATABASE TABLES you can use to create views for even more IN-DEPTH ANALYSIS. The 'READONLY' user is the RECOMMENDED user to use. The 'tableau' user can access tables starting with UNDERSCORE (_) or HIST_ (like _background_tasks, _datasources, hist_ tables with user information).",
+      "difficulty": "advanced",
+      "tags": ["repository-users", "tableau-user", "readonly-user", "access-levels"]
+    },
+    {
+      "id": 3,
+      "question": "What command enables repository access and creates a password for the readonly user?",
+      "options": [
+        "tsm configure repository --enable",
+        "tsm data-access repository-access enable --repository-username readonly --repository-password <PASSWORD>",
+        "psql -U readonly -W",
+        "tableau-server enable-repository"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To enable repository access and create a readonly user password, use: `tsm data-access repository-access enable --repository-username readonly --repository-password <PASSWORD>`. If your password includes SPECIAL CHARACTERS, then you must ENCLOSE THE PASSWORD IN DOUBLE QUOTES. IMPORTANT: This command will RESTART TABLEAU SERVER. To disable remote access later, use `tsm data-access repository-access disable` (this disables external access but not localhost access).",
+      "difficulty": "advanced",
+      "tags": ["tsm-commands", "enable-repository", "password-configuration", "restart-required"]
+    },
+    {
+      "id": 4,
+      "question": "What port must be opened for remote connections to the Tableau Server repository?",
+      "options": [
+        "Port 3306 (MySQL default)",
+        "Port 8060 (pgsql.port default)",
+        "Port 5432 (PostgreSQL default)",
+        "Port 80 (HTTP)"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You may need to have PORT 8060 opened on the REPOSITORY NODE so you can connect to the database remotely. Before enabling repository access, verify that port 8060 is opened on the computer where the repository is installed—this is a REQUIREMENT if you are connecting remotely. When connecting via Tableau Desktop, you specify the port in the connection (default pgsql.port is 8060).",
+      "difficulty": "intermediate",
+      "tags": ["port-configuration", "remote-connection", "pgsql-port", "network-access"]
+    },
+    {
+      "id": 5,
+      "question": "When connecting to the Tableau Server repository from Tableau Desktop, what database name must be specified?",
+      "options": [
+        "tableau",
+        "workgroup",
+        "repository",
+        "postgres"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When connecting to the Tableau Server repository from Tableau Desktop: (1) Select Data > Connect to Data, then select POSTGRESQL; (2) Enter the name or URL for Tableau Server (for distributed installations, enter the name or IP address of the node where the repository is hosted); (3) Connect using port 8060 (default for pgsql.port); (4) Specify 'WORKGROUP' as the DATABASE to connect to; (5) Connect using the user and password you specified. Note: You might need to install PostgreSQL database drivers from www.tableau.com/support/drivers.",
+      "difficulty": "intermediate",
+      "tags": ["connection-setup", "workgroup-database", "tableau-desktop", "postgresql-connection"]
+    },
+    {
+      "id": 6,
+      "question": "What are custom administrative views and what are they used for?",
+      "options": [
+        "Built-in Tableau Server views that cannot be customized",
+        "Views created with data from the repository (using custom queries of PostgreSQL tables); used for performance monitoring, tracking user activity, workbook activity, and more",
+        "Views created only by Tableau Support",
+        "Temporary views that exist only during a session"
+      ],
+      "correctAnswer": 1,
+      "explanation": "After you enable access to the Tableau Server repository, you can create views with data from the repository. The views that you create with this data are sometimes called CUSTOM ADMINISTRATIVE VIEWS. In addition to being used for PERFORMANCE MONITORING, custom admin views can be used for tracking USER ACTIVITY, WORKBOOK ACTIVITY, and more. You can create these by querying database tables described in the Tableau Server Data Dictionary, or use the preselected database tables in the sample performance workbook.",
+      "difficulty": "intermediate",
+      "tags": ["custom-admin-views", "performance-monitoring", "user-tracking", "repository-queries"]
+    },
+    {
+      "id": 7,
+      "question": "Which tables can the 'tableau' user access in the repository?",
+      "options": [
+        "All tables without restriction",
+        "Tables that start with an underscore (_) or with hist_ prefix (e.g., _background_tasks, _datasources, hist_ tables)",
+        "Only system tables",
+        "Only performance-related tables"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The 'TABLEAU' user has access to all of the tables that start with an UNDERSCORE (_) or with 'HIST_'. For example, you can connect to '_background_tasks' and '_datasources'. The 'HIST_' tables include information about SERVER USERS that isn't currently presented in the Actions by Specific User view. The 'READONLY' user has access to ADDITIONAL TABLES that can be used to query other information about server usage, which is why readonly is recommended for more comprehensive analysis.",
+      "difficulty": "advanced",
+      "tags": ["tableau-user", "table-access", "underscore-tables", "hist-tables"]
+    },
+    {
+      "id": 8,
+      "question": "When should you click the 'Require SSL' option when connecting to the repository?",
+      "options": [
+        "Always—it's required for all connections",
+        "If you have configured Tableau Server to use SSL for connecting to the repository",
+        "Never—SSL is not supported for repository connections",
+        "Only for connections from outside the network"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Click the 'Require SSL' option in the PostgreSQL connection dialog IF YOU HAVE CONFIGURED TABLEAU SERVER TO USE SSL for connecting to the repository. This is an optional security configuration. For more information about configuring SSL for repository connections, see the documentation on 'Configure Postgres SSL to Allow Direct Connections from Clients.' SSL adds encryption to the connection between Tableau Desktop and the repository.",
+      "difficulty": "intermediate",
+      "tags": ["ssl-configuration", "security", "encrypted-connections", "postgres-ssl"]
+    },
+    {
+      "id": 9,
+      "question": "How can you determine the version of PostgreSQL used by Tableau Server?",
+      "options": [
+        "It's always the latest PostgreSQL version",
+        "Two methods: (1) Task Manager > Details tab > right-click postgres.exe > Properties, or (2) Connect to workgroup database and run query: select version()",
+        "Only through Tableau Support",
+        "Check the Tableau Server installation logs"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To find the PostgreSQL version used by Tableau Server, use one of these methods: METHOD 1: (1) Log into Tableau Server directly or through remote connection; (2) Launch Task Manager; (3) Click the Details tab; (4) Right-click one of the postgres.exe processes and select Properties to see the version. METHOD 2: Connect to the workgroup database and issue the query: `select version()`. Knowing the PostgreSQL version is important for compatibility and troubleshooting.",
+      "difficulty": "intermediate",
+      "tags": ["postgresql-version", "task-manager", "version-query", "troubleshooting"]
+    },
+    {
+      "id": 10,
+      "question": "For distributed Tableau Server installations, what connection detail is critical when connecting to the repository?",
+      "options": [
+        "Use any server node—they all host the repository",
+        "Enter the name or IP address of the NODE WHERE THE REPOSITORY IS HOSTED (not just any server in the deployment)",
+        "Always use localhost regardless of the node",
+        "Connect through a load balancer URL"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In the PostgreSQL connection dialog box, enter the name or URL for Tableau Server in the Server box. IMPORTANT: If you have a DISTRIBUTED SERVER INSTALLATION, enter the NAME OR IP ADDRESS of the NODE WHERE THE REPOSITORY IS HOSTED (not just any node in the deployment). The repository is hosted on a specific node in distributed deployments, and you must connect directly to that node. Connect using the port you have set up for the pgsql.port (8060 by default).",
+      "difficulty": "advanced",
+      "tags": ["distributed-deployment", "repository-node", "connection-details", "multi-node"]
+    }
+  ]
+}

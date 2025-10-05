@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "title": "About Tableau Catalog",
+    "description": "Comprehensive question bank covering Tableau Catalog features, metadata management, data governance, lineage tracking, permissions, and enterprise implementation strategies for Tableau Consultant certification.",
+    "questionCount": 10,
+    "domain": "Domain 1: Tableau Products",
+    "difficulty": "Consultant Level",
+    "tags": ["Tableau Catalog", "Data Governance", "Metadata Management", "Lineage", "Enterprise Implementation", "Data Quality", "Permissions"]
+  },
+  "questions": [
+    {
+      "id": "tc_001",
+      "question": "As a Tableau consultant implementing Tableau Catalog for a large financial enterprise with strict data governance requirements, you need to configure metadata permissions that ensure sensitive customer data lineage is only visible to specific compliance teams while allowing broader access to general business metrics. What is the most appropriate approach to achieve this granular permission structure?",
+      "options": [
+        "A) Disable derived permissions globally and manually assign View and Overwrite capabilities to individual users for each external asset",
+        "B) Create separate projects for sensitive and non-sensitive data sources, then use project-based permission inheritance with selective explicit permission overrides for compliance teams",
+        "C) Enable obfuscation for all lineage data and rely on role-based access control through Tableau Server groups",
+        "D) Use the Metadata API to programmatically filter sensitive information before it's indexed by Catalog"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The most scalable and maintainable approach for enterprise environments is to leverage project-based organization with selective overrides. This allows you to use Tableau's hierarchical permission model effectively while maintaining granular control where needed. Option B provides the best balance of automation (through derived permissions within projects) and control (through explicit overrides for sensitive data). Option A would be too manual and difficult to maintain at scale. Option C doesn't provide the required granularity. Option D is not how Catalog permissions work - filtering must be done through the permission system, not the API.",
+      "topic": "Metadata Permissions and Enterprise Governance",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_002",
+      "question": "A multinational corporation is experiencing performance issues with Tableau Catalog indexing, frequently seeing 'Showing partial results' messages. The organization has over 50,000 workbooks across multiple sites and complex data source relationships. As the consulting architect, what combination of strategies would you recommend to optimize Catalog performance while maintaining comprehensive metadata coverage?",
+      "options": [
+        "A) Increase server memory allocation and implement a phased content migration strategy to distribute indexing load",
+        "B) Disable Catalog on high-volume sites and rely on REST API metadata methods for critical lineage tracking",
+        "C) Implement content lifecycle management to archive unused workbooks and establish indexing priority tiers based on business criticality",
+        "D) Configure multiple Tableau Server nodes with dedicated Catalog indexing processes and load balancing"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Option C addresses the root cause of the performance issue by reducing the total volume of content that needs to be indexed while ensuring business-critical content receives priority. Content lifecycle management helps maintain a healthier Tableau environment overall, and establishing priority tiers ensures that the most important metadata is always available. Option A only addresses symptoms temporarily. Option B defeats the purpose of having Catalog. Option D misunderstands how Catalog indexing works - it's not a distributed process that can be load balanced across nodes in the way described.",
+      "topic": "Catalog Performance Optimization",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "tc_003",
+      "question": "An organization wants to implement automated data quality monitoring using Tableau Catalog's monitoring warnings feature. They need to ensure that when extract refresh failures occur, appropriate stakeholders are notified, and downstream impact is assessed. Which implementation approach provides the most comprehensive enterprise solution?",
+      "options": [
+        "A) Configure site-wide monitoring warnings and use Tableau's built-in email notification system for alerts",
+        "B) Implement asset-level monitoring warnings combined with custom notification workflows using the Tableau REST API and impact analysis through lineage tracking",
+        "C) Set up manual data quality warnings on critical data sources and establish a daily review process",
+        "D) Use Tableau Server's built-in monitoring tools exclusively and configure alerts through Administrative Views"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides the most comprehensive solution by combining automated monitoring at the asset level with custom notification workflows and impact analysis. This approach allows for targeted notifications to specific stakeholders based on the assets affected, and enables proactive impact assessment using Catalog's lineage capabilities. Option A is too broad and doesn't provide targeted notifications. Option C relies on manual processes that don't scale. Option D doesn't leverage Catalog's specific capabilities for data quality management and impact analysis.",
+      "topic": "Data Quality Monitoring and Impact Analysis",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_004",
+      "question": "A healthcare organization needs to implement Tableau Catalog while ensuring HIPAA compliance. They require that certain database connections and their associated lineage information remain completely hidden from most users, even those with administrative privileges on specific projects. What is the correct approach to achieve this requirement?",
+      "options": [
+        "A) Use Tableau's row-level security features to filter metadata based on user attributes",
+        "B) Create a separate Tableau Server instance for sensitive data and exclude it from Catalog indexing",
+        "C) Configure external asset permissions to deny access to sensitive connections and use obfuscation features for lineage data",
+        "D) Implement custom metadata filtering through the Metadata API before data reaches Catalog"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Option C is the correct approach because Tableau Catalog provides specific features for this use case through external asset permissions and lineage obfuscation. These features are designed to handle exactly this scenario where certain data sources and their lineage must be hidden for compliance reasons. Option A confuses content security with metadata security. Option B creates unnecessary infrastructure complexity. Option D misunderstands how Catalog works - the API is for querying metadata, not filtering what gets indexed.",
+      "topic": "Compliance and Security in Catalog Implementation",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "tc_005",
+      "question": "As a consultant designing a Tableau Catalog implementation strategy for a company transitioning from multiple BI tools to Tableau, you need to establish data governance practices that leverage Catalog's certification and labeling features. The organization has varying levels of data quality and wants to implement a trust framework. What is the most effective approach?",
+      "options": [
+        "A) Implement a binary certification system (certified/not certified) and use custom labels for data source categories",
+        "B) Create a multi-tier certification framework (Bronze/Silver/Gold) combined with data quality warnings and sensitivity labels for comprehensive data asset classification",
+        "C) Use only data quality warnings to indicate issues and rely on user training for trust assessment",
+        "D) Implement certification only after all data sources have been fully validated and cleaned"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides the most comprehensive and practical approach for an organization with varying data quality levels. A multi-tier certification system allows for nuanced trust levels while data quality warnings address specific issues. Sensitivity labels add another dimension for compliance and governance. This approach provides users with multiple signals about data trustworthiness and allows for progressive improvement. Option A is too simplistic for complex enterprise needs. Option C doesn't provide clear trust signals. Option D would delay implementation indefinitely in most real-world scenarios.",
+      "topic": "Data Governance Framework Design",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_006",
+      "question": "A retail organization with seasonal data patterns wants to use Tableau Catalog to manage data freshness expectations. They have daily, weekly, and monthly reporting cycles with different stakeholder expectations. How should they implement data quality warnings to effectively communicate data freshness across these different patterns?",
+      "options": [
+        "A) Set uniform 'stale data' warnings based on the most frequent update cycle",
+        "B) Create custom data quality warning types through the label manager that reflect different freshness expectations (Daily-Fresh, Weekly-Current, Monthly-Updated)",
+        "C) Use only monitoring warnings triggered by extract refresh failures",
+        "D) Implement a manual review process where business users set appropriate warnings based on their needs"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B leverages Tableau Catalog's custom label manager feature (available since Tableau Cloud June 2023) to create meaningful, context-specific data quality indicators. This approach allows the organization to set appropriate expectations for different types of data and reporting cycles, providing clear communication to users about what 'fresh' means for each data source. Option A doesn't account for legitimate variations in update cycles. Option C only addresses failures, not normal freshness expectations. Option D lacks consistency and puts too much burden on business users.",
+      "topic": "Custom Data Quality Warning Implementation",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_007",
+      "question": "An enterprise is planning to migrate from Tableau Server to Tableau Cloud and wants to understand how Tableau Catalog functionality will change. They currently use custom metadata management tools alongside Tableau Server. What is the most important consideration for their Catalog implementation strategy?",
+      "options": [
+        "A) Tableau Cloud automatically enables Catalog, so no additional planning is needed",
+        "B) The migration requires reconfiguring all metadata permissions and may impact custom metadata integration workflows",
+        "C) Catalog functionality is identical between Server and Cloud, requiring no changes to existing processes",
+        "D) Cloud provides enhanced Catalog features that make custom metadata tools unnecessary"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B correctly identifies the key considerations: while Catalog is automatically enabled on Tableau Cloud with Data Management licensing, the permission model and integration points may differ from Server implementations. Custom metadata management tools will need to be evaluated for compatibility with Cloud's security model and API access patterns. Organizations need to plan for potential reconfiguration of permissions and integration workflows. Option A oversimplifies the complexity. Option C is incorrect as there can be differences in implementation details. Option D makes assumptions about the organization's custom tools without understanding their specific requirements.",
+      "topic": "Migration Planning and Implementation Strategy",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_008",
+      "question": "A technology company wants to implement Tableau Catalog to support their DataOps practices, requiring integration with external data catalogs and automated metadata synchronization. Which approach best supports this advanced integration scenario?",
+      "options": [
+        "A) Use the Tableau Metadata API to extract metadata and push it to external systems through custom ETL processes",
+        "B) Implement bidirectional synchronization using both the Metadata API and REST API Metadata Methods with automated reconciliation processes",
+        "C) Rely on Tableau's built-in external catalog connectors for automatic synchronization",
+        "D) Create manual export/import processes using GraphiQL Query Tool for metadata management"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides the most comprehensive approach for DataOps integration, using both available APIs to create robust bidirectional synchronization. The Metadata API provides rich querying capabilities for extracting lineage and relationships, while REST API Metadata Methods allow for programmatic updates. Automated reconciliation processes are essential for maintaining consistency in a DataOps environment. Option A is unidirectional and insufficient for DataOps needs. Option C assumes connectors that may not exist for all systems. Option D is not scalable for automated DataOps practices.",
+      "topic": "Advanced API Integration and DataOps",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "tc_009",
+      "question": "An organization implementing Tableau Catalog discovers that their complex data lineage includes relationships that span multiple data warehouses, cloud platforms, and on-premises systems. Users report difficulty understanding the complete data journey from source to visualization. What strategy would best address this challenge?",
+      "options": [
+        "A) Simplify the data architecture to reduce lineage complexity",
+        "B) Use Catalog's description and tagging features to add contextual information at key lineage points, combined with training on lineage interpretation",
+        "C) Create separate Tableau environments for each data platform to isolate lineage tracking",
+        "D) Implement custom visualization tools for lineage display instead of using Catalog's built-in features"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B addresses the challenge by leveraging Catalog's built-in capabilities to add context and meaning to complex lineage relationships. Adding descriptions and strategic tagging at key transformation points helps users understand the data journey, while training ensures they can effectively interpret the information. This approach works with the existing architecture rather than against it. Option A may not be feasible or desirable for business reasons. Option C fragments the data governance approach. Option D abandons Catalog's purpose and creates additional tool complexity.",
+      "topic": "Complex Lineage Management and User Experience",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "tc_010",
+      "question": "A global manufacturing company with multiple business units wants to implement Tableau Catalog with federated governance, where each business unit maintains autonomy over their data assets while ensuring enterprise-wide visibility for compliance reporting. What implementation architecture would best support this requirement?",
+      "options": [
+        "A) Create separate Tableau sites for each business unit with independent Catalog configurations",
+        "B) Use a single Tableau environment with project-based organization, federated permission management, and centralized compliance reporting through Metadata API aggregation",
+        "C) Implement multiple Tableau Server instances with periodic metadata synchronization",
+        "D) Use site-level permissions to restrict cross-business unit visibility while maintaining central administration"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides the optimal balance of autonomy and governance by leveraging Tableau's project structure for business unit separation while maintaining enterprise visibility through centralized metadata aggregation. This approach allows each business unit to manage their own data governance within their projects while enabling compliance teams to access enterprise-wide metadata through the API. Option A fragments governance too much and makes enterprise reporting difficult. Option C creates unnecessary infrastructure complexity. Option D doesn't provide the granular control needed for true federated governance.",
+      "topic": "Federated Governance Architecture",
+      "difficulty": "Expert"
+    }
+  ]
+}

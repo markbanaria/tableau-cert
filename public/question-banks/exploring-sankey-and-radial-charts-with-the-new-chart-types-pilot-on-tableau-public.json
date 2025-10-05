@@ -1,0 +1,210 @@
+{
+  "title": "Exploring Sankey and Radial Charts with the New Chart Types Pilot on Tableau Public - Practice Questions",
+  "description": "Practice questions for exploring Sankey and Radial Charts covering pilot program features, implementation techniques, enterprise use cases, and consultant-level best practices",
+  "metadata": {
+    "topic": "Exploring Sankey and Radial Charts with the New Chart Types Pilot on Tableau Public",
+    "domain": "Design and Troubleshoot Calculations and Workbooks",
+    "sourceUrl": "https://www.tableau.com/blog/exploring-sankey-and-radial-charts-new-chart-types-pilot-tableau-public",
+    "relatedTopics": ["Designing Efficient Workbooks", "Sankey and Radial Charts"],
+    "generatedDate": "2025-10-05",
+    "questionCount": 14
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "During which period was the New Chart Types Pilot program for Sankey and Radial charts available in Tableau Public?",
+      "options": [
+        "January 1st - March 31st, 2023",
+        "April 24th - June 30th, 2023",
+        "July 1st - September 30th, 2023",
+        "October 1st - December 31st, 2023"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The New Chart Types Pilot program for Sankey and Radial charts was available from April 24th through June 30th, 2023. This was a limited-time pilot program to gather community feedback on these new visualization types before potential full integration into Tableau.",
+      "difficulty": "Beginner",
+      "tags": ["pilot-program", "timeline", "tableau-public"]
+    },
+    {
+      "id": "2",
+      "question": "What is the primary platform requirement for accessing Sankey and Radial charts during the pilot program?",
+      "options": [
+        "Tableau Desktop with specific license",
+        "Tableau Public web authoring platform only",
+        "Tableau Server enterprise installation",
+        "Tableau Mobile app with premium features"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Sankey and Radial charts were exclusively available through Tableau Public's web authoring platform during the pilot. They were not available on mobile/tablet interfaces or through Tableau Desktop, making web authoring the only access method for testing these new chart types.",
+      "difficulty": "Beginner",
+      "tags": ["platform-requirements", "web-authoring", "access"]
+    },
+    {
+      "id": "3",
+      "question": "When creating a Sankey chart in the pilot program, which two primary shelves are used for data configuration?",
+      "options": [
+        "Rows and Columns shelves",
+        "Color and Size shelves",
+        "Level and Link shelves",
+        "Detail and Tooltip shelves"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Sankey charts in the pilot program use two specific shelves: the 'Level' shelf for dimensional data (categories) and the 'Link' shelf for measures (flow values). This is different from traditional Tableau charts that primarily use Rows and Columns shelves. The Level shelf defines the categorical stages while the Link shelf determines the flow magnitude between stages.",
+      "difficulty": "Intermediate",
+      "tags": ["sankey-implementation", "shelves", "data-configuration"]
+    },
+    {
+      "id": "4",
+      "question": "A retail consultant needs to visualize customer journey flows from initial contact through purchase completion. Which chart type and primary benefit would be most appropriate?",
+      "options": [
+        "Radial chart to show cyclical customer behavior patterns",
+        "Sankey chart to display sequential flow transitions and drop-off points",
+        "Traditional bar chart to compare stage-by-stage volumes",
+        "Scatter plot to analyze customer behavior correlations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Sankey charts are ideal for visualizing customer journey flows because they excel at showing 'before and after' state transitions and sequential flows. They can clearly display how customers move through different stages (contact → interest → consideration → purchase) and reveal drop-off points or bottlenecks in the process. This makes them superior to other chart types for flow analysis scenarios.",
+      "difficulty": "Intermediate",
+      "tags": ["sankey-use-cases", "customer-journey", "consultant-scenarios"]
+    },
+    {
+      "id": "5",
+      "question": "What is the most critical limitation consultants should communicate to clients about charts created during the pilot program?",
+      "options": [
+        "Charts have limited color customization options",
+        "Charts cannot be embedded in external websites",
+        "Charts will revert to automatic marks and lose functionality after pilot ends",
+        "Charts cannot handle large datasets effectively"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The most critical limitation is that after the pilot program ended on June 30th, 2023, any Sankey or Radial charts would revert to 'Automatic' on the marks card and lose their specialized functionality. This means existing visualizations would break and become non-functional. This is a crucial consideration for consultants planning long-term dashboard strategies or client deliverables.",
+      "difficulty": "Advanced",
+      "tags": ["pilot-limitations", "consultant-considerations", "long-term-planning"]
+    },
+    {
+      "id": "6",
+      "question": "For Radial charts in the pilot program, what are the two primary shelf types used for configuration?",
+      "options": [
+        "Level and Angle shelves",
+        "Radius and Rotation shelves",
+        "Inner and Outer shelves",
+        "Center and Circumference shelves"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Radial charts in the pilot program use 'Level' and 'Angle' shelves for configuration. The Level shelf is used for hierarchical dimensions (similar to Sankey charts), while the Angle shelf determines the angular positioning and proportions of the radial segments. This configuration allows for both donut-style and sunburst-style radial visualizations.",
+      "difficulty": "Intermediate",
+      "tags": ["radial-implementation", "shelves", "configuration"]
+    },
+    {
+      "id": "7",
+      "question": "A manufacturing consultant is analyzing energy flow through different production stages with varying efficiency losses. The data shows inputs, transformations, and outputs across 5 major production phases. What is the most important consideration for Sankey chart effectiveness in this scenario?",
+      "options": [
+        "Ensuring the chart shows exactly 5 levels to match production phases",
+        "Limiting the number of categories to maintain readability and avoid visual complexity",
+        "Using bright colors to highlight efficiency losses",
+        "Including all possible sub-categories for comprehensive analysis"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The most critical consideration is limiting categories to maintain readability. As stated in Tableau's best practices, 'Adding too many categories results in many lines and crossings that can make a Sankey difficult to navigate.' Even with 5 major phases, if each phase has multiple sub-categories, the visualization becomes cluttered and loses its analytical value. The chart should reveal clear visual insights without unnecessary complexity.",
+      "difficulty": "Advanced",
+      "tags": ["sankey-best-practices", "manufacturing", "readability", "consultant-analysis"]
+    },
+    {
+      "id": "8",
+      "question": "Which statement best describes the recommended audience consideration for Sankey and Radial charts in enterprise environments?",
+      "options": [
+        "These charts are suitable for all audiences regardless of data visualization experience",
+        "Charts should only be used with technical audiences familiar with advanced analytics",
+        "Audience data fluency should be assessed before choosing these chart types over simpler alternatives",
+        "These charts are most effective when presented to executive leadership only"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau's guidance emphasizes that 'Sankey diagrams may not be an appropriate chart type for all audiences. If your audience is not comfortable interpreting complex charts, or they are not as data-fluent, a simpler chart type may be more effective.' Consultants must assess audience data literacy and choose visualization types that effectively communicate insights rather than create confusion.",
+      "difficulty": "Advanced",
+      "tags": ["audience-considerations", "data-fluency", "chart-selection", "enterprise"]
+    },
+    {
+      "id": "9",
+      "question": "What is the primary advantage of the pilot program's implementation compared to traditional custom Sankey chart creation in Tableau?",
+      "options": [
+        "Better color customization and formatting options",
+        "Support for larger datasets and better performance",
+        "Reduced creation time from hours to minutes without complex calculations",
+        "Integration with Tableau Server and enterprise security features"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The primary advantage is the dramatic reduction in creation time and complexity. Previously, creating Sankey charts required 'union data back on itself and sometimes complex maths equations' taking hours. The pilot program reduced this to minutes with simple drag-and-drop functionality, eliminating the need for complex calculations and data manipulation techniques.",
+      "difficulty": "Intermediate",
+      "tags": ["implementation-efficiency", "time-savings", "complexity-reduction"]
+    },
+    {
+      "id": "10",
+      "question": "A financial services consultant needs to show fund allocation flows across multiple investment categories and subcategories. The client wants to understand both the hierarchical relationship and proportional distributions. Which approach would be most effective?",
+      "options": [
+        "Use only Sankey charts to show fund flows between categories",
+        "Use only Radial sunburst charts to show hierarchical relationships",
+        "Combine both chart types in separate views to show flows and hierarchies respectively",
+        "Use traditional tree maps to show both relationships simultaneously"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The most effective approach is to use both chart types strategically: Sankey charts excel at showing fund flows and distribution across stages, while Radial sunburst charts are ideal for displaying hierarchical relationships and proportions across multiple category levels. Using both in separate but complementary views provides comprehensive analysis covering both flow and hierarchical aspects of the financial data.",
+      "difficulty": "Advanced",
+      "tags": ["chart-combination", "financial-analysis", "strategic-visualization", "consultant-strategy"]
+    },
+    {
+      "id": "11",
+      "question": "According to the pilot program guidelines, what is the recommended maximum number of categories for Radial charts to maintain clarity?",
+      "options": [
+        "3 or fewer categories",
+        "5 or fewer categories",
+        "7 or fewer categories",
+        "10 or fewer categories"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau recommends using 5 or fewer categories for Radial charts to maintain clarity and readability. This limitation ensures that the circular layout remains interpretable and that differences between categories are easily discernible. Exceeding this recommendation can lead to cluttered visualizations that are difficult to read and analyze effectively.",
+      "difficulty": "Beginner",
+      "tags": ["radial-best-practices", "category-limits", "clarity"]
+    },
+    {
+      "id": "12",
+      "question": "In the context of enterprise dashboard strategy, what is the most important long-term consideration for consultants regarding the pilot program charts?",
+      "options": [
+        "Training end users on new chart interpretation techniques",
+        "Planning migration strategies for when pilot features become standard",
+        "Developing alternative visualization approaches since pilot features are temporary",
+        "Documenting custom calculation methods for future replication"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Since the pilot program was temporary (ending June 30, 2023) and charts would lose functionality after the pilot ended, the most important long-term consideration is developing alternative visualization approaches. Consultants need sustainable solutions that don't rely on temporary features, ensuring dashboard continuity and avoiding broken visualizations in production environments.",
+      "difficulty": "Advanced",
+      "tags": ["enterprise-strategy", "long-term-planning", "sustainability", "risk-management"]
+    },
+    {
+      "id": "13",
+      "question": "A healthcare consultant is analyzing patient flow through different treatment pathways. The data shows complex multi-stage processes with varying success rates. What is the key question to ask before choosing a Sankey chart for this analysis?",
+      "options": [
+        "Does the data contain enough historical records for trend analysis?",
+        "Will using a Sankey easily reveal a visual insight that justifies the complexity?",
+        "Are there enough color options to distinguish between different pathways?",
+        "Can the chart be easily exported to other presentation formats?"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The key question is whether the Sankey will easily reveal visual insights that justify its complexity. As Tableau guidance states: 'Consider the insight you want to illustrate and the easiest way to make that obvious for someone viewing – sometimes a Sankey is a great way to simplify an insight, but other times it can make things unnecessarily complex.' The chart choice should be driven by analytical value, not visual appeal.",
+      "difficulty": "Advanced",
+      "tags": ["chart-selection-criteria", "healthcare-analysis", "insight-driven-design", "consultant-judgment"]
+    },
+    {
+      "id": "14",
+      "question": "What mechanism was provided during the pilot program for community feedback and updates?",
+      "options": [
+        "Direct email feedback to Tableau product team",
+        "Community survey link and Tableau Public Twitter account updates",
+        "In-app feedback form within Tableau Public interface",
+        "Dedicated pilot program forum on Tableau Community"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The pilot program used a community survey link for collecting participant feedback and the Tableau Public Twitter account for sharing updates and communication. This approach allowed Tableau to gather structured feedback through surveys while keeping the community informed about pilot progress and developments through social media updates.",
+      "difficulty": "Beginner",
+      "tags": ["feedback-mechanism", "community-engagement", "pilot-communication"]
+    }
+  ]
+}

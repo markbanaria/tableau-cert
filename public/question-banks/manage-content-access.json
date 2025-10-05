@@ -1,0 +1,125 @@
+{
+  "title": "Manage Content Access",
+  "description": "Master Tableau's comprehensive permissions system including capabilities, permission rules, effective permissions, project-level vs. content-level permissions, and complex scenarios for enterprise content governance.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What are the two primary organizational structures that make permissions management easier in Tableau?",
+      "options": [
+        "Users and roles; data sources and workbooks",
+        "Projects and groups; set permissions at project level for groups instead of individuals",
+        "Sites and servers; manage permissions centrally",
+        "Workbooks and dashboards; apply permissions to content types"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau sites use PROJECTS to organize content and GROUPS to organize users. Managing permissions is EASIER when permission rules are: (1) Set at the PROJECT LEVEL instead of on individual pieces of content, and (2) Established for GROUPS instead of individuals. This approach provides scalable, maintainable permission management for enterprise deployments.",
+      "difficulty": "intermediate",
+      "tags": ["permissions-fundamentals", "projects", "groups", "best-practices"]
+    },
+    {
+      "id": 2,
+      "question": "What is the difference between a 'capability' and a 'permission rule' in Tableau's permissions system?",
+      "options": [
+        "They are the same thing with different names",
+        "Capabilities are actions users can perform (view, edit, delete); permission rules establish what capabilities are allowed or denied for a user/group on an asset",
+        "Capabilities are for administrators only; permission rules are for all users",
+        "Permission rules are set in Tableau Desktop; capabilities are set in Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "CAPABILITIES are the ability to perform actions like view content, web edit, download data sources, or delete content. PERMISSION RULES establish what capabilities are ALLOWED or DENIED for a user or group on an asset. Think of capabilities as the building blocks that permission rules use to define access. Note: While 'permission' is used colloquially, the precise technical term is 'capability.'",
+      "difficulty": "advanced",
+      "tags": ["capabilities", "permission-rules", "terminology", "permissions-model"]
+    },
+    {
+      "id": 3,
+      "question": "When setting project-level permissions, what is critical to remember about content type tabs?",
+      "options": [
+        "You only need to set permissions on one tab—they apply to all content types",
+        "You must set permissions for EACH content type tab or users will be denied access to that content type; a capability is only granted if expressly allowed",
+        "Content type tabs are optional configuration settings",
+        "Permissions automatically cascade from workbooks to data sources"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The permissions dialog for a project contains TABS FOR EACH TYPE OF CONTENT. You MUST set permissions for EACH CONTENT TYPE at the project level or users will be DENIED access to that content type. A capability is ONLY GRANTED if expressly allowed—leaving a capability as 'Unspecified' results in it being DENIED. TIP: Every time you create a permission rule at the project level, look through ALL content type tabs.",
+      "difficulty": "advanced",
+      "tags": ["project-permissions", "content-types", "permission-tabs", "deny-by-default"]
+    },
+    {
+      "id": 4,
+      "question": "What is the recommended best practice for the 'All Users' group when building custom permission rules?",
+      "options": [
+        "Leave the All Users group with default permissions for backward compatibility",
+        "Delete the rule entirely or edit to remove permissions (set to None template) to start with a clean slate",
+        "Always give All Users the View capability for discoverability",
+        "The All Users group cannot be modified by administrators"
+      ],
+      "correctAnswer": 1,
+      "explanation": "By default, all users are added to an 'All Users' group that has basic permissions. Best practice: DELETE THE RULE ENTIRELY or EDIT the rule for All Users to REMOVE any permissions (set permission role template to 'None'). This helps prevent ambiguity by reducing the number of rules that apply to any given user, making effective permissions easier to understand. Start with a clean slate when building your own permission rules.",
+      "difficulty": "intermediate",
+      "tags": ["all-users-group", "best-practices", "permission-cleanup", "governance"]
+    },
+    {
+      "id": 5,
+      "question": "For web authoring, which site setting, site role, and permissions are required for an Explorer to author and save NEW content?",
+      "options": [
+        "Web Authoring enabled; Explorer role; Web Edit allowed only",
+        "Web Authoring enabled; Explorer (can publish) role; Web Edit, Download/Save a Copy, Publish (project), and Connect (data source) all allowed",
+        "Web Authoring enabled; Creator role required; no special permissions needed",
+        "Web authoring disabled; Explorer can always save with correct permissions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For Explorer to web author and save as NEW content: SITE SETTING—Web authoring enabled for the site. SITE ROLE—Explorer (can publish). PERMISSIONS—Web Edit ALLOW, Download/Save a Copy ALLOW, Overwrite DENY (to prevent overwriting existing), Publish (project) ALLOW, Connect (data source) ALLOW. Explorers without 'can publish' cannot save, only explore on-the-fly.",
+      "difficulty": "advanced",
+      "tags": ["web-authoring", "explorer-can-publish", "permission-capabilities", "site-settings"]
+    },
+    {
+      "id": 6,
+      "question": "When a workbook connects to a published data source and is set to 'Prompt users' (not 'Embed password'), what must users have to see the data?",
+      "options": [
+        "Only View permission on the workbook",
+        "Connect capability for the published data source; may also need data source authentication depending on data source settings",
+        "Administrator role on the site",
+        "Download permission on the workbook"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a workbook is set to 'Prompt users' (not 'Embed password'), Tableau-controlled access is checked for the data source. The person consuming the workbook MUST have the CONNECT CAPABILITY for the PUBLISHED DATA SOURCE. If the published data source is ALSO set to 'Prompt user' for underlying data authentication, the viewer must enter their CREDENTIALS for the data source itself. This provides row-level control—users see data based on their own permissions, not the author's.",
+      "difficulty": "advanced",
+      "tags": ["data-source-authentication", "connect-capability", "prompt-users", "embed-password"]
+    },
+    {
+      "id": 7,
+      "question": "When can non-administrators move content between projects?",
+      "options": [
+        "Never—only administrators can move content",
+        "Project leaders/owners can move among their projects; other users need Creator/Explorer (can publish) role, publishing rights for destination, AND ownership of content or Move capability",
+        "Any user with View permission can move content",
+        "Only content owners can move their own content"
+      ],
+      "correctAnswer": 1,
+      "explanation": "ADMINISTRATORS can always move assets/projects anywhere. PROJECT LEADERS and PROJECT OWNERS can move assets and nested projects among THEIR projects (cannot move projects to become top-level). OTHER USERS can move assets ONLY if ALL THREE requirements are met: (1) Creator or Explorer (Can Publish) SITE ROLE, (2) Publishing rights (VIEW and PUBLISH capabilities) for the DESTINATION PROJECT, (3) OWNER of the content, OR—for workbooks/flows—having the MOVE capability.",
+      "difficulty": "advanced",
+      "tags": ["move-content", "project-leaders", "move-capability", "content-ownership"]
+    },
+    {
+      "id": 8,
+      "question": "When a workbook shows sheets as tabs vs. when tabs are hidden, how do permissions behave differently?",
+      "options": [
+        "No difference—permissions always work the same way",
+        "Tabs shown: workbook-level permissions apply to all sheets. Tabs hidden (in customizable project): workbook permission changes DON'T apply to views—view-level permissions must be set independently",
+        "Tabs hidden: all sheets become private to the workbook owner",
+        "Tabs shown: each sheet must have permissions set individually"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When SHEETS AS TABS is SHOWN: workbook-level permission rules apply to all sheets; changes to workbook permissions affect all views. When TABS ARE HIDDEN (in customizable project): all views assume workbook permissions upon publication, BUT subsequent changes to workbook permissions WON'T be inherited—view-level permissions must be set independently. Changing this setting impacts permission model: 'Show Tabs' overrides view-level permissions; 'Hide Tabs' breaks the relationship.",
+      "difficulty": "advanced",
+      "tags": ["show-sheets-as-tabs", "view-permissions", "workbook-permissions", "customizable-projects"]
+    }
+  ]
+}

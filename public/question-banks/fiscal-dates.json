@@ -1,0 +1,182 @@
+{
+  "title": "Fiscal Dates - Practice Questions",
+  "description": "Practice questions for Fiscal Dates covering fiscal year configuration, date calculations, business calendar implementations, and enterprise reporting scenarios",
+  "metadata": {
+    "topic": "Fiscal Dates",
+    "domain": "Design and Troubleshoot Calculations and Workbooks",
+    "difficulty": "Intermediate",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/dates_fiscal.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 12
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary method for configuring a fiscal year start month for a data source in Tableau?",
+      "options": [
+        "Right-click the data source in the Data pane and select Date Properties to set the fiscal year start",
+        "Create a calculated field using DATEADD function with fiscal year offset",
+        "Configure fiscal year settings in the Tableau Server administration panel",
+        "Use the Format menu to set fiscal year display preferences"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The correct method is to right-click the data source in the Data pane and open the Date Properties dialog to set the 'Fiscal year start' field. This applies the fiscal year configuration to all date dimensions in that data source. Options B, C, and D are incorrect: calculated fields are used for custom fiscal calculations but not basic configuration, Server administration doesn't control workbook-level fiscal settings, and Format menu only affects display formatting.",
+      "difficulty": "Beginner",
+      "tags": ["fiscal-configuration", "data-source", "date-properties"]
+    },
+    {
+      "id": "2",
+      "question": "Which date levels are explicitly affected when fiscal year configuration is applied to a data source in Tableau?",
+      "options": [
+        "All date levels including Month, Day, Hour, and Minute",
+        "Only Year, Quarter, and Week Number levels with 'FY' prefix indication",
+        "Year and Month levels only",
+        "Quarter and Week levels exclusively"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When fiscal year configuration is applied, only Year, Quarter, and Week Number levels are affected and show the 'FY' prefix to indicate fiscal calendar use. Month, Day, Hour, Minute, and Second levels remain unchanged from calendar dates. This is a key limitation to understand when working with fiscal dates in Tableau.",
+      "difficulty": "Intermediate",
+      "tags": ["fiscal-year", "date-levels", "FY-prefix"]
+    },
+    {
+      "id": "3",
+      "question": "A company's fiscal year runs from July 1st to June 30th. When creating a calculated field for fiscal year number using DATEADD, what month offset should be used?",
+      "options": [
+        "DATEADD('month', 6, [Date Field])",
+        "DATEADD('month', 7, [Date Field])",
+        "DATEADD('month', 5, [Date Field])",
+        "DATEADD('month', -6, [Date Field])"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For a fiscal year starting in July, you need to add 6 months to shift the date properly for fiscal year calculations. The formula would be DATEPART('year', DATEADD('month', 6, [Date Field])). This shifts July dates forward 6 months to January of the next year, ensuring they're grouped in the correct fiscal year. Option B (7 months) would over-shift, option C (5 months) would under-shift, and option D (negative offset) would shift in the wrong direction.",
+      "difficulty": "Intermediate",
+      "tags": ["fiscal-calculations", "dateadd", "fiscal-year-offset"]
+    },
+    {
+      "id": "4",
+      "question": "You are implementing fiscal week calculations for a retail client whose fiscal year starts in February. What is the most appropriate approach to calculate fiscal week numbers?",
+      "options": [
+        "Use WEEK([Date]) function directly as it automatically adjusts for fiscal year",
+        "Create a calculated field: DATEDIFF('week', [First fiscal day], [Date]) + 1",
+        "Apply ISO-8601 calendar settings to automatically generate fiscal weeks",
+        "Use DATEPART('week', [Date]) with fiscal year configuration"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The correct approach is DATEDIFF('week', [First fiscal day], [Date]) + 1, where [First fiscal day] represents the start date of the fiscal year. This calculates the number of weeks from the fiscal year start. Option A is incorrect because WEEK() function uses calendar year by default. Option C is incorrect because ISO-8601 is a separate calendar system. Option D is incorrect because DATEPART with 'week' still uses calendar year numbering.",
+      "difficulty": "Advanced",
+      "tags": ["fiscal-week", "datediff", "custom-calculations"]
+    },
+    {
+      "id": "5",
+      "question": "What limitation exists when working with fiscal dates in Tableau regarding data source types?",
+      "options": [
+        "Fiscal dates work with all data source types including extracts and live connections",
+        "Fiscal dates can only be applied to dimensions in a relational data source",
+        "Fiscal dates require Tableau Server or Tableau Cloud to function properly",
+        "Fiscal dates are only supported with SQL-based databases"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Fiscal dates can only be applied to dimensions in a relational data source. This is a key limitation that consultants need to understand when architecting solutions. Multidimensional data sources, cube connections, and some other data source types do not support fiscal date configuration through the standard Date Properties dialog.",
+      "difficulty": "Intermediate",
+      "tags": ["fiscal-limitations", "data-source-types", "relational-data"]
+    },
+    {
+      "id": "6",
+      "question": "In an enterprise environment, you need to create a fiscal quarter calculation that works independently of Tableau's built-in fiscal year settings. Which approach provides the most flexibility?",
+      "options": [
+        "Use FORMAT([Date], 'Q') with fiscal year configuration",
+        "Create a calculated field using CASE statements based on MONTH([Date]) ranges",
+        "Apply DATETRUNC('quarter', DATEADD('month', offset, [Date]))",
+        "Use DATEPART('quarter', [Date]) with parameter-based fiscal year start"
+      ],
+      "correctAnswer": 2,
+      "explanation": "DATETRUNC('quarter', DATEADD('month', offset, [Date])) provides the most flexible approach. By using DATEADD to shift the date by the appropriate fiscal year offset, then applying DATETRUNC to get the quarter start, you create a robust calculation that works independently of Tableau's fiscal settings. Option A relies on built-in settings, option B is more complex and error-prone for quarter calculations, and option D still depends on DATEPART which uses calendar quarters.",
+      "difficulty": "Advanced",
+      "tags": ["fiscal-quarter", "datetrunc", "enterprise-solutions", "custom-calculations"]
+    },
+    {
+      "id": "7",
+      "question": "When standard date functions ignore fiscal year start configuration, what is the fundamental reason according to Tableau's design?",
+      "options": [
+        "Date functions are optimized for performance and fiscal calculations would slow them down",
+        "Date functions return values based on calendar year by design, requiring manual offset calculations",
+        "Fiscal year functionality is only available in Tableau Server, not Desktop",
+        "Date functions require specific licensing to access fiscal year capabilities"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Date functions return values based on calendar year by design. This is why functions like DATEPART, DATENAME, and others ignore the fiscal year start configuration and require manual offset calculations using DATEADD to shift dates to their corresponding fiscal positions. This is a fundamental design principle that consultants must understand when creating fiscal calculations.",
+      "difficulty": "Intermediate",
+      "tags": ["date-functions", "fiscal-design", "calendar-year"]
+    },
+    {
+      "id": "8",
+      "question": "A financial services client needs fiscal year-to-date calculations where their fiscal year starts in October. What is the most effective approach for creating a fiscal YTD filter?",
+      "options": [
+        "Use built-in date filters and set fiscal year start in data source properties",
+        "Create a calculated field comparing fiscal-adjusted dates to current fiscal-adjusted date",
+        "Apply DATEDIFF with 'year' parameter between fiscal year start and current date",
+        "Use DATEPART('dayofyear', [Date]) with fiscal year offset calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Creating a calculated field that compares fiscal-adjusted dates (using DATEADD with appropriate month offset) to the current fiscal-adjusted date is the most effective approach. This would involve calculations like: DATEADD('month', 3, [Date]) <= DATEADD('month', 3, TODAY()) AND YEAR(DATEADD('month', 3, [Date])) = YEAR(DATEADD('month', 3, TODAY())). Option A won't work for YTD logic, option C doesn't provide the granular date comparison needed, and option D doesn't account for fiscal year boundaries properly.",
+      "difficulty": "Advanced",
+      "tags": ["fiscal-ytd", "financial-services", "custom-filters", "dateadd"]
+    },
+    {
+      "id": "9",
+      "question": "What format behavior occurs when custom date formats use only 'y' and 'q' placeholders with fiscal year configuration?",
+      "options": [
+        "The format displays calendar year and quarter without modification",
+        "FY prefix is automatically prepended to each year in the format",
+        "The format becomes invalid and displays error messages",
+        "Quarter numbers are adjusted but year remains calendar-based"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you apply a custom date format using only the 'y' and 'q' placeholders with fiscal year configuration, the FY prefix is automatically prepended to each year. This behavior ensures that fiscal year formatting is clearly indicated in custom formats that include year and quarter components.",
+      "difficulty": "Intermediate",
+      "tags": ["custom-formatting", "FY-prefix", "date-placeholders"]
+    },
+    {
+      "id": "10",
+      "question": "You're consulting for a multinational corporation that needs to support multiple fiscal year calendars (US: October start, UK: April start, Japan: April start). What is the most scalable architecture approach?",
+      "options": [
+        "Create separate data sources for each region with different fiscal year settings",
+        "Use calculated fields with parameters to dynamically adjust fiscal calculations based on region",
+        "Implement a fiscal calendar lookup table with region-specific fiscal date mappings",
+        "Configure fiscal year settings at the workbook level using Tableau's regional settings"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Implementing a fiscal calendar lookup table with region-specific fiscal date mappings is the most scalable approach. This allows you to create a comprehensive fiscal date dimension that can handle multiple fiscal year starts, provides flexibility for future changes, and maintains data integrity across regions. Option A creates maintenance overhead, option B becomes complex with multiple parameters, and option D doesn't provide the granular control needed for multi-regional fiscal requirements.",
+      "difficulty": "Advanced",
+      "tags": ["enterprise-architecture", "multi-regional", "fiscal-calendar", "lookup-tables"]
+    },
+    {
+      "id": "11",
+      "question": "How does the ISO-8601 week-based calendar relate to fiscal date functionality in Tableau?",
+      "options": [
+        "ISO-8601 automatically configures fiscal year settings based on international standards",
+        "ISO-8601 provides an alternative standardized approach to fiscal calculations with consistent week structures",
+        "ISO-8601 calendar overrides fiscal year settings when both are configured",
+        "ISO-8601 is incompatible with fiscal year functionality and cannot be used together"
+      ],
+      "correctAnswer": 1,
+      "explanation": "ISO-8601 provides an alternative standardized approach to fiscal calculations with consistent week and quarter structures. It's popular in retail and financial systems and can be used alongside or instead of traditional fiscal year configurations. The ISO-8601 calendar ensures that quarters always have 13 weeks (with potential 14-week variation) and weeks always start on Monday, providing more consistent business reporting periods.",
+      "difficulty": "Intermediate",
+      "tags": ["ISO-8601", "standardized-calendar", "business-reporting"]
+    },
+    {
+      "id": "12",
+      "question": "In a complex enterprise reporting scenario, you need fiscal quarters that follow a 4-4-5 week pattern (4 weeks, 4 weeks, 5 weeks per quarter). What combination of Tableau functionality would best support this requirement?",
+      "options": [
+        "Use standard fiscal year configuration with custom calculated fields for 4-4-5 pattern",
+        "Implement ISO-8601 calendar with custom week grouping calculations and fiscal calendar lookup table",
+        "Create separate date dimensions for each quarter pattern with union-based data modeling",
+        "Use Tableau's built-in retail calendar functions with fiscal year offset parameters"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Implementing ISO-8601 calendar with custom week grouping calculations and a fiscal calendar lookup table best supports 4-4-5 patterns. The ISO-8601 calendar provides the consistent week structure needed, while custom calculations can group weeks into the 4-4-5 pattern, and a lookup table maps these to fiscal periods. This approach provides the flexibility and accuracy needed for complex retail fiscal calendars. Option A lacks the week structure consistency, option C creates unnecessary complexity, and option D references non-existent built-in retail functions.",
+      "difficulty": "Advanced",
+      "tags": ["retail-calendar", "4-4-5-pattern", "ISO-8601", "enterprise-reporting", "lookup-tables"]
+    }
+  ]
+}

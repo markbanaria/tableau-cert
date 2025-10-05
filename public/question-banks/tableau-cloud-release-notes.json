@@ -1,0 +1,97 @@
+{
+  "title": "Tableau Cloud Release Notes",
+  "description": "Tableau Cloud release cadence, maintenance schedule, system updates, communication channels, Trust Status notifications, downtime planning, and release preview environments.",
+  "metadata": {
+    "domain": "Domain 1: Evaluate Current State",
+    "certification": "Tableau Consultant Certification",
+    "totalQuestions": 6,
+    "estimatedTime": "9 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is Tableau Cloud's release cadence for shipping new features and functionality?",
+      "options": [
+        "Monthly releases on the first day of each month",
+        "Three major releases per year: Winter, Spring, Summer; rolled out worldwide over several weeks with no downtime during release upgrades",
+        "Quarterly releases synchronized with Tableau Server releases",
+        "Continuous deployment with daily updates"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To ensure continuous innovation, Tableau ships new features and functionality THREE times per year with seasonal releases: Winter, Spring, and Summer. Major releases are rolled out across Tableau Cloud's worldwide infrastructure over SEVERAL WEEKS before upgrading on-premises software. Because releases roll out worldwide in sequence, exact dates/times are not pre-announced. Instead, in-product notifications inform users approximately 2 weeks before site is scheduled to upgrade. Sites can be accessed DURING the upgrade with all features/functionality available - there's NO DOWNTIME associated with release upgrades. Starting April 2025, Tableau+ customers can create release preview sites to assess major releases before they go live in production.",
+      "difficulty": "intermediate",
+      "tags": ["release cadence", "updates", "maintenance"]
+    },
+    {
+      "id": 2,
+      "question": "How does Tableau Cloud communicate system maintenance and incidents to site administrators and users?",
+      "options": [
+        "Only through email to the primary site administrator",
+        "Via Salesforce Trust Status page (https://status.salesforce.com/products/tableau) with subscription options for email/notifications, plus automatic emails to Site Administrator role users; Trust Status posts maintenance schedules, incidents, and updates",
+        "Through quarterly newsletter and annual conference announcements",
+        "Via phone calls to designated contacts only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Cloud uses two primary communication channels: (1) Salesforce Trust Status page (https://status.salesforce.com/products/tableau) - all status updates including maintenance and incidents are posted here; users can subscribe for email/notifications when Tableau Cloud creates/updates/resolves incidents. (2) Site Administrator emails - users with Site Administrator role automatically receive notification emails about their site including maintenance and incidents. Emails include: date/time, instance name, maintenance type, impact to users, estimated completion time. Important note: On July 15, 2024, Tableau Trust (https://trust.tableau.com) moved to Salesforce Trust - existing email/RSS subscriptions were migrated but SMS subscriptions need to be reset. For maintenance impacting entire instance, Trust Status notifications sent to subscribers and site admins via email.",
+      "difficulty": "intermediate",
+      "tags": ["communication", "Trust", "notifications"]
+    },
+    {
+      "id": 3,
+      "question": "What is the reserved system maintenance schedule for Tableau Cloud, and when is advanced notice provided?",
+      "options": [
+        "Daily maintenance windows with 1-hour notice",
+        "First and third weekends of calendar month during 6-hour regional windows (e.g., Saturday 08:00-14:00 PST for US-West); Trust Status subscribers/site admins notified 14 days before maintenance, 48 hours prior, at start and end; may not occur every month",
+        "Random maintenance windows selected based on system load",
+        "Only during annual holiday periods with 90-day notice"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Reserved maintenance schedule: Whenever possible and only as necessary, Tableau schedules system maintenance on FIRST and THIRD weekends of calendar month. Regional 6-hour windows: US-West (Saturday 08:00-14:00 PST), US-East (Sunday 11:00-17:00 EST), Europe (Saturday 02:00-08:00 CET), APAC varies by region. Note: There might be months when maintenance is NOT required. Notification timeline: When maintenance scheduled, dates/times published on Salesforce Trust Status page; notifications sent when schedule posted and 14 days before maintenance; additional notifications sent 48 hours prior as reminder, at start, and at end of maintenance. Trust Status subscribers and site administrators receive email notifications. Priority maintenance may have less than one week notice if required. Local windows use standard time (may shift +/- 1 hour during daylight savings). Plan organization maintenance activities OUTSIDE these windows to avoid conflicts.",
+      "difficulty": "intermediate",
+      "tags": ["maintenance", "schedule", "downtime"]
+    },
+    {
+      "id": 4,
+      "question": "Starting in April 2025, what new capability is available to Tableau+ customers regarding Tableau Cloud releases?",
+      "options": [
+        "Ability to delay releases up to 6 months",
+        "Create release preview sites hosted in dedicated limited-release preview environments to assess major Tableau Cloud releases before they go live in production; updated separately from standard sites",
+        "Direct access to beta features before general availability",
+        "Custom release schedules for individual sites"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Starting in April 2025, Tableau+ customers can create release preview sites to assess major Tableau Cloud releases BEFORE they go live in production environments. These release preview sites are: (1) Hosted in dedicated limited-release preview environments, (2) Updated separately from standard Tableau Cloud sites, (3) Allow customers to test and evaluate new features in a controlled environment before production rollout. This capability helps organizations better prepare for major releases by testing functionality, assessing impact on existing workbooks/dashboards, and training users before the release reaches their production Tableau Cloud sites. For more information, see 'About Tableau Release Preview' in the Tableau Cloud Help documentation.",
+      "difficulty": "intermediate",
+      "tags": ["release preview", "Tableau+", "testing"]
+    },
+    {
+      "id": 5,
+      "question": "What is the difference between system maintenance and release upgrades in terms of site availability and downtime?",
+      "options": [
+        "Both cause complete downtime and require sites to be offline",
+        "System maintenance has scheduled downtime in reserved windows (first and third weekends); release upgrades have NO downtime - sites remain accessible during upgrade with all features/functionality available",
+        "Release upgrades require downtime but maintenance does not",
+        "Both are always performed without any service interruption"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Critical distinction: (1) System maintenance - periodic maintenance to sustain infrastructure, security, availability, and performance; has SCHEDULED DOWNTIME during reserved maintenance windows (first and third weekends of month); site administrators should plan for scheduled downtime and avoid service interruptions. (2) Release upgrades - major releases rolled out 3 times per year (Winter, Spring, Summer); sites can be accessed DURING the upgrade; all features and functionality available to users; there's NO DOWNTIME associated with release upgrades. Release upgrades happen over several weeks across worldwide infrastructure. Site administrators receive in-product notifications approximately 2 weeks before site scheduled to upgrade and again once upgrade is complete. As site administrator, you don't manage updates to your site - Tableau handles this automatically - but you should review reserved maintenance schedule to plan accordingly.",
+      "difficulty": "intermediate",
+      "tags": ["maintenance", "releases", "downtime"]
+    },
+    {
+      "id": 6,
+      "question": "Where can users find information about new features in upcoming Tableau Cloud releases and recent updates?",
+      "options": [
+        "Only through direct contact with Tableau support team",
+        "Coming Soon page (www.tableau.com/products/coming-soon) for upcoming/in-progress releases; Release Notes (help.tableau.com) for version-specific details; in-product notifications approximately 2 weeks before site upgrade; as Cloud customer may already have access to features before broader website updates",
+        "Features are only documented after all customers worldwide have been upgraded",
+        "Exclusively through annual conference presentations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Multiple information sources for new features: (1) Coming Soon page (www.tableau.com/products/coming-soon) - offers information about upcoming and in-progress Tableau releases; as Tableau Cloud customer, you might ALREADY have access to features listed here before broader website updates happen (updates occur once customers across all products can upgrade). (2) Release Notes (help.tableau.com/current/online/en-us/whatsnew_online.htm) - version-specific details about features in each release. (3) In-product notifications - approximately 2 weeks before site scheduled to upgrade, and again once upgrade complete. (4) Salesforce Trust Status page - for maintenance and system updates. Starting September 2023, fixed defects can be found on Tableau's releases site; additional defect information available at https://help.salesforce.com/s/issues. Note: Tableau changed product and maintenance release cadence - review blog before downloading latest software.",
+      "difficulty": "intermediate",
+      "tags": ["release notes", "new features", "documentation"]
+    }
+  ]
+}

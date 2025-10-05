@@ -1,0 +1,125 @@
+{
+  "title": "Dashboard Extensions API",
+  "description": "Master Tableau's Dashboard Extensions API including web app creation, manifest files (.trex), security models (network-enabled vs. sandboxed), initialization, hosting requirements, debugging, and integration patterns.",
+  "metadata": {
+    "domain": "Domain 2: Plan and Prepare Data Connections",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is a Tableau Dashboard Extension and what are its key components?",
+      "options": [
+        "A native Tableau plugin installed via Windows installer",
+        "A web application (HTML + JavaScript) that interacts with Tableau dashboards; requires the Extensions API JavaScript library (tableau.extensions.1.latest.js) and a manifest file (.trex)",
+        "A calculated field that extends dashboard functionality",
+        "A server-side application that runs on Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A Tableau Dashboard Extension is a WEB APPLICATION that can interact and communicate with Tableau and applications outside of Tableau. It can be placed in the dashboard like any other dashboard object. Key components: (1) HTML PAGE that links to the Extensions API JavaScript library (tableau.extensions.1.latest.js); (2) JavaScript code that uses the Dashboard Extensions API; (3) MANIFEST FILE (.trex) that defines the extension. The extension is hosted on a web server and must use HTTPS (except localhost for testing).",
+      "difficulty": "intermediate",
+      "tags": ["extensions-overview", "web-application", "manifest-file", "javascript-library"]
+    },
+    {
+      "id": 2,
+      "question": "What is the purpose of the manifest file (.trex) in dashboard extensions?",
+      "options": [
+        "It stores the JavaScript code for the extension",
+        "It defines extension metadata (name, description, author), specifies the URL where the web app is hosted, declares permissions required, and identifies the extension type",
+        "It contains styling and CSS for the extension",
+        "It encrypts data transmitted between Tableau and the extension"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The MANIFEST FILE (.trex format, XML-based) is required for all dashboard extensions. It defines: (1) Extension METADATA (name, description, author, version); (2) URL where the web app is HOSTED; (3) PERMISSIONS required by the extension; (4) Extension TYPE (network-enabled or sandboxed); (5) Icon and other display properties. Users drag and drop the .trex file into their dashboard to add the extension. The manifest ensures Tableau knows how to load and secure the extension.",
+      "difficulty": "advanced",
+      "tags": ["manifest-file", "trex", "metadata", "permissions", "extension-deployment"]
+    },
+    {
+      "id": 3,
+      "question": "What are the two types of dashboard extensions in terms of security, and how do they differ?",
+      "options": [
+        "Public and private extensions based on user authentication",
+        "Network-enabled (full access to external resources/applications) vs. Sandboxed (hosted by Tableau, employs CSP, no network calls outside hosting Tableau Server)",
+        "Desktop and server extensions based on deployment location",
+        "Basic and advanced extensions based on API access level"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau supports TWO TYPES of dashboard extensions: (1) NETWORK-ENABLED extensions—have FULL ACCESS to resources and applications OUTSIDE of Tableau; can make external API calls and interact with third-party services; (2) SANDBOXED extensions—HOSTED BY TABLEAU and employ W3C standards like Content Security Policy (CSP) to ensure the extension CAN'T MAKE NETWORK CALLS outside of the hosting Tableau Server; provide enhanced security for enterprise environments. Sandboxed extensions are ideal when security is the top concern.",
+      "difficulty": "advanced",
+      "tags": ["security-models", "network-enabled", "sandboxed", "csp", "enterprise-security"]
+    },
+    {
+      "id": 4,
+      "question": "What hosting requirement must dashboard extensions meet for production use?",
+      "options": [
+        "Extensions must be hosted on Tableau Server",
+        "Extensions require HTTPS (secure connection), except localhost which can use HTTP for testing purposes",
+        "All extensions must be hosted on GitHub or Heroku",
+        "Extensions can only be hosted on company intranets"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For SECURITY, dashboard extensions require HTTPS (secure encrypted connection). The EXCEPTION is LOCALHOST where you can use HTTP for TESTING PURPOSES. Hosting options include: (1) Company web server; (2) Localhost on your computer (testing); (3) Public sites like GitHub Pages or Heroku. The URL specified in the manifest file must match the hosting location. HTTPS ensures data transmitted between Tableau and the extension is encrypted, protecting sensitive information.",
+      "difficulty": "intermediate",
+      "tags": ["https-requirement", "hosting", "security", "localhost-testing", "deployment"]
+    },
+    {
+      "id": 5,
+      "question": "How must you initialize the Tableau Extensions API in your JavaScript code?",
+      "options": [
+        "Automatically initialized when the extension loads",
+        "Call tableau.extensions.initializeAsync() which returns a Promise; handle initialization completion before using other API methods",
+        "Use tableau.extensions.connect() with credentials",
+        "Include initialization parameters in the manifest file"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You must call tableau.extensions.initializeAsync() to INITIALIZE the Extensions API library. This method returns a PROMISE that resolves when initialization is complete. You MUST WAIT for initialization to complete before using other API methods to interact with the dashboard. Example pattern: `tableau.extensions.initializeAsync().then(function() { // API is ready, can now use other methods });` This ensures the extension is properly connected to the Tableau environment before attempting operations.",
+      "difficulty": "advanced",
+      "tags": ["initialization", "initializeAsync", "promise", "async-pattern", "api-setup"]
+    },
+    {
+      "id": 6,
+      "question": "What resources are available for debugging dashboard extensions?",
+      "options": [
+        "Only server log files",
+        "Debug Extensions in Tableau Desktop (Chromium DevTools); Debug in Tableau Server/Cloud (remote debugging); Use Tableau log files; Access via Help menu or --remote-debugging-port flag",
+        "Extensions cannot be debugged",
+        "Only console.log statements in production"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Debugging resources: (1) TABLEAU DESKTOP—Access via Help > Settings and Performance > Enable Dashboard Extension Debugging, opens Chromium DevTools; can also use --remote-debugging-port flag; (2) TABLEAU SERVER/CLOUD—Remote debugging capabilities available; (3) TABLEAU LOG FILES—Can identify issues via logs at [My Tableau Repository]/Logs; (4) Browser developer tools for testing web app separately. Extensions run in an embedded Chromium browser, providing full web debugging capabilities including breakpoints, network inspection, and console.",
+      "difficulty": "advanced",
+      "tags": ["debugging", "chromium-devtools", "remote-debugging", "log-files", "troubleshooting"]
+    },
+    {
+      "id": 7,
+      "question": "What best practices should developers follow when designing dashboard extensions?",
+      "options": [
+        "No specific guidelines—design as preferred",
+        "Follow Tableau Design Guidelines for Dashboard Extensions; use Tableau UI library (React components) for consistent look and feel; ensure seamless user experience matching Tableau standards",
+        "Use only native HTML elements with no styling",
+        "Design must exactly match Tableau's internal dashboards"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practices for extension design: (1) Follow TABLEAU DESIGN GUIDELINES FOR DASHBOARD EXTENSIONS—ensures extensions adhere to Tableau best practices; (2) Use the TABLEAU UI LIBRARY—a React component library containing UI components with the LOOK AND FEEL of Tableau; (3) Provide a SEAMLESS EXPERIENCE for customers that feels native to Tableau; (4) Consider responsive design for different dashboard sizes; (5) Handle loading states and errors gracefully. These practices ensure extensions integrate naturally into the Tableau experience.",
+      "difficulty": "intermediate",
+      "tags": ["design-guidelines", "tableau-ui-library", "react-components", "ux-best-practices", "user-experience"]
+    },
+    {
+      "id": 8,
+      "question": "Besides Dashboard Extensions, what other type of extension does the Extensions API support?",
+      "options": [
+        "Mobile Extensions for Tableau Mobile app",
+        "Viz Extensions that create new viz types accessible through the worksheet Marks card",
+        "Server Extensions for Tableau Server administration",
+        "Data Extensions for custom data connectors"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Extensions API supports TWO types of extensions: (1) DASHBOARD EXTENSIONS—web applications placed in dashboards like any other dashboard object; (2) VIZ EXTENSIONS—create NEW VIZ TYPES that Tableau users can access through the WORKSHEET MARKS CARD. Viz extensions allow developers to create custom visualization types beyond Tableau's built-in charts. Note: This is different from Analytics Extensions API (for extending calculations with Python/R) and Web Data Connectors (for custom data sources).",
+      "difficulty": "intermediate",
+      "tags": ["viz-extensions", "extension-types", "marks-card", "custom-visualizations", "api-capabilities"]
+    }
+  ]
+}

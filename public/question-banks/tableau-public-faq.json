@@ -1,0 +1,97 @@
+{
+  "title": "Tableau Public FAQ",
+  "description": "Master frequently asked questions about Tableau Public including its free availability, public visibility requirements, data privacy considerations, download capabilities, profile management, and key differences from Tableau Desktop.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 6,
+    "estimatedTime": "9 minutes",
+    "difficulty": "beginner"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is Tableau Public and how much does it cost?",
+      "options": [
+        "A paid version of Tableau for public sector organizations",
+        "A FREE platform for anyone to explore, create, and publicly share data visualizations online; all workbooks saved to Tableau Public are publicly visible",
+        "A trial version of Tableau Desktop with limited features",
+        "A cloud-based version requiring an annual subscription"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Public is a FREE platform for anyone to EXPLORE, CREATE, and PUBLICLY SHARE data visualizations online. It's completely free to use with no license required. IMPORTANT: All workbooks saved to Tableau Public are PUBLICLY VISIBLE—there is no way to keep workbooks private on Tableau Public. This makes it ideal for public data storytelling, portfolios, and sharing insights with the world, but not suitable for sensitive or proprietary data.",
+      "difficulty": "beginner",
+      "tags": ["tableau-public", "free", "public-visibility", "platform-overview"]
+    },
+    {
+      "id": 2,
+      "question": "Can you keep workbooks private on Tableau Public?",
+      "options": [
+        "Yes, with a privacy setting toggle",
+        "No, ALL workbooks saved to Tableau Public are publicly visible and accessible to anyone on the internet",
+        "Yes, but only with a paid upgrade",
+        "Yes, if you set permissions on the profile"
+      ],
+      "correctAnswer": 1,
+      "explanation": "NO, you CANNOT keep workbooks private on Tableau Public. ALL workbooks saved to Tableau Public are PUBLICLY VISIBLE and accessible to anyone on the internet. This is a fundamental characteristic of the platform—it's designed for PUBLIC sharing of data visualizations. If you need to keep work private, you must use Tableau Desktop with Tableau Server or Tableau Cloud, not Tableau Public.",
+      "difficulty": "beginner",
+      "tags": ["privacy", "public-visibility", "no-private-workbooks", "important-limitation"]
+    },
+    {
+      "id": 3,
+      "question": "Can anyone download and access the underlying data from a workbook published to Tableau Public?",
+      "options": [
+        "No, data is always protected from download",
+        "Yes, by default anyone can download workbooks and underlying data from Tableau Public; authors can disable downloads but data can still be accessed through other means",
+        "Only registered Tableau Public users can download data",
+        "Downloads require author approval"
+      ],
+      "correctAnswer": 1,
+      "explanation": "YES, by default anyone can DOWNLOAD workbooks and the UNDERLYING DATA from Tableau Public visualizations. While authors can DISABLE the download option in their viz settings, the data can still be accessed through other means (e.g., data extraction tools, inspect element). IMPORTANT: Never publish sensitive, confidential, or proprietary data to Tableau Public. Only use data that is already public or that you have permission to share publicly.",
+      "difficulty": "intermediate",
+      "tags": ["data-download", "data-access", "security-limitation", "sensitive-data"]
+    },
+    {
+      "id": 4,
+      "question": "What is a key difference in how you save workbooks in Tableau Public vs. Tableau Desktop?",
+      "options": [
+        "Tableau Public has no save functionality",
+        "In Tableau Public, you 'Save to Tableau Public' (publishing to the web); there is no local 'Save' option like in Tableau Desktop—workbooks must be saved to your public online profile",
+        "Tableau Public saves automatically to local files",
+        "Both save identically to local disk"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In Tableau Public, you 'SAVE TO TABLEAU PUBLIC' which means publishing the workbook to the WEB (your public online profile). There is NO LOCAL 'SAVE' OPTION like in Tableau Desktop. Every save publishes the workbook publicly online. This is different from Tableau Desktop where you can save .twbx files locally without publishing. To work on a viz offline, you need to download it from your profile, edit it, then re-publish (save) it back to Tableau Public.",
+      "difficulty": "intermediate",
+      "tags": ["save-functionality", "publishing", "no-local-save", "workflow-difference"]
+    },
+    {
+      "id": 5,
+      "question": "What types of data connections are supported in Tableau Public?",
+      "options": [
+        "All data sources including live database connections",
+        "Limited to file-based data sources (Excel, CSV, Google Sheets, etc.) and web data connectors; NO live database connections or server-based data sources",
+        "Only Excel and CSV files",
+        "Only cloud-based data sources"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Public is LIMITED to FILE-BASED DATA SOURCES such as Excel, CSV, Google Sheets, PDF, spatial files, and web data connectors. It does NOT support LIVE DATABASE CONNECTIONS or SERVER-BASED DATA SOURCES like SQL Server, Oracle, or Snowflake. Data must be extracted and embedded in the workbook. This limitation is by design to ensure workbooks remain accessible and shareable on the public platform without requiring database authentication.",
+      "difficulty": "intermediate",
+      "tags": ["data-connections", "file-based", "no-live-connections", "connection-limitations"]
+    },
+    {
+      "id": 6,
+      "question": "What happens to your Tableau Public profile and workbooks if you stop using it?",
+      "options": [
+        "Everything is deleted immediately",
+        "Tableau Public profiles and workbooks remain publicly accessible indefinitely; Tableau may delete profiles inactive for extended periods (e.g., 12+ months) after notification",
+        "Workbooks are archived and become private",
+        "Access is locked until you log back in"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Public profiles and workbooks remain PUBLICLY ACCESSIBLE indefinitely by default. However, Tableau may DELETE PROFILES that have been INACTIVE for an extended period (typically 12 months or more) after sending notification to the profile owner. If you want to keep your work long-term, it's good practice to download local copies of your workbooks periodically. Active profiles with regular sign-ins and updates are maintained without time limits.",
+      "difficulty": "intermediate",
+      "tags": ["profile-management", "inactive-profiles", "data-retention", "account-deletion"]
+    }
+  ]
+}

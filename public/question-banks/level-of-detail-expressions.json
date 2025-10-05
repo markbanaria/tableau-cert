@@ -1,0 +1,154 @@
+{
+  "title": "Level of Detail Expressions - Practice Questions",
+  "description": "Practice questions for Level of Detail (LOD) Expressions covering FIXED, INCLUDE, and EXCLUDE expressions",
+  "metadata": {
+    "topic": "Level of Detail Expressions",
+    "domain": "domain3",
+    "difficulty": "advanced",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/calculations_calculatedfields_lod.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary purpose of a FIXED Level of Detail (LOD) expression in Tableau?",
+      "options": [
+        "To compute values using a specified level of detail that ignores all the dimensions in the view",
+        "To include additional dimensions in the calculation beyond those in the view",
+        "To exclude specific dimensions from the calculation",
+        "To aggregate data at the data source level only"
+      ],
+      "correctAnswer": 0,
+      "explanation": "FIXED LOD expressions compute values using a specified level of detail that ignores all the dimensions in the view. The other options describe INCLUDE and EXCLUDE expressions or are incorrect.",
+      "difficulty": "intermediate",
+      "tags": ["LOD", "FIXED", "calculations"]
+    },
+    {
+      "id": "2",
+      "question": "In a complex dashboard with multiple data sources, you need to calculate total sales by region regardless of any filters applied to the view. Which LOD expression type would be most appropriate?",
+      "options": [
+        "INCLUDE {Region} : SUM([Sales])",
+        "EXCLUDE {Product} : SUM([Sales])",
+        "{FIXED [Region] : SUM([Sales])}",
+        "SUM({FIXED : [Sales]})"
+      ],
+      "correctAnswer": 2,
+      "explanation": "FIXED LOD expressions ignore filters and dimensions in the view, making them ideal for calculating totals that shouldn't be affected by view-level filters. The syntax {FIXED [Region] : SUM([Sales])} calculates total sales by region independent of the view.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "FIXED", "filters", "aggregation"]
+    },
+    {
+      "id": "3",
+      "question": "When troubleshooting performance issues in a workbook with complex LOD expressions, what is the most critical consideration?",
+      "options": [
+        "LOD expressions always improve performance by pre-aggregating data",
+        "FIXED expressions can create Cartesian joins and significantly impact performance",
+        "INCLUDE expressions are always faster than basic aggregations",
+        "LOD expressions only affect performance when used with table calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "FIXED expressions can create Cartesian joins when they reference dimensions not in the data source's grain, potentially causing significant performance issues. This is a critical consideration for consultant-level optimization.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "performance", "optimization", "troubleshooting"]
+    },
+    {
+      "id": "4",
+      "question": "You have a dashboard showing sales by product category, and you want to calculate each product's percentage of total sales within its category. Which approach is most appropriate?",
+      "options": [
+        "SUM([Sales]) / {FIXED : SUM([Sales])}",
+        "SUM([Sales]) / {FIXED [Category] : SUM([Sales])}",
+        "SUM([Sales]) / {INCLUDE [Category] : SUM([Sales])}",
+        "SUM([Sales]) / SUM({FIXED [Product] : [Sales]})"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To calculate percentage within category, you need the total sales for each category. {FIXED [Category] : SUM([Sales])} provides the total sales per category, which can then be used as the denominator.",
+      "difficulty": "intermediate",
+      "tags": ["LOD", "FIXED", "percentage", "category analysis"]
+    },
+    {
+      "id": "5",
+      "question": "In Tableau's order of operations, when are LOD expressions evaluated?",
+      "options": [
+        "After dimension filters but before measure filters",
+        "Before all filters are applied",
+        "After all filters and table calculations",
+        "At the same time as basic aggregations"
+      ],
+      "correctAnswer": 0,
+      "explanation": "LOD expressions are evaluated after dimension filters but before measure filters in Tableau's order of operations. This timing is crucial for understanding how they interact with different filter types.",
+      "difficulty": "intermediate",
+      "tags": ["LOD", "order of operations", "filters"]
+    },
+    {
+      "id": "6",
+      "question": "You're implementing row-level security with LOD expressions in an enterprise environment. A FIXED expression calculating user-specific metrics is not respecting row-level security filters. What is the most likely cause?",
+      "options": [
+        "FIXED expressions always ignore row-level security",
+        "The FIXED expression is evaluated before row-level security filters are applied",
+        "Row-level security only works with INCLUDE expressions",
+        "The data source connection needs to be refreshed"
+      ],
+      "correctAnswer": 1,
+      "explanation": "FIXED expressions are evaluated before context filters (including row-level security filters) in Tableau's order of operations, which can cause them to bypass security restrictions. This requires careful consideration in enterprise deployments.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "FIXED", "security", "row-level security", "enterprise"]
+    },
+    {
+      "id": "7",
+      "question": "When would you use an EXCLUDE LOD expression instead of INCLUDE or FIXED?",
+      "options": [
+        "When you want to remove specific dimensions from the calculation while keeping others from the view",
+        "When you want to calculate values independent of the view",
+        "When you want to add dimensions to the calculation",
+        "When you want to improve query performance"
+      ],
+      "correctAnswer": 0,
+      "explanation": "EXCLUDE expressions remove specific dimensions from the calculation while maintaining the level of detail from other dimensions in the view. This is useful for calculations like running totals or comparisons.",
+      "difficulty": "intermediate",
+      "tags": ["LOD", "EXCLUDE", "dimensions"]
+    },
+    {
+      "id": "8",
+      "question": "In a complex workbook with multiple LOD expressions causing performance issues, you notice queries taking significantly longer. What combination of strategies would be most effective for optimization?",
+      "options": [
+        "Convert all LOD expressions to table calculations and use data extracts only",
+        "Use context filters to control LOD evaluation, optimize data source joins, and consider pre-aggregating data",
+        "Remove all FIXED expressions and use only INCLUDE expressions",
+        "Increase the query timeout and add more memory to Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A comprehensive approach including context filters for LOD control, optimized data source design, and strategic pre-aggregation addresses the root causes of LOD performance issues rather than just symptoms.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "performance", "optimization", "context filters", "data modeling"]
+    },
+    {
+      "id": "9",
+      "question": "You need to create a cohort analysis showing customer retention rates. You want to calculate the total number of customers acquired in each month, regardless of any date filters applied to the view. Which expression structure is correct?",
+      "options": [
+        "{INCLUDE [Order Date] : COUNTD([Customer ID])}",
+        "{FIXED DATETRUNC('month', [First Order Date]) : COUNTD([Customer ID])}",
+        "{EXCLUDE [Product] : COUNTD([Customer ID])}",
+        "COUNTD({FIXED [Customer ID] : [First Order Date]})"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For cohort analysis, you need to count distinct customers by their acquisition month independent of view filters. FIXED with DATETRUNC ensures the calculation isn't affected by date filters in the view.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "FIXED", "cohort analysis", "date functions", "customer analysis"]
+    },
+    {
+      "id": "10",
+      "question": "When designing a dashboard for executive reporting that combines data from multiple sources, you need to ensure LOD calculations work correctly across data blending. What is the key consideration?",
+      "options": [
+        "LOD expressions cannot be used with blended data sources",
+        "LOD expressions in blended data sources are evaluated independently in each source before blending",
+        "Only FIXED expressions work with data blending",
+        "Data blending automatically optimizes LOD expression performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With data blending, LOD expressions are evaluated independently in each data source before the blending occurs. This can lead to unexpected results and requires careful design of the blending relationships.",
+      "difficulty": "advanced",
+      "tags": ["LOD", "data blending", "multiple data sources", "executive reporting"]
+    }
+  ]
+}

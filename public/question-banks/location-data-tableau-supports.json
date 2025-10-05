@@ -1,0 +1,154 @@
+{
+  "title": "Location Data that Tableau Supports for Building Map Views - Practice Questions",
+  "description": "Practice questions covering Tableau's built-in location data support, geographic roles, mapping capabilities, and handling unrecognized locations",
+  "metadata": {
+    "topic": "Location Data that Tableau Supports for Building Map Views",
+    "domain": "domain1",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/maps_data.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "Which types of location data does Tableau support natively for building map views without requiring custom geocoding?",
+      "options": [
+        "Only countries and capital cities",
+        "Airport codes, cities, countries, regions, states, provinces, some postcodes, and latitude/longitude coordinates in decimal degrees",
+        "All street addresses worldwide",
+        "Only US-based location data"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau natively supports worldwide airport codes (IATA and ICAO), cities with population of 15,000+, countries, regions, territories, states, provinces, some postcodes, second-level administrative districts, and any latitude/longitude coordinates in decimal degrees. For the US, it also supports area codes, CBSA, MSA, Congressional districts, and ZIP codes. Street addresses are not natively supported and require custom geocoding.",
+      "difficulty": "beginner",
+      "tags": ["maps", "geographic-data", "supported-locations", "data-analysis"]
+    },
+    {
+      "id": "2",
+      "question": "A consultant's client has location data that Tableau doesn't recognize automatically. What is the FIRST step they should take before attempting custom geocoding?",
+      "options": [
+        "Immediately create a custom geocoding CSV file",
+        "Assign geographic roles to fields manually to see if Tableau can recognize the data",
+        "Convert all data to latitude/longitude coordinates",
+        "Use data blending exclusively for all geographic data"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The first step should be to assign geographic roles to fields manually. Tableau may recognize the data but hasn't automatically assigned geographic roles. Only if this doesn't work (meaning the data is truly unsupported by Tableau) should you proceed to custom geocoding, editing location names, or using spatial data. The documentation specifically recommends checking if Tableau recognizes your data and assigning geographic roles before attempting custom geocoding.",
+      "difficulty": "intermediate",
+      "tags": ["geographic-roles", "troubleshooting", "maps", "best-practices"]
+    },
+    {
+      "id": "3",
+      "question": "When Tableau assigns a geographic role to a field, what additional fields are automatically generated in the Data pane?",
+      "options": [
+        "Map Layer (generated) and Zoom Level (generated)",
+        "X Coordinate (generated) and Y Coordinate (generated)",
+        "Latitude (generated) and Longitude (generated)",
+        "Geographic Key (generated) and Location Index (generated)"
+      ],
+      "correctAnswer": 2,
+      "explanation": "When you assign a geographic role to a field, Tableau automatically adds two fields to the measures area of the Data pane: Latitude (generated) and Longitude (generated). These fields contain latitude and longitude values based on Tableau's built-in geocoding data. If you double-click each of these fields, Tableau adds them to the Columns and Rows shelves and creates a map view.",
+      "difficulty": "beginner",
+      "tags": ["geographic-roles", "generated-fields", "maps", "latitude-longitude"]
+    },
+    {
+      "id": "4",
+      "question": "A client needs to map data containing worldwide cities, but some cities are not being recognized. What is the minimum population threshold for cities that Tableau's built-in geocoding supports?",
+      "options": [
+        "All cities regardless of size",
+        "Cities with population of 50,000 or more",
+        "Cities with population of 15,000 or more",
+        "Only capital cities and major metropolitan areas"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau's built-in geocoding supports worldwide cities with a population of 15,000 or more. City names are recognized in multiple languages including English (UK/US), French, German, Spanish, Brazilian-Portuguese, Japanese, Korean, and Chinese (Simplified and Traditional). Cities below this population threshold would require custom geocoding to be plotted on maps.",
+      "difficulty": "intermediate",
+      "tags": ["cities", "geographic-data", "supported-locations", "population-threshold"]
+    },
+    {
+      "id": "5",
+      "question": "Which geographic role should be assigned to a field containing US Core Based Statistical Areas (CBSA) and Metropolitan Statistical Areas (MSA)?",
+      "options": [
+        "County (US)",
+        "Area Code (US)",
+        "CBSA/MSA (US)",
+        "State/Province"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The CBSA/MSA (US) geographic role is specifically designed for US Core Based Statistical Areas (CBSA), which includes Metropolitan Statistical Areas (MSA), as defined by the US Office of Management and Budget. Both CBSA/MSA codes and names are recognized by Tableau. This is distinct from County, Area Code, and State/Province roles.",
+      "difficulty": "beginner",
+      "tags": ["geographic-roles", "us-data", "cbsa", "msa", "administrative-areas"]
+    },
+    {
+      "id": "6",
+      "question": "A consultant needs to map European regional data using NUTS (Nomenclature of Territorial Units for Statistics) classifications. What geographic role supports this requirement?",
+      "options": [
+        "County",
+        "State/Province",
+        "NUTS Europe",
+        "Country/Region"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The NUTS Europe geographic role specifically supports NUTS (Nomenclature of Territorial Units for Statistics) levels 1-3 codes. Both codes and names, including synonyms, are supported. This is the appropriate role for European regional statistical data. While County supports second-level administrative divisions, NUTS Europe is the correct role for the specific NUTS classification system used in European statistical reporting.",
+      "difficulty": "intermediate",
+      "tags": ["geographic-roles", "europe", "nuts", "international-data", "regional-data"]
+    },
+    {
+      "id": "7",
+      "question": "A consultant needs to create custom geocoding for mining site locations that Tableau doesn't recognize. What are the MINIMUM required columns for the CSV file to successfully implement custom geocoding?",
+      "options": [
+        "Location Name and Country only",
+        "Latitude, Longitude, and at least one location identifier column",
+        "Address, City, State, and Country",
+        "X Coordinate, Y Coordinate, and Map Layer"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For custom geocoding, the CSV file must include Latitude and Longitude columns with real number values (at least one decimal place), plus at least one location identifier column (such as the location name). The latitude/longitude coordinates are essential for Tableau to plot the locations on the map. Additional hierarchy columns like Country can be included but aren't strictly required for basic custom geocoding.",
+      "difficulty": "intermediate",
+      "tags": ["custom-geocoding", "csv-requirements", "latitude-longitude", "implementation"]
+    },
+    {
+      "id": "8",
+      "question": "When implementing custom geocoding to extend an existing geographic role (like adding missing cities to the City role), what column naming requirement must be followed in the CSV file?",
+      "options": [
+        "Column names can be anything as long as data is correct",
+        "Column names must exactly match the existing geographic role names in Tableau",
+        "All columns must be named with geographic coordinate references",
+        "Column names must include the word 'Custom' as a prefix"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When extending existing geographic roles, the CSV column names must exactly match the existing geographic role names in Tableau's hierarchy. For example, to extend the City role, you might need columns named 'City', 'State', 'Country', 'Latitude', and 'Longitude'. The highest level in the hierarchy is always Country when extending existing roles.",
+      "difficulty": "advanced",
+      "tags": ["custom-geocoding", "geographic-roles", "column-naming", "extend-existing"]
+    },
+    {
+      "id": "9",
+      "question": "A client wants to add a new geographic role called 'Sales Territory' that includes territory names within existing state boundaries. What is the correct approach for implementing this custom geocoding hierarchy?",
+      "options": [
+        "Create CSV with only Sales Territory and coordinates",
+        "Create CSV with Sales Territory, State, Country, Latitude, and Longitude columns to establish proper hierarchy",
+        "Use data blending instead of custom geocoding",
+        "Custom geographic roles cannot be created, only existing ones can be extended"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When adding new geographic roles, you must include parent hierarchy columns to establish the relationship. For a 'Sales Territory' within states, the CSV should include Sales Territory (the new role), State, Country, Latitude, and Longitude columns. This creates a proper geographic hierarchy that Tableau can understand and navigate. The hierarchy ensures proper mapping relationships and enables drill-down functionality.",
+      "difficulty": "advanced",
+      "tags": ["custom-geocoding", "new-geographic-roles", "hierarchy", "sales-territory"]
+    },
+    {
+      "id": "10",
+      "question": "After importing a custom geocoding file through Map > Geocoding > Import Custom Geocoding, what happens to the previous custom geographic roles that were imported?",
+      "options": [
+        "Previous custom roles are merged with the new ones",
+        "Previous custom geographic roles are completely replaced by the new import",
+        "Both old and new custom roles coexist independently",
+        "Only the conflicting roles are replaced, others remain"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you import a new custom geocoding file, it completely replaces all previous custom geographic roles. This is an important consideration for consultants managing multiple custom geocoding datasets - you cannot incrementally add to existing custom geocoding. If you need multiple custom geographic roles, they must all be included in a single CSV file, or you must systematically manage and combine your geocoding files before import.",
+      "difficulty": "intermediate",
+      "tags": ["custom-geocoding", "import-process", "data-management", "replacement-behavior"]
+    }
+  ]
+}

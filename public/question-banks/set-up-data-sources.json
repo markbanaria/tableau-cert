@@ -1,0 +1,154 @@
+{
+  "title": "Set Up Data Sources - Practice Questions",
+  "description": "Practice questions for Set Up Data Sources covering connection types, authentication, optimization, and enterprise deployment patterns",
+  "metadata": {
+    "topic": "Set Up Data Sources",
+    "domain": "domain2",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/datasource_prepare.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A large financial institution needs to connect Tableau to their mainframe DB2 system that doesn't have a native connector. They require enterprise-grade security and optimal performance. What is the BEST connection approach?",
+      "options": [
+        "Use the generic ODBC connector with custom driver configuration",
+        "Develop a custom Web Data Connector using REST APIs",
+        "Use JDBC connector with enterprise authentication and TDC optimization",
+        "Export data to CSV files and use file-based connections"
+      ],
+      "correctAnswer": 2,
+      "explanation": "For enterprise mainframe systems without native connectors, JDBC provides the most robust solution with support for Kerberos authentication, connection pooling, and TDC (Tableau Data Connection) file optimization. JDBC offers better security and performance than ODBC for enterprise scenarios. Web Data Connectors are for REST APIs, not database systems, and CSV exports would lose real-time capabilities and security integration.",
+      "difficulty": "ADVANCED",
+      "tags": ["enterprise", "authentication", "JDBC", "performance"]
+    },
+    {
+      "id": "2",
+      "question": "Your organization is migrating from legacy Tableau Bridge schedules to modern refresh schedules due to the 2025.2 deprecation. Which factor is MOST critical when planning this transition?",
+      "options": [
+        "Converting all schedules during off-peak hours to minimize disruption",
+        "Ensuring Bridge pooling is configured for high-availability critical services",
+        "Upgrading all data sources to use OAuth 2.0 authentication",
+        "Implementing incremental refresh for all extracts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Bridge pooling for high-availability is the most critical factor during the legacy schedule migration. Critical business services need uninterrupted data refresh capabilities, and pooling ensures redundancy. While timing and authentication upgrades are important, service continuity through pooling is essential for enterprise operations during this mandatory transition.",
+      "difficulty": "ADVANCED",
+      "tags": ["tableau-bridge", "migration", "high-availability", "2025-features"]
+    },
+    {
+      "id": "3",
+      "question": "A healthcare organization needs to implement row-level security while maintaining HIPAA compliance and optimal query performance. Which architectural approach is recommended?",
+      "options": [
+        "Implement all security logic in Tableau using user filters and calculated fields",
+        "Use virtual connections with centralized data policies at the connection level",
+        "Create separate data sources for each user group with embedded credentials",
+        "Apply security through Tableau Server permissions only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Virtual connections with centralized data policies provide the optimal solution for HIPAA compliance. They enable row-level security implementation at the connection level, ensuring consistent policy enforcement across all content while maintaining performance through database-level security integration. This approach also supports audit requirements and centralized governance that HIPAA compliance demands.",
+      "difficulty": "ADVANCED",
+      "tags": ["virtual-connections", "RLS", "compliance", "healthcare"]
+    },
+    {
+      "id": "4",
+      "question": "When configuring OAuth 2.0 authentication for a cloud data warehouse connection, which 2025 enhancement provides the most significant security improvement?",
+      "options": [
+        "Automatic certificate rotation every 30 days",
+        "Automatic refresh token rotation with enhanced security protocols",
+        "Multi-factor authentication integration with every connection",
+        "Encryption of all connection strings in the repository"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Automatic refresh token rotation introduced in 2025 significantly enhances security by automatically rotating refresh tokens according to enhanced security protocols. This reduces the risk of token compromise and ensures continuous security without manual intervention. While other security measures are important, automatic token rotation addresses a critical OAuth security vulnerability.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["OAuth", "authentication", "security", "2025-features"]
+    },
+    {
+      "id": "5",
+      "question": "Your Tableau Server deployment needs to support 5,000 concurrent users across multiple departments. Based on Tableau's linear scaling model, what is the minimum recommended application server configuration?",
+      "options": [
+        "3 application servers with load balancing",
+        "5 application servers with dedicated services",
+        "7 application servers with external PostgreSQL repository",
+        "10 application servers with multi-node deployment"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau's linear scaling model recommends 1,000 users per application server. For 5,000 concurrent users, 5 application servers provide the minimum recommended capacity. The external PostgreSQL repository is essential for this scale to handle metadata operations efficiently. While additional servers might provide buffer capacity, 5 represents the baseline requirement for reliable performance.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["scalability", "architecture", "capacity-planning", "enterprise"]
+    },
+    {
+      "id": "6",
+      "question": "A manufacturing company connects to their real-time IoT sensor database that generates 100,000 records per minute. Dashboard performance is critical for operational decisions. What is the optimal data source strategy?",
+      "options": [
+        "Use live connections with aggressive caching policies",
+        "Implement near real-time extracts with 5-minute refresh intervals",
+        "Create aggregated extracts with streaming data integration",
+        "Use direct database connections with view materialization"
+      ],
+      "correctAnswer": 2,
+      "explanation": "For high-volume real-time IoT data, aggregated extracts with streaming data integration provide the optimal balance of performance and timeliness. Pre-aggregating data reduces volume while streaming integration maintains near real-time capabilities. Live connections would overwhelm the system with this data volume, and standard extracts without aggregation wouldn't handle the scale efficiently.",
+      "difficulty": "ADVANCED",
+      "tags": ["real-time", "IoT", "performance", "streaming-data"]
+    },
+    {
+      "id": "7",
+      "question": "When implementing published data sources for enterprise governance, which practice provides the most effective balance between performance and data consistency?",
+      "options": [
+        "Embed all data sources in workbooks to ensure version consistency",
+        "Use certified published data sources with designated data stewards",
+        "Create separate data sources for each department to avoid conflicts",
+        "Implement live connections only to maintain real-time accuracy"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Certified published data sources with designated data stewards represent best practice for enterprise governance. Certification provides trust indicators and quality assurance, while data stewards ensure ongoing maintenance and consistency. This approach centralizes governance while maintaining performance through proper data source design and optimization.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["governance", "published-data-sources", "enterprise", "data-stewardship"]
+    },
+    {
+      "id": "8",
+      "question": "Your organization needs to connect to a legacy system that only supports 32-bit ODBC drivers, but Tableau requires 64-bit drivers. What is the recommended solution approach?",
+      "options": [
+        "Install 32-bit version of Tableau Desktop to match driver architecture",
+        "Implement a data integration layer with 64-bit driver conversion",
+        "Use Tableau Prep to extract data and convert to supported format",
+        "Configure JDBC connection as an alternative to ODBC"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A data integration layer that converts from 32-bit legacy system access to 64-bit driver availability is the recommended enterprise solution. This approach maintains the legacy system while providing proper 64-bit connectivity for Tableau. Installing 32-bit Tableau would sacrifice performance and functionality, while JDBC may not be available for the legacy system.",
+      "difficulty": "ADVANCED",
+      "tags": ["legacy-systems", "drivers", "architecture", "integration"]
+    },
+    {
+      "id": "9",
+      "question": "When optimizing connection performance for a Snowflake data warehouse with multiple users, which configuration provides the most significant improvement?",
+      "options": [
+        "Increase the warehouse size to X-Large for all queries",
+        "Implement connection pooling with appropriate timeout settings",
+        "Use separate warehouses for each user group",
+        "Configure automatic warehouse suspension after 1 minute"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Connection pooling with appropriate timeout settings provides the most efficient resource utilization and performance improvement for multi-user Snowflake environments. Pooling reuses connections, reduces authentication overhead, and manages concurrency effectively. Simply increasing warehouse size wastes resources, while separate warehouses create management complexity without proportional benefits.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["snowflake", "connection-pooling", "performance", "optimization"]
+    },
+    {
+      "id": "10",
+      "question": "A consulting client wants to implement Tableau Catalog for comprehensive metadata management across their multi-cloud environment. Which capability provides the most strategic value for their data governance initiative?",
+      "options": [
+        "Automated data quality scoring for all connected data sources",
+        "Column-level lineage tracking with impact analysis for changes",
+        "Real-time monitoring of query performance across all connections",
+        "Automatic generation of data dictionary documentation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Column-level lineage tracking with impact analysis provides the most strategic value for data governance. This capability enables understanding of data flow from source to visualization, supports change impact assessment, and facilitates compliance requirements. While other features are valuable, lineage is fundamental to enterprise data governance and regulatory compliance initiatives.",
+      "difficulty": "ADVANCED",
+      "tags": ["tableau-catalog", "metadata", "lineage", "governance"]
+    }
+  ]
+}

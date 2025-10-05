@@ -1,0 +1,153 @@
+{
+  "title": "Best Practices for Published Data Sources",
+  "description": "Master the strategic approach to publishing, managing, and optimizing Tableau data sources for enterprise-wide use, including extract vs. live decisions, credential management, and centralized data governance.",
+  "metadata": {
+    "domain": "Domain 1: Evaluate Current State",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the primary benefit of publishing data sources separately rather than embedding them within workbooks?",
+      "options": [
+        "Separate data sources always load faster in web browsers than embedded ones",
+        "Updates to a published data source flow to all connected workbooks automatically",
+        "Embedded data sources cannot use extract refresh schedules",
+        "Separate data sources require fewer permissions to manage"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you publish a data source separately, updates flow to ALL connected workbooks, whether published or not. This creates a single source of truth and centralizes data management. In contrast, embedded data sources are limited to one workbook, and each embedded source requires separate maintenance. This is one of the key advantages of publishing data sources as standalone resources.",
+      "difficulty": "intermediate",
+      "tags": ["published-data-sources", "centralized-management", "single-source-of-truth"]
+    },
+    {
+      "id": 2,
+      "question": "A consultant needs to publish a data source to Tableau Cloud that connects to an on-premises SQL Server database. What is required?",
+      "options": [
+        "The data must be published as an extract since Tableau Cloud cannot reach on-premises data directly",
+        "A VPN connection must be established between Tableau Cloud and the on-premises network",
+        "The SQL Server database must be migrated to a cloud provider first",
+        "Only live connections are supported for SQL Server on Tableau Cloud"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Cloud in the cloud cannot reach data sources maintained on local networks. When connecting to on-premises databases like SQL Server, you must publish an extract and set up a refresh schedule using Tableau Bridge. Some cloud-hosted data sources always require extracts including Google Analytics, Salesforce.com, Oracle, OData, and some ODBC data sources. Tableau Bridge expands data freshness options for data Tableau Cloud cannot reach directly.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-cloud", "extracts", "tableau-bridge", "on-premises-data"]
+    },
+    {
+      "id": 3,
+      "question": "What authentication option should be selected when publishing a data source if the organization wants to set up automatic extract refresh schedules?",
+      "options": [
+        "Prompt user—users enter credentials each time",
+        "Viewer credentials—passes through user identity via SSO",
+        "Embedded password—credentials are saved with the connection",
+        "Server run as account—uses Kerberos service account"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To set up automatic refresh schedules for extracts, you MUST embed the password in the connection. When credentials are embedded, Tableau Server or Cloud can connect to the data source on schedule without user intervention. Options like 'Prompt user' or 'Viewer credentials' require user authentication at access time, which prevents automated scheduled refreshes from working.",
+      "difficulty": "intermediate",
+      "tags": ["authentication", "extract-refresh", "embedded-credentials", "scheduled-refreshes"]
+    },
+    {
+      "id": 4,
+      "question": "A published data source consists of which of the following components? (Select the option that includes ALL correct components)",
+      "options": [
+        "Data connection information and extract only",
+        "Connection information, optional extract, access/refresh credentials, and metadata (calculations, sets, groups, field formatting)",
+        "Only the data connection string and authentication method",
+        "Extract file and scheduled refresh configuration only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A Tableau data source consists of: (1) Connection information describing what data to bring in (including joins), (2) An optional extract if created, (3) Access information (embedded credentials, OAuth tokens, or prompt for credentials), and (4) Customization/metadata including calculations, sets, groups, bins, parameters, field formatting, and hidden fields. All of these refinements become part of the published data source that you maintain.",
+      "difficulty": "beginner",
+      "tags": ["data-source-components", "metadata", "extracts", "connections"]
+    },
+    {
+      "id": 5,
+      "question": "What is the key organizational role that Tableau recommends to avoid data source proliferation and ensure data quality?",
+      "options": [
+        "A site administrator who manages server permissions",
+        "A data steward or team who creates and publishes data sources that meet organizational requirements",
+        "Individual content creators who publish their own data sources",
+        "A database administrator who controls all data connections"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau recommends designating a data steward (or team) who creates and publishes data sources for the Tableau community that meet organizational data requirements. This central management helps avoid data source proliferation. Authors who connect to managed data can be confident that the answers they find reflect the current state of the business. A site administrator would manage published content and permissions, but the data steward role focuses on creating and maintaining quality data sources.",
+      "difficulty": "intermediate",
+      "tags": ["governance", "data-steward", "centralized-management", "data-quality"]
+    },
+    {
+      "id": 6,
+      "question": "When publishing a workbook that connects to a Tableau Server data source (rather than a database), what do the authentication options control?",
+      "options": [
+        "Whether the workbook can access the published data source it connects to",
+        "The credentials used to connect to the underlying database",
+        "The permissions needed to edit the workbook",
+        "The refresh schedule for the underlying extract"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When you publish a workbook that connects to a Tableau Server/Cloud data source, you set whether the workbook can ACCESS THE PUBLISHED DATA SOURCE (not the underlying database). The choices are always 'Embedded password' or 'Prompt users'. If you embed password, users can see the workbook even without View/Connect permissions on the data source. If you prompt users, they must have View and Connect permissions on the published data source to see the data.",
+      "difficulty": "advanced",
+      "tags": ["authentication", "published-data-sources", "permissions", "embedded-password"]
+    },
+    {
+      "id": 7,
+      "question": "What are valid reasons to publish an extract instead of using a live connection? (Select the most comprehensive answer)",
+      "options": [
+        "Tableau Cloud cannot reach the data directly, or to improve performance with large/slow databases",
+        "Only to enable functionality the data source doesn't support (e.g., Median with SQL Server)",
+        "Extracts are required for all cloud-hosted data sources",
+        "Live connections are deprecated and should not be used"
+      ],
+      "correctAnswer": 0,
+      "explanation": "There are three main reasons to use extracts: (1) Tableau Cloud cannot reach data on local networks directly—requires extracts with Tableau Bridge, (2) To improve performance—even if live connections are supported, a subset extract can be faster and easier to work with than a large or slow database connection, (3) To enable functionality the data source doesn't inherently support (like Median function with SQL Server). Experimentation between live and extract is often recommended to find the best option.",
+      "difficulty": "intermediate",
+      "tags": ["extracts", "live-connections", "performance", "tableau-cloud"]
+    },
+    {
+      "id": 8,
+      "question": "When a published data source is renamed on Tableau Server or Cloud, what happens to workbooks that use that data source?",
+      "options": [
+        "Workbooks immediately break and require republishing",
+        "Workbooks use the new name after the next data source refresh is complete",
+        "Workbooks must be manually updated to reference the new name",
+        "The old name is retained for all existing workbooks permanently"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a published data source is renamed (via the More actions menu or REST API), all workbooks that use that data source will use the new name AFTER THE NEXT DATA SOURCE REFRESH is complete. The rename is NOT saved in the revision history. Note: Editing a data source caption doesn't change the underlying published data source name—if you edit the underlying name, the caption isn't updated, but the correct data source is still referenced.",
+      "difficulty": "intermediate",
+      "tags": ["published-data-sources", "naming-convention", "data-source-management"]
+    },
+    {
+      "id": 9,
+      "question": "What is a key disadvantage of embedding data sources within workbooks compared to publishing them separately?",
+      "options": [
+        "Embedded data sources cannot use scheduled extract refreshes",
+        "Each embedded data source has a separate connection to the data and can show different results at any time, leading to data source proliferation",
+        "Embedded data sources require more storage space on Tableau Server",
+        "Users cannot create filters on embedded data sources"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Each embedded data source has a separate connection to the data, and each has the potential to show something different than the other at any given time. Data source proliferation is common with embedded sources. While embedded extracts CAN be refreshed on schedules, each workbook must have its own refresh schedule, which can affect performance when multiple workbooks connect to the same original data. Published data sources create a single source of truth and centralize management.",
+      "difficulty": "intermediate",
+      "tags": ["embedded-data-sources", "data-proliferation", "centralized-management"]
+    },
+    {
+      "id": 10,
+      "question": "For virtual connections published with 'Embed password' or 'Embed credentials' (Tableau 2022.3+/Desktop 2022.4+), how are permissions and data policies evaluated?",
+      "options": [
+        "Both connection permissions and data policies use the content creator's identity",
+        "Both connection permissions and data policies use the viewer's identity",
+        "Connection permissions use the creator's identity, but data policies are evaluated using the viewer's identity",
+        "Data policies use the creator's identity, but connection permissions use the viewer's identity"
+      ],
+      "correctAnswer": 2,
+      "explanation": "When you embed credentials for a virtual connection (2022.3+/2022.4+), the viewer gets YOUR permissions to connect to and query the virtual connection. However, any data policies associated with the virtual connection are ALWAYS evaluated using the viewer's identity—not yours. This ensures sensitive data remains protected via data policies while enabling access through embedded credentials. You can only embed CONNECT permissions, not edit permissions.",
+      "difficulty": "advanced",
+      "tags": ["virtual-connections", "data-policies", "embedded-credentials", "security"]
+    }
+  ]
+}

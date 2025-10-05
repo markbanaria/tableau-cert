@@ -1,0 +1,125 @@
+{
+  "title": "Create a Virtual Connection",
+  "description": "Master creating and configuring virtual connections in Tableau for centralized data access, shared credentials, row-level security, and mixed live/extract table management.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate-advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is a virtual connection in Tableau?",
+      "options": [
+        "A direct connection to a database that bypasses Tableau Server",
+        "A sharable central access point to data that supports row-level security at the connection level",
+        "A temporary connection used only during workbook authoring",
+        "A connection that virtualizes data from multiple sources into one table"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A virtual connection is a Tableau content type that provides a SHARABLE CENTRAL ACCESS POINT to data and supports ROW-LEVEL SECURITY at the connection level. Users connect through the virtual connection rather than directly to databases, enabling centralized credential management and security policies. Virtual connections require Tableau Data Management license.",
+      "difficulty": "beginner",
+      "tags": ["virtual-connections", "centralized-access", "row-level-security", "data-management"]
+    },
+    {
+      "id": 2,
+      "question": "Who can create a virtual connection in Tableau Cloud or Server?",
+      "options": [
+        "Only site administrators",
+        "Any user with Explorer or higher site role",
+        "Server/site administrators OR Creators, AND must have credentials to the database",
+        "Only users with Data Management Add-on license"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To create a virtual connection, you must: (1) Have CREDENTIALS to the database that the virtual connection connects to, AND (2) Be a SERVER/SITE ADMINISTRATOR, OR a CREATOR. The Creator site role (formerly Publisher) is the minimum non-admin role that can create virtual connections. Note that using virtual connections requires Data Management license, but the creator role determines who can build them.",
+      "difficulty": "intermediate",
+      "tags": ["virtual-connections", "site-roles", "creators", "permissions"]
+    },
+    {
+      "id": 3,
+      "question": "When creating a virtual connection, credentials are entered during the connection setup. How are these credentials used?",
+      "options": [
+        "Credentials are only used for initial validation and not saved",
+        "Credentials are saved in the virtual connection so connection users don't have to enter credentials",
+        "Each user must still provide their own credentials when using the virtual connection",
+        "Credentials are encrypted and sent to each user for local storage"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The credentials you enter when creating a virtual connection are SAVED IN THE VIRTUAL CONNECTION, so connection users DON'T HAVE TO ENTER CREDENTIALS to connect to the data. This is a key feature of virtual connections—centralized credential management. Users authenticate to Tableau, then the virtual connection handles authentication to the underlying data source using the saved credentials.",
+      "difficulty": "intermediate",
+      "tags": ["virtual-connections", "credentials", "centralized-management", "authentication"]
+    },
+    {
+      "id": 4,
+      "question": "A virtual connection can have multiple connections to different databases. What are valid use cases for this capability?",
+      "options": [
+        "Only to connect to backup databases for redundancy",
+        "Use a table from any connection as an entitlement table in data policies; migrate data between databases; access same database with different credentials; group related tables from multiple databases",
+        "Multiple connections are only for load balancing purposes",
+        "Each connection must be to a different database vendor (e.g., one SQL Server, one Oracle)"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With multiple connections in a virtual connection, you can: (1) Use a table from ANY connection/database as an entitlement table in a data policy that secures tables from OTHER connections/databases, (2) Add or REPLACE tables when migrating data between databases, (3) Add multiple connections to the SAME server/database with DIFFERENT CREDENTIALS, (4) SHARE a group of RELATED TABLES regardless of physical location (e.g., employee info from multiple databases). Multiple connections provide flexibility for complex enterprise scenarios.",
+      "difficulty": "advanced",
+      "tags": ["virtual-connections", "multiple-connections", "entitlement-tables", "data-migration"]
+    },
+    {
+      "id": 5,
+      "question": "What are the two modes available for tables in a virtual connection, and can they be mixed?",
+      "options": [
+        "Cached and Direct modes; they cannot be mixed in the same virtual connection",
+        "Live and Extract modes; you can set individual tables to either mode in the SAME virtual connection",
+        "Transactional and Analytical modes; all tables must use the same mode",
+        "Real-time and Scheduled modes; mode is set at connection level, not table level"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tables in virtual connections can be set to: (1) LIVE—tables are queried directly from the database (default), or (2) EXTRACT—tables are extracted and saved to Tableau. You can set INDIVIDUAL TABLES to either live or extract mode IN THE SAME VIRTUAL CONNECTION, whether from multiple connections or not. For example, you might extract some tables to avoid impact from heavy traffic while keeping other tables live for real-time data.",
+      "difficulty": "intermediate",
+      "tags": ["virtual-connections", "live-mode", "extract-mode", "table-configuration"]
+    },
+    {
+      "id": 6,
+      "question": "Starting in Tableau Cloud June 2024 and Server 2024.2, what extract refresh capability was added for virtual connection tables?",
+      "options": [
+        "Parallel extract refresh for multiple tables simultaneously",
+        "Incremental refresh using a key column to identify new rows",
+        "Automatic extract optimization based on usage patterns",
+        "Cloud-native extract storage with unlimited capacity"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Starting in Tableau Cloud June 2024 and Server 2024.2, you can configure table extracts for INCREMENTAL REFRESH. You specify a KEY COLUMN used to identify new rows. When the incremental extract is refreshed, only rows where the key column has INCREASED will be added to the extract. Fewer rows processed means faster refresh jobs and less database load. You can still do FULL REFRESH on an extract configured for incremental refresh when needed.",
+      "difficulty": "intermediate",
+      "tags": ["incremental-refresh", "extract-refresh", "virtual-connections", "tableau-2024"]
+    },
+    {
+      "id": 7,
+      "question": "What is the purpose of the table visibility toggle in a virtual connection?",
+      "options": [
+        "To control which tables appear in the virtual connection editor only",
+        "To show (visible) or hide tables and their data from users; hidden tables can still be used in data policies and as entitlement tables",
+        "To enable or disable extract refresh for specific tables",
+        "To mark tables as live or extract mode"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Visibility toggle controls whether users can see table data: VISIBLE (✓, default)—users can see table data; you can create data policies to govern which data users see. HIDDEN (✗)—users CAN'T see table data, BUT you can USE HIDDEN TABLES in a data policy and AS AN ENTITLEMENT TABLE. This allows you to maintain entitlement data that users shouldn't directly query while still using it for row-level security policies.",
+      "difficulty": "advanced",
+      "tags": ["table-visibility", "hidden-tables", "entitlement-tables", "data-policies"]
+    },
+    {
+      "id": 8,
+      "question": "Starting in Tableau Cloud June 2024 and Server 2024.2, what new custom SQL capability was added for virtual connection tables?",
+      "options": [
+        "Support for stored procedures and functions",
+        "Convert to Custom SQL—approximates the SQL for a table as a starting point, less impactful to downstream assets than New Custom SQL",
+        "Automatic SQL optimization for improved performance",
+        "Cross-database joins in custom SQL"
+      ],
+      "correctAnswer": 1,
+      "explanation": "'Convert to Custom SQL' (introduced Tableau Cloud June 2024/Server 2024.2) approximates the SQL used to connect to a table and uses that as a starting point for your own custom SQL. This is LESS IMPACTFUL to existing virtual connections than using 'New Custom SQL'—downstream assets see the table as the SAME TABLE instead of a new one. You can filter or make query changes to modify the result set. Note: The initial SQL should be considered a starting point and may need modification for your database's SQL syntax.",
+      "difficulty": "advanced",
+      "tags": ["custom-sql", "convert-to-custom-sql", "virtual-connections", "tableau-2024"]
+    }
+  ]
+}

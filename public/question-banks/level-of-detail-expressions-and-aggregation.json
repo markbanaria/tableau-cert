@@ -1,0 +1,224 @@
+{
+  "title": "Level of Detail Expressions and Aggregation - Practice Questions",
+  "description": "Practice questions for Level of Detail Expressions and Aggregation covering FIXED, INCLUDE, EXCLUDE expressions, performance optimization, and enterprise scenarios",
+  "metadata": {
+    "topic": "Level of Detail Expressions and Aggregation",
+    "domain": "Design and Troubleshoot Calculations and Workbooks",
+    "difficulty": "Mixed (Beginner to Advanced)",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/calculations_calculatedfields_lod_replication.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 15
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary difference between FIXED, INCLUDE, and EXCLUDE Level of Detail expressions in terms of granularity control?",
+      "options": [
+        "FIXED ignores view dimensions, INCLUDE adds dimensions to the view, EXCLUDE removes dimensions from the view calculation",
+        "FIXED creates table calculations, INCLUDE creates row-level calculations, EXCLUDE creates aggregate calculations",
+        "FIXED works with measures only, INCLUDE works with dimensions only, EXCLUDE works with both",
+        "All three types work identically but use different syntax for compatibility"
+      ],
+      "correctAnswer": 0,
+      "explanation": "FIXED expressions compute values using only specified dimensions, ignoring view-level dimensions. INCLUDE expressions use both specified dimensions and view-level dimensions. EXCLUDE expressions remove specified dimensions from the view-level calculation. This fundamental difference in how they handle granularity makes them suitable for different analytical scenarios.",
+      "difficulty": "Beginner",
+      "tags": ["LOD", "FIXED", "INCLUDE", "EXCLUDE", "granularity"]
+    },
+    {
+      "id": "2",
+      "question": "Which of the following correctly describes the syntax structure for Level of Detail expressions?",
+      "options": [
+        "{[FIXED | INCLUDE | EXCLUDE] <dimension declaration> : <aggregate expression>}",
+        "[FIXED | INCLUDE | EXCLUDE] {<dimension declaration> : <aggregate expression>}",
+        "LOD([FIXED | INCLUDE | EXCLUDE], <dimension>, <aggregate expression>)",
+        "{LOD [FIXED | INCLUDE | EXCLUDE] : <dimension declaration>, <aggregate expression>}"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The correct syntax for LOD expressions is enclosed in curly braces with the LOD type keyword, followed by dimension declaration, a colon, and the aggregate expression. The options order and bracket placement are critical for proper functionality. Other syntax variations will result in calculation errors.",
+      "difficulty": "Beginner",
+      "tags": ["LOD", "syntax", "structure"]
+    },
+    {
+      "id": "3",
+      "question": "When does Tableau automatically wrap a Level of Detail expression in an aggregate function?",
+      "options": [
+        "Always, regardless of the expression type or view granularity",
+        "Only when the LOD expression has a finer level of detail than the view",
+        "Only when using FIXED expressions in calculated fields",
+        "Never, LOD expressions are always computed at their declared granularity"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau automatically wraps LOD expressions in an aggregate function when the expression has a finer level of detail than the view. This happens because multiple values from the finer granularity need to be aggregated to display at the view's coarser granularity. When LOD expressions have the same or coarser granularity as the view, no automatic aggregation occurs.",
+      "difficulty": "Intermediate",
+      "tags": ["LOD", "aggregation", "automatic", "granularity"]
+    },
+    {
+      "id": "4",
+      "question": "What happens when you create a FIXED LOD expression that references fewer dimensions than are present in your view?",
+      "options": [
+        "The calculation will fail and return an error",
+        "Values will be replicated across all combinations of the view dimensions",
+        "Only the first row of data will be calculated",
+        "The expression will automatically include all view dimensions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a FIXED LOD expression references fewer dimensions than the view (coarser granularity), the calculated values are replicated across all combinations of the view's dimensions. This replication allows for comparative analysis, such as comparing individual sales to regional averages, but users should be aware that the same value appears multiple times.",
+      "difficulty": "Intermediate",
+      "tags": ["FIXED", "replication", "coarser granularity", "comparative analysis"]
+    },
+    {
+      "id": "5",
+      "question": "Which limitation applies to the aggregate expression portion of Level of Detail expressions?",
+      "options": [
+        "Only SUM and COUNT aggregations are supported",
+        "Table calculations cannot be used within the aggregate expression",
+        "String functions are not supported in LOD expressions",
+        "LOD expressions cannot reference calculated fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Table calculations cannot be used within the aggregate expression portion of LOD expressions because table calculations operate on the query results after data is retrieved, while LOD expressions are computed during the query execution phase. Additionally, ATTR aggregation is not supported in LOD expressions. Other functions and calculated fields can generally be used within LOD expressions.",
+      "difficulty": "Beginner",
+      "tags": ["LOD", "limitations", "table calculations", "aggregate expression"]
+    },
+    {
+      "id": "6",
+      "question": "A retail company wants to compare each store's sales to the average sales across all stores in the same region. The view shows Store Name and Sales by Month. What LOD expression would accomplish this?",
+      "options": [
+        "{INCLUDE [Region] : AVG([Sales])}",
+        "{FIXED [Region] : AVG([Sales])}",
+        "{EXCLUDE [Store Name] : AVG([Sales])}",
+        "{FIXED [Store Name] : AVG([Sales])}"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A FIXED expression with [Region] calculates the average sales for each region independently of the view's dimensions (Store Name and Month). This provides a consistent regional average that can be compared to individual store performance. INCLUDE would add Region to the existing view dimensions, EXCLUDE would remove Store Name but still vary by Month, and option D would calculate per-store averages.",
+      "difficulty": "Intermediate",
+      "tags": ["FIXED", "comparative analysis", "business scenario", "retail"]
+    },
+    {
+      "id": "7",
+      "question": "An enterprise dashboard displays customer purchase patterns with Customer ID and Product Category. Management wants to see what percentage each category represents of each customer's total purchases. Which approach is most appropriate?",
+      "options": [
+        "{INCLUDE [Product Category] : SUM([Sales])} / SUM([Sales])",
+        "SUM([Sales]) / {EXCLUDE [Product Category] : SUM([Sales])}",
+        "{FIXED [Customer ID] : SUM([Sales])} / SUM([Sales])",
+        "SUM([Sales]) / {FIXED [Customer ID] : SUM([Sales])}"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To calculate the percentage each category represents of a customer's total purchases, you need the category sales (numerator) divided by the customer's total sales across all categories (denominator). EXCLUDE [Product Category] removes the category dimension while maintaining the customer dimension, giving the total sales per customer. This creates the correct percentage calculation for each customer-category combination.",
+      "difficulty": "Advanced",
+      "tags": ["EXCLUDE", "percentage calculation", "enterprise scenario", "customer analysis"]
+    },
+    {
+      "id": "8",
+      "question": "A financial services company has a dashboard showing Account Manager performance. The view contains Account Manager, Client Name, and Monthly Revenue. They want to show each manager's revenue compared to the company-wide average revenue per client. What LOD expression provides this comparison metric?",
+      "options": [
+        "{FIXED : AVG([Monthly Revenue])}",
+        "{INCLUDE [Account Manager] : AVG([Monthly Revenue])}",
+        "{EXCLUDE [Account Manager], [Client Name] : AVG([Monthly Revenue])}",
+        "{FIXED [Client Name] : AVG([Monthly Revenue])}"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A FIXED expression without any dimension specification creates a table-scoped calculation that computes the overall average across the entire dataset, regardless of view dimensions. This provides the company-wide average revenue per client that can be compared to individual manager performance. The other options would calculate averages at different granularities but not the overall company average.",
+      "difficulty": "Advanced",
+      "tags": ["FIXED", "table-scoped", "company-wide average", "financial services"]
+    },
+    {
+      "id": "9",
+      "question": "A manufacturing company tracks production data with Facility, Product Line, and Daily Output. They want to include each facility's total monthly output alongside daily figures. The view shows Facility and Daily Output by Date. Which LOD expression accomplishes this?",
+      "options": [
+        "{INCLUDE [Facility] : SUM([Daily Output])}",
+        "{FIXED [Facility], MONTH([Date]) : SUM([Daily Output])}",
+        "{EXCLUDE [Date] : SUM([Daily Output])}",
+        "{INCLUDE MONTH([Date]) : SUM([Daily Output])}"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To get monthly totals by facility while maintaining daily granularity in the view, use FIXED with [Facility] and MONTH([Date]). This calculates the sum of daily output for each facility-month combination, providing the monthly total that will replicate across all days in that month for each facility. INCLUDE would change the view granularity, and EXCLUDE wouldn't provide the monthly breakdown needed.",
+      "difficulty": "Intermediate",
+      "tags": ["FIXED", "date functions", "manufacturing", "monthly aggregation"]
+    },
+    {
+      "id": "10",
+      "question": "An e-commerce platform analyzes user behavior with Customer ID, Session ID, and Page Views. They want to understand session behavior compared to each customer's average session length. The view shows Customer ID and Total Page Views by Session ID. What calculation provides the customer's average session page views?",
+      "options": [
+        "{INCLUDE [Customer ID] : AVG([Page Views])}",
+        "{FIXED [Customer ID] : AVG(SUM([Page Views]))}",
+        "{EXCLUDE [Session ID] : AVG([Page Views])}",
+        "{FIXED [Session ID] : AVG([Page Views])}"
+      ],
+      "correctAnswer": 2,
+      "explanation": "EXCLUDE [Session ID] removes the session dimension from the calculation while keeping the Customer ID dimension from the view. This calculates the average page views across all sessions for each customer, which is exactly what's needed for comparison. The EXCLUDE approach is more intuitive here than using FIXED [Customer ID] because it works with the existing view structure.",
+      "difficulty": "Intermediate",
+      "tags": ["EXCLUDE", "e-commerce", "user behavior", "session analysis"]
+    },
+    {
+      "id": "11",
+      "question": "A healthcare analytics team needs to optimize dashboard performance. Their current dashboard uses multiple complex LOD expressions: {FIXED [Hospital] : SUM([Patient Count])}, {INCLUDE [Department] : AVG([Treatment Time])}, and {EXCLUDE [Doctor] : COUNT([Procedures])}. Which optimization strategy would most effectively improve performance?",
+      "options": [
+        "Replace all LOD expressions with basic calculated fields using IF statements",
+        "Create calculated fields for reused LOD expressions and use data source filters to reduce data volume",
+        "Convert all FIXED expressions to INCLUDE expressions for better query optimization",
+        "Move all LOD calculations to table calculations for client-side processing"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Creating calculated fields for frequently reused LOD expressions avoids recalculating the same values multiple times. Data source filters reduce the amount of data processed by LOD expressions. Table calculations can't replace LOD functionality, IF statements would be far more complex and less performant, and changing LOD types would alter the analytical meaning of the calculations.",
+      "difficulty": "Advanced",
+      "tags": ["performance optimization", "healthcare", "calculated fields", "data source filters"]
+    },
+    {
+      "id": "12",
+      "question": "A consulting team is troubleshooting a dashboard where LOD expressions return unexpected NULL values. The expression {FIXED [Region], [Product Category] : AVG([Profit Ratio])} works in some views but returns NULL in others. What is the most likely cause and solution?",
+      "options": [
+        "The LOD expression syntax is incorrect; add parentheses around the dimension list",
+        "Different views have different data source connections; ensure all views use the same connection",
+        "Field matching issues due to case sensitivity or field naming differences between views",
+        "LOD expressions cannot be used across multiple worksheets in the same workbook"
+      ],
+      "correctAnswer": 2,
+      "explanation": "LOD expressions require exact field name matching, including case sensitivity. If field names differ between data sources or views (e.g., 'Product Category' vs 'product category'), the LOD expression will return NULL. The solution is to ensure consistent field naming or use the same data source across views. LOD expressions can work across worksheets, and the syntax shown is correct.",
+      "difficulty": "Advanced",
+      "tags": ["troubleshooting", "NULL values", "field matching", "consulting"]
+    },
+    {
+      "id": "13",
+      "question": "A multinational corporation has regional sales data where each region uses different fiscal year calendars. They want to compare current fiscal quarter performance to the same quarter's historical average. The view shows Region, Current Quarter Sales, and Fiscal Year. Which LOD approach handles the varying fiscal calendars correctly?",
+      "options": [
+        "{FIXED [Region], [Fiscal Quarter] : AVG([Sales])} calculated separately for each region's fiscal calendar",
+        "{INCLUDE [Fiscal Quarter] : AVG([Sales])} with a parameter for fiscal year start",
+        "{EXCLUDE [Fiscal Year] : AVG([Sales])} to remove year variations",
+        "Create separate LOD expressions for each region and combine with CASE statements"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Different fiscal calendars require region-specific LOD expressions because a universal expression cannot account for varying fiscal quarter definitions. Creating separate FIXED expressions for each region (with appropriate fiscal quarter calculations) and combining them with CASE statements based on region provides the most accurate and maintainable solution. A single LOD expression would misalign quarters across regions.",
+      "difficulty": "Advanced",
+      "tags": ["multinational", "fiscal calendars", "CASE statements", "regional analysis"]
+    },
+    {
+      "id": "14",
+      "question": "An analytics team is building a real-time operational dashboard that updates every 15 minutes. The dashboard includes several LOD expressions calculating rolling averages and cumulative metrics. Users report that the dashboard becomes significantly slower during peak business hours. What is the most effective approach to maintain real-time performance?",
+      "options": [
+        "Cache LOD calculation results in extracts that refresh every 15 minutes instead of using live connections",
+        "Replace LOD expressions with faster table calculations and accept the limitation in functionality",
+        "Implement incremental data loading and partition LOD calculations by time periods",
+        "Reduce the complexity of LOD expressions by limiting them to single-dimension calculations only"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Incremental data loading with time-partitioned LOD calculations optimizes performance by limiting calculations to new data and relevant time windows. This maintains the analytical power of LOD expressions while reducing computational load. Extracts would lose real-time capability, table calculations can't replace LOD functionality for these use cases, and limiting to single dimensions would sacrifice analytical depth.",
+      "difficulty": "Advanced",
+      "tags": ["real-time", "performance", "incremental loading", "operational dashboard"]
+    },
+    {
+      "id": "15",
+      "question": "A data science team is analyzing customer lifetime value (CLV) using a complex nested LOD expression: SUM([Revenue]) / {FIXED [Customer ID] : COUNTD([Order Date])}. The expression works correctly, but they need to extend it to include a regional adjustment factor. Which approach correctly incorporates regional adjustments while maintaining the per-customer calculation integrity?",
+      "options": [
+        "SUM([Revenue]) * [Regional Factor] / {FIXED [Customer ID] : COUNTD([Order Date])}",
+        "(SUM([Revenue]) / {FIXED [Customer ID] : COUNTD([Order Date])}) * {FIXED [Region] : AVG([Regional Factor])}",
+        "{FIXED [Customer ID] : SUM([Revenue]) * AVG([Regional Factor])} / {FIXED [Customer ID] : COUNTD([Order Date])}",
+        "SUM([Revenue]) / ({FIXED [Customer ID] : COUNTD([Order Date])} * {INCLUDE [Region] : [Regional Factor]})"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Option C correctly applies the regional factor within the customer-level LOD expression before dividing by the order count. This ensures that the regional adjustment is applied consistently at the customer level. Options A and B would apply regional factors at the wrong granularity, and option D incorrectly attempts to multiply the order count by the regional factor, which would distort the CLV calculation logic.",
+      "difficulty": "Advanced",
+      "tags": ["nested LOD", "customer lifetime value", "data science", "regional adjustment"]
+    }
+  ]
+}

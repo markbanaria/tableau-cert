@@ -1,0 +1,154 @@
+{
+  "title": "Tableau's Order of Operations - Practice Questions",
+  "description": "Practice questions covering Tableau's order of operations, including filters, LOD expressions, table calculations, and troubleshooting scenarios",
+  "metadata": {
+    "topic": "Tableau's Order of Operations",
+    "domain": "domain3",
+    "difficulty": "advanced",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/order_of_operations.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "In Tableau's order of operations, where are FIXED LOD expressions evaluated relative to dimension filters?",
+      "options": [
+        "After dimension filters are applied",
+        "Before dimension filters but after context filters",
+        "At the same time as dimension filters",
+        "After all filters including table calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "FIXED LOD expressions are evaluated before dimension filters but after context filters and data source filters. This is why dimension filters don't affect FIXED calculations unless converted to context filters.",
+      "difficulty": "intermediate",
+      "tags": ["order of operations", "FIXED LOD", "dimension filters"]
+    },
+    {
+      "id": "2",
+      "question": "You have a dashboard with a Top 10 customers calculation that's not working as expected when users apply region filters. The Top 10 is calculated across all regions instead of within the filtered region. What is the most effective solution?",
+      "options": [
+        "Convert the Top 10 filter to a context filter",
+        "Convert the region filter to a context filter",
+        "Use a FIXED LOD expression instead of Top N filter",
+        "Change the Top N filter to a measure filter"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Converting the region filter to a context filter ensures it's applied before the Top N calculation, so the Top 10 customers will be calculated within the selected region rather than globally.",
+      "difficulty": "advanced",
+      "tags": ["order of operations", "context filters", "Top N", "troubleshooting"]
+    },
+    {
+      "id": "3",
+      "question": "When troubleshooting a calculation that uses INCLUDE/EXCLUDE LOD expressions, you notice that dimension filters are affecting the results differently than expected. Where are INCLUDE/EXCLUDE LODs evaluated in the order of operations?",
+      "options": [
+        "Before all filters like FIXED LODs",
+        "After dimension filters and context filters",
+        "Before dimension filters but after context filters",
+        "At the same time as table calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "INCLUDE and EXCLUDE LOD expressions are evaluated after both context filters and dimension filters, which is why they behave differently from FIXED LODs and are less problematic with dimension filtering.",
+      "difficulty": "advanced",
+      "tags": ["order of operations", "INCLUDE LOD", "EXCLUDE LOD", "dimension filters"]
+    },
+    {
+      "id": "4",
+      "question": "In a complex dashboard, you need a table calculation to execute before dimension filters are applied. What is the recommended approach?",
+      "options": [
+        "Convert all dimension filters to measure filters",
+        "Move the table calculation to the data source level",
+        "Rewrite the table calculation as a FIXED LOD expression",
+        "Use context filters for all dimension filters"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Since table calculations are executed after dimension filters in the order of operations, rewriting as a FIXED LOD expression (which executes before dimension filters) achieves the desired behavior.",
+      "difficulty": "advanced",
+      "tags": ["order of operations", "table calculations", "FIXED LOD", "conversion"]
+    },
+    {
+      "id": "5",
+      "question": "What is the visual indicator that a filter has been converted to a context filter in Tableau?",
+      "options": [
+        "The filter pill turns blue",
+        "The filter pill turns grey",
+        "The filter shows a star icon",
+        "The filter appears at the top of the Filters shelf"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Context filters are visually distinguished by appearing as grey pills in the Filters shelf, making it easy to identify which filters have elevated precedence in the order of operations.",
+      "difficulty": "basic",
+      "tags": ["context filters", "user interface", "visual indicators"]
+    },
+    {
+      "id": "6",
+      "question": "You're building an enterprise dashboard where users need to filter by date range, but you want sales targets (calculated using FIXED LOD) to remain constant regardless of date selection. What approach ensures the targets aren't affected by the date filter?",
+      "options": [
+        "Use INCLUDE LOD expressions instead of FIXED LOD",
+        "Convert the date filter to a context filter",
+        "Keep the date filter as a dimension filter (FIXED LODs ignore dimension filters)",
+        "Move the sales targets calculation to a table calculation"
+      ],
+      "correctAnswer": 2,
+      "explanation": "FIXED LOD expressions ignore dimension filters (including date filters) by design, so keeping the date filter as a dimension filter ensures the sales targets remain constant while allowing date filtering for other metrics.",
+      "difficulty": "advanced",
+      "tags": ["FIXED LOD", "enterprise", "date filters", "business requirements"]
+    },
+    {
+      "id": "7",
+      "question": "In the complete order of operations, where do Sets get evaluated?",
+      "options": [
+        "After dimension filters",
+        "Before context filters",
+        "After context filters but before dimension filters",
+        "At the same time as FIXED LOD expressions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Sets are evaluated after context filters but before dimension filters in Tableau's order of operations, which affects how they interact with other filtering mechanisms.",
+      "difficulty": "intermediate",
+      "tags": ["order of operations", "Sets", "filters"]
+    },
+    {
+      "id": "8",
+      "question": "A consultant is troubleshooting a dashboard where a FIXED LOD calculation is being affected by a dimension filter, contrary to expected behavior. What should they check first?",
+      "options": [
+        "Whether the dimension filter has been converted to a context filter",
+        "Whether the FIXED LOD syntax is correct",
+        "Whether the dimension filter is in the correct position on the shelf",
+        "Whether data blending is affecting the calculation"
+      ],
+      "correctAnswer": 0,
+      "explanation": "If a FIXED LOD is being affected by a dimension filter, the most likely cause is that the dimension filter has been converted to a context filter, which executes before FIXED LODs and therefore can affect them.",
+      "difficulty": "advanced",
+      "tags": ["troubleshooting", "FIXED LOD", "context filters", "consultant skills"]
+    },
+    {
+      "id": "9",
+      "question": "When working with data blending and LOD expressions, where does data blending occur in the order of operations?",
+      "options": [
+        "Before all LOD expressions",
+        "After FIXED LODs but before INCLUDE/EXCLUDE LODs",
+        "After dimension filters but before measure filters",
+        "After all LOD expressions but before table calculations"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data blending occurs after dimension filters but before measure filters in the order of operations, which is between INCLUDE/EXCLUDE LODs and measure filters. This timing affects how LOD expressions interact with blended data.",
+      "difficulty": "advanced",
+      "tags": ["data blending", "order of operations", "LOD expressions"]
+    },
+    {
+      "id": "10",
+      "question": "In an enterprise environment, you need to ensure that extract filters and data source filters work correctly with your LOD expressions. How do these filters interact with FIXED, INCLUDE, and EXCLUDE LODs?",
+      "options": [
+        "Extract and data source filters affect all LOD types equally",
+        "Extract and data source filters are applied before all LOD expressions",
+        "Extract and data source filters only affect FIXED LODs",
+        "Extract and data source filters are applied after all calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Extract filters and data source filters are applied at the very beginning of the order of operations, before all LOD expressions (FIXED, INCLUDE, and EXCLUDE), ensuring they affect the base dataset used for all subsequent calculations.",
+      "difficulty": "advanced",
+      "tags": ["extract filters", "data source filters", "LOD expressions", "enterprise"]
+    }
+  ]
+}

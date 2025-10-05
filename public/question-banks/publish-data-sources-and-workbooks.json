@@ -1,0 +1,153 @@
+{
+  "title": "Publish Data Sources and Workbooks",
+  "description": "Master the publishing workflow for Tableau content including data sources and workbooks, understanding permissions, authentication, and configuration options for enterprise deployment.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the minimum site role and project-level capabilities required to publish content to Tableau Server or Tableau Cloud?",
+      "options": [
+        "Viewer site role with View and Download capabilities on the project",
+        "Explorer site role with View and Save capabilities on the project",
+        "Creator site role with View and Save capabilities on the project",
+        "Site Administrator Creator role with Full Control on the project"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To publish to Tableau Server or Cloud, users need: (1) A site role of Creator (formerly Publisher) on the site, and (2) View and Save capabilities set to Allowed on the project into which they publish. The Creator site role is the minimum required for publishing content from Tableau Desktop.",
+      "difficulty": "intermediate",
+      "tags": ["publishing", "site-roles", "permissions", "capabilities"]
+    },
+    {
+      "id": 2,
+      "question": "What are the three primary benefits of publishing data sources and workbooks to Tableau Server or Cloud?",
+      "options": [
+        "Faster performance, reduced file sizes, and automatic backups",
+        "Collaborate and share, centralize data management, and support mobility",
+        "Version control, audit logging, and regulatory compliance",
+        "Extract acceleration, query caching, and view acceleration"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The three primary benefits are: (1) COLLABORATE AND SHARE—allow others to view, interact, download, subscribe, edit without Tableau Desktop; (2) CENTRALIZE DATA MANAGEMENT—create shared data models as single source of truth, eliminate driver installation needs; (3) SUPPORT MOBILITY—access from different computers/locations via browser or mobile app, connect from offsite to private network.",
+      "difficulty": "beginner",
+      "tags": ["publishing-benefits", "collaboration", "centralized-management", "mobility"]
+    },
+    {
+      "id": 3,
+      "question": "When publishing a workbook, what happens if you select 'Show sheets as tabs' versus leaving it unchecked?",
+      "options": [
+        "Checked: tab navigation enabled, workbook-level permissions apply to sheets. Unchecked: one view at a time, view-level permissions must be set independently",
+        "Checked: all sheets visible to all users. Unchecked: sheets are hidden from non-administrators",
+        "Checked: sheets refresh automatically. Unchecked: manual refresh required",
+        "There is no functional difference; it's only a display preference"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When 'Show Sheets as Tabs' is CHECKED: users get tab-based navigation, and WORKBOOK-LEVEL permission rules apply to all sheets. When UNCHECKED: people can only open one view at a time, and changes to workbook permissions DON'T apply to individual sheets—view-level permissions must be set independently. This is a critical governance consideration.",
+      "difficulty": "advanced",
+      "tags": ["show-sheets-as-tabs", "permissions", "navigation", "governance"]
+    },
+    {
+      "id": 4,
+      "question": "A consultant wants to publish a workbook with a dashboard but hide the underlying worksheets. What should they know about this approach?",
+      "options": [
+        "Hidden sheets are completely secure and cannot be accessed by any users",
+        "Hiding sheets is not a security measure—users with Download Workbook/Save a Copy capability can access hidden sheets",
+        "Hidden sheets are automatically deleted from the workbook on the server",
+        "Only site administrators can view hidden sheets"
+      ],
+      "correctAnswer": 1,
+      "explanation": "IMPORTANT: Hiding sheets is NOT a security measure. Anyone who has the 'Download Workbook/Save a Copy' capability can access the hidden sheets. Other editing permissions can also allow access to hidden sheets. Hiding sheets is useful for cleaner presentation but should not be relied upon for data security or access control.",
+      "difficulty": "intermediate",
+      "tags": ["hidden-sheets", "security", "permissions", "workbook-publishing"]
+    },
+    {
+      "id": 5,
+      "question": "When publishing a workbook with an extract to Tableau Cloud or Server, what authentication option must be selected to enable scheduled extract refreshes?",
+      "options": [
+        "Prompt user for credentials",
+        "Viewer credentials via SSO",
+        "Embed password or Allow refresh access",
+        "Server Run As account"
+      ],
+      "correctAnswer": 2,
+      "explanation": "To set up scheduled extract refreshes, you MUST select 'Embed password' or 'Allow refresh access'. These options embed credentials in the connection so the server can connect to the data source automatically on schedule without user intervention. 'Prompt user' or viewer credentials won't work for automated refreshes because no user is present to provide credentials.",
+      "difficulty": "intermediate",
+      "tags": ["extract-refresh", "authentication", "scheduling", "embedded-credentials"]
+    },
+    {
+      "id": 6,
+      "question": "What is the recommended practice for setting permissions when publishing content, according to Tableau best practices?",
+      "options": [
+        "Always set custom permissions during publishing to maintain control",
+        "Accept default project permissions—consult administrator for exceptions and adjust on server if needed",
+        "Set all permissions to 'Deny' by default and enable as requested",
+        "Copy permissions from similar content in other projects"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practice: ACCEPT DEFAULT PROJECT PERMISSIONS. Consult with your Tableau administrator to learn organizational guidelines. It's common (and recommended) for administrators to lock permissions to the project. Setting unique permissions during publishing creates exceptions that require extra maintenance and may conflict with governance policies. If necessary, permissions can be updated on the server afterward with a more comprehensive view of the effects.",
+      "difficulty": "intermediate",
+      "tags": ["permissions", "best-practices", "project-permissions", "governance"]
+    },
+    {
+      "id": 7,
+      "question": "Which permission template should be assigned to allow a user to overwrite published content (e.g., via web editing and saving over the original)?",
+      "options": [
+        "View template",
+        "Explore template",
+        "Publish template",
+        "Administer template"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The PUBLISH template allows users the ability to overwrite content (such as via web editing and saving over the original) and gives them ownership of the content. Templates from least to most permissive: VIEW (basic access, filtering), EXPLORE (View + web editing, downloading), PUBLISH (Explore + overwrite/ownership), ADMINISTER (Publish + delete, set permissions).",
+      "difficulty": "intermediate",
+      "tags": ["permission-templates", "publish-template", "content-ownership"]
+    },
+    {
+      "id": 8,
+      "question": "When publishing a workbook with Tableau data source connections to Tableau Cloud/Server, what authentication options are available?",
+      "options": [
+        "Embedded password or Prompt users (regardless of original data type)",
+        "All standard authentication types including OAuth and Kerberos",
+        "Only Prompt users is available for security reasons",
+        "Viewer credentials via SSO only"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When you publish a workbook that connects to a Tableau Cloud/Server data source, REGARDLESS OF THE ORIGINAL DATA TYPE, the choice is always 'Embedded password' or 'Prompt users'. You're setting whether the workbook can access the PUBLISHED data source (not the underlying data). If you embed password, users can see the workbook without View/Connect permissions on the data source. If you prompt users, they must have View and Connect permissions on the published data source.",
+      "difficulty": "advanced",
+      "tags": ["authentication", "tableau-data-sources", "embedded-password", "prompt-users"]
+    },
+    {
+      "id": 9,
+      "question": "What is the purpose of tags when publishing a workbook or data source?",
+      "options": [
+        "Tags control which users can access the published content",
+        "Tags help users find related content when browsing the server; separate with comma or space, use quotes for multi-word tags",
+        "Tags automatically categorize content into projects",
+        "Tags enable version control and rollback functionality"
+      ],
+      "correctAnswer": 1,
+      "explanation": "TAGS help users find related workbooks/data sources when browsing the server. When publishing, separate tags using a comma or space. To add a tag that contains a space, put the tag in quotation marks (e.g., 'sales analysis'). Tags are metadata for search and organization, not for security or access control.",
+      "difficulty": "beginner",
+      "tags": ["tags", "metadata", "search", "content-organization"]
+    },
+    {
+      "id": 10,
+      "question": "When publishing a workbook to Tableau Cloud that connects to on-premises Excel or SQL Server data, what approach should be used?",
+      "options": [
+        "Convert all connections to cloud-based databases before publishing",
+        "Use Tableau Bridge if connectors are supported, or select 'Include External Files' for unsupported connectors",
+        "Publish only extracts—live connections to on-premises data are not supported",
+        "Upload the data files manually to Tableau Cloud storage"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For on-premises data with Tableau Cloud: (1) If all connectors are supported by Tableau Bridge (like SQL Server, Excel), ignore 'Include External Files' but use Bridge to keep data fresh. (2) If a connector isn't supported by Bridge, select 'Include External Files'—Tableau Cloud can refresh data it can connect to directly, but file-based data remains static. (3) For flat files (Excel, CSV), you can skip 'Include External Files'—a shadow extract is created.",
+      "difficulty": "advanced",
+      "tags": ["tableau-cloud", "tableau-bridge", "on-premises-data", "include-external-files"]
+    }
+  ]
+}

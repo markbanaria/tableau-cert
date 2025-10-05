@@ -1,0 +1,153 @@
+{
+  "title": "Designing Efficient Production Dashboards Whitepaper",
+  "description": "Best practices for workbook performance optimization, Workbook Optimizer guidelines, dashboard design patterns, calculation efficiency, extract optimization, filtering strategies, visualization performance, and production deployment considerations.",
+  "metadata": {
+    "domain": "Domain 1: Tableau Products",
+    "certification": "Tableau Consultant Certification",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "Consultant Level"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the Workbook Optimizer and what are its three guideline categories?",
+      "options": [
+        "A command-line tool that fixes performance issues; categories are: Critical, Warning, Info",
+        "A rules engine that evaluates workbook metadata against best practices; categories are: Take action (minimal impact changes), Needs review (may require restructuring), Passed (already following best practices)",
+        "An automated testing suite for data accuracy; categories are: Failed, Pending, Successful",
+        "A dashboard design template generator; categories are: Basic, Advanced, Expert"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Workbook Optimizer is available from Server menu or publishing dialog, automatically evaluating workbooks against performance best practices parsed from metadata. Three categories: (1) Take action - minimal to no impact on functionality, probably no reason to avoid changes, (2) Needs review - may involve restructuring data sources or simplifying dashboards, use judgment to determine if worth effort, (3) Passed - already following best practices (renamed 'Passed and ignored' if guidelines ignored). Not all recommendations apply to every workbook; many aspects of performance aren't captured. You can ignore guidelines, autofix some rules, or manually address others.",
+      "difficulty": "intermediate",
+      "tags": ["Workbook Optimizer", "guidelines", "performance"]
+    },
+    {
+      "id": 2,
+      "question": "According to the Designing Efficient Workbooks whitepaper general tips, what are the primary causes of slow dashboards?",
+      "options": [
+        "Database server hardware limitations and network latency issues",
+        "Poor design - too many charts on a single dashboard or trying to show too much data at once; should keep simple and allow incremental drill-down rather than showing everything then filtering",
+        "Insufficient Tableau Server RAM and processing power",
+        "Using live connections instead of extracts for all data sources"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The majority of slow dashboards are caused by poor design - specifically: too many charts on a single dashboard, or trying to show too much data at once. Best practice is to keep it simple and allow users to incrementally drill down to details rather than trying to show everything then filter (guided analysis approach). Other key tips: cleaner data matching question structure runs faster, extracts are quick/easy performance boost (if not needing real-time or billions of rows), don't work with unnecessary data (fields/granularity), use filters efficiently, strings/dates are slow vs numbers/Booleans, use Performance Recorder to understand where time goes, newest versions may boost performance, if slow in data source or Desktop it will be slow in Server.",
+      "difficulty": "intermediate",
+      "tags": ["dashboard design", "performance", "best practices"]
+    },
+    {
+      "id": 3,
+      "question": "The Workbook Optimizer flags 'Dashboard size not fixed' as a guideline. What is the performance impact and recommended solution?",
+      "options": [
+        "No performance impact; recommendation is for visual consistency only",
+        "Fixed size dashboards can be cached (predictable size); automatic sizing renders every time based on user's screen causing performance hit. Recommendation: use fixed dashboard sizing and device-specific dashboards for different screens",
+        "Automatic sizing reduces server memory usage; recommendation is always use automatic sizing",
+        "Fixed size increases initial load time; recommendation is use automatic sizing for faster rendering"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Fixed sized dashboards can be cached because they're a predictable size. Using automatic dashboard sizing means results depend on user's screen, so dashboard must be rendered every time - rendering more often has a performance hit. Although responsive elements are web design best practice, letting dashboard resize can distort layout in addition to performance impact of re-rendering. Best practice: use fixed dashboard size and use device-specific dashboards to support different devices and screen sizes. This balances performance with multi-device support needs.",
+      "difficulty": "intermediate",
+      "tags": ["dashboard", "sizing", "caching"]
+    },
+    {
+      "id": 4,
+      "question": "What are the performance implications of using 'Only Relevant Values' on filters, and what is the recommended alternative?",
+      "options": [
+        "No performance impact; it's always recommended to improve user experience",
+        "Every time other filters change, the list must be requeried to show only applicable options, causing performance impact. Consider using dashboard filter actions instead; if feature is valuable, extract data and optimize the extract",
+        "Reduces query load by pre-filtering options; always use for best performance",
+        "Only impacts performance on live connections, not extracts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "'Only Relevant Values' on interactive filters shows only options applicable given current view state. Performance impact: every time a change is made to other filters, the list of values must be requeried to determine what to display. Recommended alternatives: (1) Use dashboard filter actions instead - build simple visualizations (e.g., bar chart) and use as filter when user clicks, or (2) If end-user benefit is valuable enough to use this feature, extract data and optimize extract. Example scenario: cascading filters for Category → Sub-Category → Product ID where Product ID 'Only Relevant Values' prevents unwieldy list - use action filters instead of interactive filters to avoid constant requerying.",
+      "difficulty": "intermediate",
+      "tags": ["filters", "performance", "action filters"]
+    },
+    {
+      "id": 5,
+      "question": "You have a workbook with multiple nested calculations including date functions and LOD calculations. According to the Workbook Optimizer guidelines, what are the recommended optimizations? (Choose three)",
+      "options": [
+        "Push calculations to data source when possible to perform processing before user requests dashboard",
+        "Materialize calculations in extracts using 'Compute Calculations Now' to pre-compute results",
+        "Use CASE statements instead of nested IF statements for better performance",
+        "Use Tableau Prep to create calculations prior to analysis, moving processing to data layer"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For nested, date, and LOD calculations optimization: (1) Push calculations to data source - production databases handle significant query loads and processing happens before user requests dashboard, (2) Materialize calculations in extracts - use 'Compute Calculations Now' when extracting to pre-compute results and avoid runtime calculation, (3) Use Tableau Prep for calculations - create calculations in data preparation layer before analysis. FIXED LOD calculations can sometimes be performed by database; Tableau Prep supports FIXED LOD and rank calculations. Date functions have significant performance impact - consider DATEPARSE and MAKEDATE, use built-in functions like DATEDIFF() when possible. For filters, use relative or continuous date filters instead of discrete. Nested calculations add complications and processing; materializing or pushing to source is best. The correct answers are A, B, and D.",
+      "difficulty": "intermediate",
+      "tags": ["calculations", "optimization", "LOD"]
+    },
+    {
+      "id": 6,
+      "question": "A dashboard contains 42 views and takes a long time to load. What strategies should you use to improve performance while maintaining functionality?",
+      "options": [
+        "Increase server memory and processing power to handle the load",
+        "Focus on sheets with most marks/filters/complexity; limit initial dashboard to summary information with guided drill-down using action filters, show/hide containers with buttons, or multiple dashboards with navigation buttons",
+        "Convert all data sources to live connections for faster querying",
+        "Remove all filters and let users manually query data as needed"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Dashboard must load all elements before display - more views means longer load time. Reducing number of views often best way to boost efficiency. Not all views have equal performance impact - focus on sheets with most marks, filters, or complexity. Strategies for guided drill-down: (1) Use action filters - provide more details when user requests them, (2) Hide detailed views in layout container with show/hide button - reveals on demand, (3) Break into multiple dashboards with navigation buttons - separates summary from detail. Start by removing anything unnecessary immediately; if substantial redesign needed, limit initial dashboard to summary and provide details on request. This maintains functionality while improving performance through strategic information architecture.",
+      "difficulty": "intermediate",
+      "tags": ["dashboard", "views", "drill-down"]
+    },
+    {
+      "id": 7,
+      "question": "What are the performance considerations when using data blending, and what alternatives should be considered?",
+      "options": [
+        "Data blending is always the fastest method for combining data sources",
+        "Data blending sends two separate queries at level of linking fields, merges results in memory - performance driven by cardinality of linking fields. Consider using relationships when possible; if blend required, use low cardinality linking fields",
+        "Data blending only impacts performance when using calculated fields",
+        "Data blending automatically optimizes queries and requires no special considerations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data blending sends two separate queries to two separate data sources and displays results together in viz. Queries are at level of linking fields; results are merged in memory in Tableau. Large query results require more processing to generate final viz. Performance is driven by number of unique members in linking fields (cardinality). Recommended approach: (1) Consider using relationships when possible - may offer better performance, (2) If blend required, try to use low cardinality linking fields to minimize data volume merged in memory. Note: Cross data source filtering suffers from similar performance issues around field cardinality - if Optimizer flags data blending but you're not using it, check for cross data source filtering.",
+      "difficulty": "intermediate",
+      "tags": ["data blending", "performance", "relationships"]
+    },
+    {
+      "id": 8,
+      "question": "According to visualization performance best practices, what are the key strategies to make visualizations faster? (Choose three)",
+      "options": [
+        "Reduce scope - fewer sheets and data sources; spread data across multiple visualizations leveraging Tableau's interactive design",
+        "Limit number of interactive filters shown in view - each filter requires query to populate options; 'show relevant values' requires query each time other filters change",
+        "Add more marks to views to provide comprehensive detail in single visualization",
+        "Reduce number of marks on view - watch for large crosstabs and complex custom polygons; remove unneeded dimensions from Detail shelf; use action filters for overview-to-granular drill-down"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Visualization performance strategies: (1) Reduce scope - each worksheet runs one or more queries, so more sheets = longer render time; be strategic and spread data across multiple visualizations rather than packing everything into one, (2) Limit interactive filters - each filter in view requires query to populate options; adding many filters causes slow dashboard render; 'show relevant values' requires query update each time other filters change (use sparingly), (3) Reduce marks - no hard rule on 'too many' but more marks = more processing power/memory to render (check status bar for count); watch for large crosstabs and maps with complex polygons; too many points causes information overload; compile related views with action filters for overview-to-granular exploration; remove unneeded dimensions from Detail shelf. Note: zooming doesn't filter out marks - if only need subset, filter data you don't need. The correct answers are A, B, and D.",
+      "difficulty": "intermediate",
+      "tags": ["visualization", "performance", "marks"]
+    },
+    {
+      "id": 9,
+      "question": "As a Tableau consultant implementing a production dashboard environment for a global enterprise with 10,000+ users, you need to design a caching and performance strategy that accounts for different user access patterns, time zones, and data refresh schedules. Which combination of approaches would provide the optimal enterprise-scale performance architecture?",
+      "options": [
+        "A) Enable automatic dashboard caching with standard refresh intervals and rely on server auto-scaling",
+        "B) Implement strategic extract scheduling aligned with business cycles, configure view acceleration for high-traffic dashboards, establish tiered caching policies based on usage patterns, and design dashboard architecture with progressive disclosure to minimize initial load requirements",
+        "C) Use only live connections to ensure real-time data and increase server memory",
+        "D) Create separate Tableau environments for different geographic regions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Option B provides a comprehensive enterprise performance strategy that addresses the complexity of global deployment. Key components: (1) Strategic extract scheduling - align data refresh with business cycles and user activity patterns across time zones, (2) View acceleration - implement for dashboards with high user traffic and complex calculations, (3) Tiered caching policies - different cache strategies for executive dashboards vs operational reports based on usage frequency, (4) Progressive disclosure architecture - design dashboards to load essential information first with drill-down capabilities to minimize initial rendering requirements. This approach scales to enterprise requirements while optimizing performance across different user patterns. Option A lacks strategic consideration of usage patterns. Option C ignores performance optimization principles. Option D creates unnecessary infrastructure complexity without addressing performance architecture.",
+      "difficulty": "expert",
+      "tags": ["enterprise", "caching", "production", "scaling"]
+    },
+    {
+      "id": 10,
+      "question": "During production deployment of a critical executive dashboard, you discover that performance varies significantly between test and production environments despite identical data volumes. The dashboard uses complex LOD calculations and has 15 views with real-time requirements. What systematic troubleshooting approach would you use to identify and resolve production-specific performance issues?",
+      "options": [
+        "A) Increase production server memory and processing power to match test environment specifications",
+        "B) Convert all calculations to extract-based pre-computed fields",
+        "C) Use Performance Recorder in production environment to identify bottlenecks, analyze query patterns against production database load, review concurrent user impact on shared resources, evaluate network latency differences, and implement targeted optimizations based on production-specific constraints",
+        "D) Simplify the dashboard by removing complex calculations and reducing view count"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Option C provides a systematic approach to production performance troubleshooting that addresses environment-specific factors. Methodology includes: (1) Performance Recorder analysis in production - identify where time is spent (query execution, rendering, network), (2) Database load analysis - production databases often have different performance characteristics due to concurrent usage, maintenance windows, and resource allocation, (3) Concurrent user impact assessment - test environments rarely simulate real user load patterns, (4) Network latency evaluation - production network topology may differ from test, (5) Resource contention analysis - shared production resources affect performance differently than isolated test environments. This approach identifies root causes rather than applying broad fixes. Option A assumes hardware is the issue without diagnosis. Option B may not be feasible for real-time requirements. Option D reduces functionality without understanding the actual performance bottlenecks.",
+      "difficulty": "expert",
+      "tags": ["production", "troubleshooting", "performance", "deployment"]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "title": "Geocode Locations Tableau Does Not Recognize - Practice Questions",
+  "description": "Practice questions covering custom geocoding in Tableau, including creating CSV files, extending geographic roles, adding new roles, and managing custom geocoding data",
+  "metadata": {
+    "topic": "Geocode Locations Tableau Does Not Recognize and Plot Them on a Map",
+    "domain": "domain1",
+    "difficulty": "advanced",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/custom_geocoding.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 8
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is custom geocoding in Tableau and when is it necessary?",
+      "options": [
+        "It's a premium feature that enhances all mapping capabilities",
+        "It's the process of assigning latitude and longitude coordinates to locations Tableau can't map natively, such as street addresses",
+        "It's a method to change the default map style in Tableau",
+        "It's only needed for international locations outside North America"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Custom geocoding is the process of assigning latitude and longitude coordinates to locations that Tableau can't map natively, such as street addresses. It allows you to create custom geographic roles that can be used in map views. For example, while Tableau can geocode to country and state/province level, it won't recognize street address data without custom geocoding. It's not a premium feature, not about map styling, and applies to any unsupported location data worldwide.",
+      "difficulty": "beginner",
+      "tags": ["custom-geocoding", "maps", "latitude-longitude", "unsupported-locations"]
+    },
+    {
+      "id": "2",
+      "question": "When creating a CSV file for custom geocoding in Tableau, what are the two mandatory columns that must be included regardless of the geocoding type?",
+      "options": [
+        "Country and City",
+        "Location Name and Address",
+        "Latitude and Longitude",
+        "Geographic Role and Hierarchy Level"
+      ],
+      "correctAnswer": 2,
+      "explanation": "All custom geocoding CSV files must contain Latitude and Longitude columns with real numbers (including at least one decimal place). These are mandatory regardless of whether you're extending an existing geographic hierarchy, adding a new geographic role, or creating a new hierarchy. The latitude and longitude values provide the actual coordinates that Tableau will use to plot the locations on maps.",
+      "difficulty": "beginner",
+      "tags": ["custom-geocoding", "csv-format", "latitude-longitude", "data-preparation"]
+    },
+    {
+      "id": "3",
+      "question": "A consultant needs to extend the State/Province geographic role to include additional provinces not currently recognized by Tableau. How should the custom geocoding import file be structured?",
+      "options": [
+        "Include only the new province names with their latitude and longitude",
+        "Include columns for every level in the hierarchy above the level being extended (Country, State/Province, Latitude, Longitude)",
+        "Include only Latitude, Longitude, and the new State/Province names",
+        "Create a completely new hierarchy starting from scratch"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When extending an existing role like State/Province, the import file must contain every level of the hierarchy above the level you're extending. For State/Province, this means including Country (Name), State/Province, Latitude, and Longitude columns. The column names must match the existing geographic roles in the hierarchy to ensure new locations are added to the proper roles and hierarchies. This maintains the hierarchical structure that Tableau uses for geographic data.",
+      "difficulty": "advanced",
+      "tags": ["custom-geocoding", "extending-roles", "hierarchies", "geographic-roles"]
+    },
+    {
+      "id": "4",
+      "question": "When adding a new geographic role (such as 'Crater Name') to an existing hierarchy, what must be included in the custom geocoding CSV file?",
+      "options": [
+        "Only the new role data with Latitude and Longitude",
+        "Columns for each level in the existing hierarchy plus the new role, with column names matching existing geographic roles",
+        "The new role in a separate file imported independently",
+        "No parent hierarchy data is needed for new roles"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When adding new roles to an existing hierarchy, the import file needs to contain columns for each level in the existing hierarchy plus the new role. The column names for parent levels must match existing geographic roles (e.g., 'Country (Name)' not just 'Country'). For example, adding 'Crater Name' to a Country/State hierarchy would require columns for Country (Name), State, Crater Name, Latitude, and Longitude. This ensures the new role is properly integrated into the existing geographic hierarchy.",
+      "difficulty": "advanced",
+      "tags": ["custom-geocoding", "new-roles", "hierarchies", "csv-format"]
+    },
+    {
+      "id": "5",
+      "question": "Where does Tableau store custom geocoding data after it's imported, and what is the scope of its availability?",
+      "options": [
+        "In the workbook file only, available only for that specific workbook",
+        "In the Local Data folder in the Tableau Repository on the local hard drive, available for all workbooks",
+        "On Tableau's cloud servers, accessible from any installation",
+        "In the Windows Registry or Mac System Preferences"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you import custom geocoding, the data is stored in the Local Data folder in your Tableau Repository, which must be on a local hard drive. The custom geocoding is then available for all workbooks on that installation. When you save a workbook as a packaged workbook, the custom geocoding data is also packaged with it. You can remove custom geocoding from the repository using Map > Geocoding > Remove Custom Geocoding.",
+      "difficulty": "intermediate",
+      "tags": ["custom-geocoding", "data-storage", "tableau-repository", "workbook-management"]
+    },
+    {
+      "id": "6",
+      "question": "What happens when you import a new custom geocoding file into Tableau Desktop?",
+      "options": [
+        "It supplements existing custom geographic roles, adding to what's already there",
+        "It merges with existing custom geocoding, keeping both old and new data",
+        "It replaces any custom geographic roles previously imported into Tableau",
+        "It creates a separate geocoding layer that can be toggled on and off"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Importing a new custom geocoding file will replace any custom geographic roles previously imported into Tableau. This is an important consideration for managing custom geocoding—you can't simply add to existing custom geocoding incrementally. If you need multiple custom geocoding sets, you must include all the data in a single import operation. However, this doesn't remove custom geocoding from packaged workbooks that were created before the new import.",
+      "difficulty": "intermediate",
+      "tags": ["custom-geocoding", "import-process", "data-management", "overwriting"]
+    },
+    {
+      "id": "7",
+      "question": "A consultant is creating a custom geocoding file to extend the Country/State/City hierarchy. Which columns can be optionally included alongside Country (Name) to provide additional country identification methods?",
+      "options": [
+        "Country Code, Country Abbreviation, Country ID",
+        "Country 2 char (ISO 3166-1), Country 3 char (ISO 3166-1), and Country (FIPS 10)",
+        "Country Alpha, Country Numeric, Country Region",
+        "No optional columns are supported for country identification"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When extending hierarchies that include Country, you can optionally include Country 2 char (ISO 3166-1), Country 3 char (ISO 3166-1), and Country (FIPS 10) columns. These should be placed just to the right of the Country (Name) column in any order. These additional columns provide alternative ways to identify countries using international standard codes, making the geocoding more robust and flexible for data from different sources.",
+      "difficulty": "advanced",
+      "tags": ["custom-geocoding", "country-codes", "iso-standards", "data-structure"]
+    },
+    {
+      "id": "8",
+      "question": "After importing custom geocoding into a workbook, what is the final step needed before you can use the custom locations in a map view?",
+      "options": [
+        "Restart Tableau Desktop to activate the custom geocoding",
+        "Publish the workbook to Tableau Server first",
+        "Assign the custom geographic roles to fields in your data source",
+        "No additional steps are needed—the locations are automatically mapped"
+      ],
+      "correctAnswer": 2,
+      "explanation": "After importing custom geocoding, you must assign the custom geographic roles to fields in your data source. In the Data pane, click the data type icon next to the field and select Geographic Role, then choose the custom geographic role from the list. Only after this assignment will the field be ready to use for creating map views with the custom locations. The custom roles become available after import but don't automatically apply to fields.",
+      "difficulty": "intermediate",
+      "tags": ["custom-geocoding", "geographic-roles", "data-preparation", "workflow"]
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "title": "Tableau Support Policy",
+  "description": "Tableau maintenance and technical support policies, supported versions lifecycle, severity levels, end-of-support timelines, limited support periods, security vulnerability handling, and upgrade recommendations.",
+  "metadata": {
+    "domain": "Domain 1: Evaluate Current State",
+    "certification": "Tableau Consultant Certification",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the standard maintenance and technical support period for Tableau Server and Tableau Desktop versions released with both Server and Cloud?",
+      "options": [
+        "12 months following version release with no extended support",
+        "24 months of full maintenance and technical support following version release, plus an additional 12 months of limited support (total 36 months)",
+        "Indefinite support for all released versions",
+        "6 months of support with option to purchase extended warranty"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For Tableau Server and Tableau Desktop versions released with both Server and Cloud, maintenance (minor release updates and defect fixes) along with full technical support (troubleshooting, customer forums) is provided for 24 MONTHS following version release. After 24 months, LIMITED SUPPORT is provided for an additional 12 months (total 36 months), which solely consists of assistance with online product documentation and/or limited troubleshooting for issues encountered while upgrading to latest version. Note: Tableau Desktop Cloud-only releases (starting 2024.1) have different policy: maintained until new version released, minimum 4 months. After end of limited support, customers should upgrade to maintained version before contacting Technical Support. After end of maintenance and support, no code defects can be investigated - highly recommended to upgrade ASAP.",
+      "difficulty": "intermediate",
+      "tags": ["support policy", "maintenance", "versions"]
+    },
+    {
+      "id": 2,
+      "question": "Starting with version 2024.1, what is the maintenance and technical support policy for Tableau Desktop versions released with Tableau Cloud only?",
+      "options": [
+        "Same 24-month support period as Server releases",
+        "Maintenance and full technical support provided until a new version is released, for a minimum of 4 months following version release",
+        "6-month fixed support window regardless of new releases",
+        "No maintenance provided for Cloud-only releases"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Starting with version 2024.1, for Tableau Desktop versions released with Tableau Cloud ONLY (not with Server), maintenance along with full technical support is provided UNTIL A NEW VERSION IS RELEASED, for a minimum of 4 months following the version release. This differs from Server/dual releases which get 24 months of support. This policy reflects Tableau Cloud's faster release cadence (3 major releases per year: Winter, Spring, Summer) compared to on-premises Server. After the Cloud-only Desktop version maintenance window ends, customers should upgrade to the newer version. Same limited support rules apply after maintenance period ends - additional 12 months of documentation assistance and limited upgrade troubleshooting.",
+      "difficulty": "intermediate",
+      "tags": ["support policy", "Cloud", "Desktop"]
+    },
+    {
+      "id": 3,
+      "question": "What are the four severity levels for technical support issues, and what defines a Level 1 - Critical issue?",
+      "options": [
+        "Four levels are Low, Medium, High, Urgent; Critical means any production issue",
+        "Levels: Level 1-Critical (business stopping, no acceptable workaround, imminent threat to key business or milestones posing financial risk), Level 2-Urgent (key business impacting, no workaround), Level 3-High (key business with workaround OR non-key without workaround), Level 4-Medium (non-key with workaround OR not business impacting)",
+        "Only two levels exist: Critical and Non-Critical",
+        "Severity levels are customizable per customer contract"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Four severity levels for technical support: (1) Level 1 - Critical: Business stopping AND no acceptable workaround; imminent threat to key business or near term business milestones posing financial risk, (2) Level 2 - Urgent: Key business impacting with no workaround, (3) Level 3 - High: Key business impacting WITH workaround, OR non-key business impacting with NO workaround, (4) Level 4 - Medium: Non-key business impacting WITH workaround, OR not business impacting. These levels help prioritize support response and determine appropriate urgency. Level 1 issues receive highest priority response as they represent complete business stoppage with no way to continue operations and financial risk to the organization.",
+      "difficulty": "intermediate",
+      "tags": ["support", "severity levels", "issues"]
+    },
+    {
+      "id": 4,
+      "question": "What types of issues are SUPPORTED vs NOT SUPPORTED under Tableau technical support programs?",
+      "options": [
+        "All software-related issues are supported without limitations",
+        "Supported: problems/defects in software, installation/license/download assistance, configuration/how-to questions, access to major/minor releases (limited support after 24 months). NOT supported: feature enhancements/design changes, Beta Program, external third-party integrations, custom development integrations",
+        "Only installation and licensing issues are supported",
+        "Beta features and third-party integrations receive full support"
+      ],
+      "correctAnswer": 1,
+      "explanation": "SUPPORTED issues include: (1) Problems or defects in the software (defect = verifiable and reproducible software problem or documentation error causing failure to operate substantially per documentation), (2) Installation, license activation, and download assistance, (3) Configuration and 'how-to' questions, (4) Access to major and minor releases (with limited support provided after 24 months of product release). NOT SUPPORTED: (1) Feature enhancements or changes to product design, (2) Beta Program participation, (3) Integration with external software from third-party vendors, (4) Custom development integrations. View Standard Support Legal Policy for complete details. Note: Technical support only provided during same period as maintenance for any given version.",
+      "difficulty": "intermediate",
+      "tags": ["support", "scope", "defects"]
+    },
+    {
+      "id": 5,
+      "question": "What happens when Tableau identifies a security vulnerability in a version currently within the maintenance window?",
+      "options": [
+        "Security patches are automatically deployed to all installations",
+        "Tableau may cease to allow download of that version prior to end of maintenance or support dates; see Apache Log4j2 vulnerability example for precedent",
+        "Vulnerabilities are only addressed in future releases, not current versions",
+        "All versions remain available for download regardless of security issues"
+      ],
+      "correctAnswer": 1,
+      "explanation": "If Tableau identifies a security vulnerability in a version that currently falls within the maintenance window, Tableau MAY CEASE TO ALLOW DOWNLOAD of that version PRIOR TO the end of maintenance or end of support dates listed. This is a proactive security measure to prevent new installations of vulnerable versions. Example precedent: Apache Log4j2 vulnerability (Log4Shell) - Tableau removed download access to affected versions to protect customers. Tableau may also remove support resources at the end of technical support for any version. Customers should check Known Issues page for any problems with currently supported versions. This policy emphasizes importance of staying current with maintained versions not only for feature access but also for security protection.",
+      "difficulty": "intermediate",
+      "tags": ["support", "security", "vulnerabilities"]
+    },
+    {
+      "id": 6,
+      "question": "What is the difference between 'full technical support' and 'limited support' periods?",
+      "options": [
+        "No functional difference; terms are used interchangeably",
+        "Full support (first 24 months): troubleshooting, customer forums, defect fixes, minor releases. Limited support (additional 12 months after): ONLY assistance with online documentation and limited troubleshooting for upgrade issues; no code defect investigation",
+        "Limited support means reduced response times but same services",
+        "Full support is for paying customers only; limited support is for free tier"
+      ],
+      "correctAnswer": 1,
+      "explanation": "FULL TECHNICAL SUPPORT (first 24 months for Server/dual releases): Includes maintenance (minor release updates and defect fixes) plus full technical support (troubleshooting, customer forums, how-to questions, installation/licensing assistance, code defect investigation). LIMITED SUPPORT (additional 12 months, months 25-36): Solely consists of assistance with online product documentation and/or limited troubleshooting for issues encountered while UPGRADING to latest version of product. During limited support, NO code defects can be investigated. After end of limited support, customers should upgrade to maintained version BEFORE contacting Tableau Technical Support for assistance. After end of maintenance and support, highly recommended customers upgrade to maintained version as soon as possible since no defects can be investigated.",
+      "difficulty": "intermediate",
+      "tags": ["support", "maintenance", "lifecycle"]
+    },
+    {
+      "id": 7,
+      "question": "According to Tableau support policy, when may Tableau cease to allow download of versions, and what resource management occurs at end of support?",
+      "options": [
+        "All versions remain permanently available for download with full documentation",
+        "May cease download for versions outside maintenance window; may remove support resources at end of technical support; must cease download if security vulnerability identified even if still within maintenance window",
+        "Downloads only removed after 10 years from release date",
+        "Download availability is solely determined by customer license agreements"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau download and resource management policy: (1) May cease to allow download of versions that are OUTSIDE of the maintenance window (after 24-month maintenance period ends), (2) May also remove support resources at the END of technical support (after 36-month full + limited support period), (3) If security vulnerability identified in version currently within maintenance window, may cease download PRIOR to end of maintenance/support dates (Apache Log4j2 example). This policy manages risks of customers installing outdated or vulnerable versions. Rationale: After maintenance ends, no code defects can be investigated, so continuing to allow downloads could create support burden and security risks. Customers should always download and deploy current maintained versions. Check Known Issues page for problems with currently supported versions.",
+      "difficulty": "intermediate",
+      "tags": ["support", "downloads", "resources"]
+    },
+    {
+      "id": 8,
+      "question": "What is the recommended action after the end of maintenance and technical support for a Tableau version, and why?",
+      "options": [
+        "Continue using the version indefinitely as it remains fully functional",
+        "Highly recommended to upgrade to maintained version as soon as possible because after end of maintenance and technical support, no code defects can be investigated; after end of limited support, must upgrade to maintained version before contacting Technical Support",
+        "Purchase extended support contract to continue using older version",
+        "Wait until forced upgrade by Tableau before taking action"
+      ],
+      "correctAnswer": 1,
+      "explanation": "After end of maintenance and technical support, it is HIGHLY RECOMMENDED customers upgrade to a maintained version AS SOON AS POSSIBLE. Critical reasons: (1) After end of maintenance and technical support, NO code defects can be investigated - if you encounter problems, Tableau cannot help resolve them, (2) After end of LIMITED support (36 months total), customers MUST upgrade to maintained version BEFORE contacting Tableau Technical Support for assistance - support will not be provided for unsupported versions, (3) Security vulnerabilities cannot be patched in unsupported versions, (4) No access to new features, improvements, or compatibility updates. Extended support contracts are NOT offered - Standard Support is the policy. Staying on maintained versions ensures access to: defect fixes, minor releases, security patches, full technical support, and compatibility with latest Tableau ecosystem components.",
+      "difficulty": "intermediate",
+      "tags": ["support", "upgrade", "lifecycle"]
+    }
+  ]
+}

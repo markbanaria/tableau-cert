@@ -1,0 +1,154 @@
+{
+  "title": "Best Practices for Creating Calculations in Tableau - Practice Questions",
+  "description": "Practice questions covering best practices for Tableau calculations including performance optimization, naming conventions, documentation, debugging, and enterprise maintainability",
+  "metadata": {
+    "topic": "Best Practices for Creating Calculations in Tableau",
+    "domain": "domain3",
+    "difficulty": "advanced",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/calculations_calculatedfields_bestpractices.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary issue with referencing the same calculated field multiple times within another calculation?",
+      "options": [
+        "It causes syntax errors in Tableau",
+        "It performs the calculation multiple times for each record, impacting performance",
+        "It creates circular references that break the calculation",
+        "It prevents the calculation from being published to Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a calculation references another calculated field multiple times, it performs that calculation multiple times for each record in the dataset, significantly impacting performance. The solution is to reference the field only once or restructure the logic.",
+      "difficulty": "intermediate",
+      "tags": ["performance optimization", "calculated fields", "efficiency"]
+    },
+    {
+      "id": "2",
+      "question": "In an enterprise environment, you need to optimize a calculation with multiple equality comparisons like IF [Field] = 'A' THEN 1 ELSEIF [Field] = 'B' THEN 2... Which approach provides the best performance?",
+      "options": [
+        "Keep the nested IF statements for clarity",
+        "Convert to a CASE expression",
+        "Use multiple IIF functions",
+        "Create separate calculated fields for each condition"
+      ],
+      "correctAnswer": 1,
+      "explanation": "CASE expressions are optimized in Tableau's query pipeline and provide better performance than nested IF statements for multiple equality comparisons. They're also more readable and maintainable.",
+      "difficulty": "advanced",
+      "tags": ["CASE expressions", "performance optimization", "best practices"]
+    },
+    {
+      "id": "3",
+      "question": "When working with complex string manipulations, which approach is generally most efficient?",
+      "options": [
+        "Using multiple CONTAINS and STARTSWITH functions",
+        "Using REGEXP_REPLACE and REGEXP_EXTRACT functions",
+        "Breaking the manipulation into multiple calculated fields",
+        "Using nested LEFT, RIGHT, and MID functions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "REGEXP_REPLACE and REGEXP_EXTRACT are more efficient for complex string operations than multiple standard string functions. Regular expressions can simplify complex string manipulation calculations and improve performance.",
+      "difficulty": "advanced",
+      "tags": ["string manipulation", "regular expressions", "performance"]
+    },
+    {
+      "id": "4",
+      "question": "What is a key enterprise best practice for maintaining calculated fields across multiple workbooks?",
+      "options": [
+        "Copy calculations between workbooks manually",
+        "Create a published TDS file with standardized calculated fields for team use",
+        "Store all calculations in Excel files",
+        "Use only basic calculations to avoid complexity"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Creating a published TDS (Tableau Data Source) file with standardized calculated fields, metadata, and naming conventions ensures consistency across the organization and serves as a single source of truth for business teams.",
+      "difficulty": "advanced",
+      "tags": ["enterprise governance", "TDS", "standardization", "data sources"]
+    },
+    {
+      "id": "5",
+      "question": "You're troubleshooting a slow-performing calculation. Which function type should you avoid when possible due to performance impact?",
+      "options": [
+        "SUM and AVG functions",
+        "COUNTD (Count Distinct) functions",
+        "MIN and MAX functions",
+        "Basic arithmetic operations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "COUNTD is one of the slowest function types in Tableau and should be avoided when possible. Consider alternatives like using LOD expressions or pre-aggregating distinct counts at the data source level.",
+      "difficulty": "advanced",
+      "tags": ["performance optimization", "COUNTD", "aggregation functions"]
+    },
+    {
+      "id": "6",
+      "question": "When should you avoid using Sets in calculations?",
+      "options": [
+        "Sets should never be used in any calculations",
+        "When you need to group data; use groups or calculated fields instead",
+        "Only when working with date fields",
+        "Sets are always preferred over calculated fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Sets are meant for comparisons, not for grouping data. When you need to group data, use groups or calculated fields instead of sets for better performance and clarity.",
+      "difficulty": "intermediate",
+      "tags": ["sets", "grouping", "performance", "data organization"]
+    },
+    {
+      "id": "7",
+      "question": "In enterprise Tableau deployments, what is considered a governance best practice for calculation documentation?",
+      "options": [
+        "Document calculations in external Word documents",
+        "Use Tableau's built-in description fields for calculations and publish to version-controlled environments",
+        "Only document complex calculations",
+        "Documentation is not necessary for calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using Tableau's built-in description fields and maintaining version control ensures calculations are properly documented and manageable as the analytics content library grows. This is crucial for enterprise governance.",
+      "difficulty": "advanced",
+      "tags": ["enterprise governance", "documentation", "version control", "maintainability"]
+    },
+    {
+      "id": "8",
+      "question": "You have a table calculation that's performing poorly. What alternative approach should you consider?",
+      "options": [
+        "Always stick with table calculations for consistency",
+        "See if it can be expressed as a LOD expression instead",
+        "Convert it to a basic calculated field",
+        "Move it to a separate worksheet"
+      ],
+      "correctAnswer": 1,
+      "explanation": "If a table calculation is performing badly, try expressing it as a LOD expression, and vice versa. Different calculation types have different performance characteristics depending on the specific use case.",
+      "difficulty": "advanced",
+      "tags": ["table calculations", "LOD expressions", "performance optimization", "troubleshooting"]
+    },
+    {
+      "id": "9",
+      "question": "When building complex calculations, what approach balances maintainability and performance?",
+      "options": [
+        "Always write calculations as single, complex expressions",
+        "Always break calculations into many small components",
+        "Consider nested components for troubleshooting ease, but evaluate pushing components back to the data source for performance",
+        "Use only basic functions to avoid complexity"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Complex calculations can be written as single expressions or nested components. Nested components aid troubleshooting and maintenance but may add processing overhead. Consider pushing components to the data source level for better performance.",
+      "difficulty": "advanced",
+      "tags": ["calculation design", "maintainability", "performance", "data source optimization"]
+    },
+    {
+      "id": "10",
+      "question": "What tool should consultants recommend to clients for identifying calculation performance issues and best practice compliance?",
+      "options": [
+        "Manual code review only",
+        "Tableau's Workbook Optimizer and Performance Recorder",
+        "External database monitoring tools",
+        "Custom scripts to analyze workbook XML"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Workbook Optimizer identifies if a workbook follows performance best practices, and the Performance Recorder helps identify where to focus tuning efforts. These are the primary tools for systematic performance analysis.",
+      "difficulty": "intermediate",
+      "tags": ["workbook optimizer", "performance recorder", "troubleshooting tools", "best practices"]
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "title": "Use Admin Insights to Create Custom Views",
+  "description": "Master Tableau Cloud's Admin Insights project including pre-built data sources, the Admin Insights Starter workbook, connecting from Desktop and Web, and creating custom monitoring dashboards for adoption, usage, and governance.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is Admin Insights and what platform is it available on?",
+      "options": [
+        "A third-party monitoring tool available for all Tableau platforms",
+        "A Tableau Cloud-only project pre-populated with curated data sources and a pre-built workbook of your site's data",
+        "A paid add-on for Tableau Server available separately",
+        "A desktop application for monitoring Tableau deployments"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Admin Insights is a TABLEAU CLOUD-ONLY project that is PRE-POPULATED with carefully curated DATA SOURCES and a PRE-BUILT WORKBOOK of your site's data. Using the resources available through the Admin Insights project, you can create custom views to help answer common questions about your site, such as adoption rates, deployment trends, popular content, user activity, and license allocation.",
+      "difficulty": "beginner",
+      "tags": ["admin-insights", "tableau-cloud", "monitoring", "overview"]
+    },
+    {
+      "id": 2,
+      "question": "Who can access the Admin Insights project and its data sources?",
+      "options": [
+        "All users on the site automatically",
+        "Site admins or anyone who has been granted access to the Admin Insights project",
+        "Only the site owner can access Admin Insights",
+        "Creator license holders only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "If you're a SITE ADMIN or someone who has been GRANTED ACCESS to the Admin Insights project, you can access the Admin Insights data sources directly from Tableau Cloud using Web Authoring or through Tableau Desktop. Access is controlled at the project level, allowing administrators to delegate monitoring responsibilities to specific users beyond just site admins.",
+      "difficulty": "intermediate",
+      "tags": ["access-control", "site-admin", "permissions", "project-access"]
+    },
+    {
+      "id": 3,
+      "question": "How do you connect to Admin Insights data sources from Tableau Desktop?",
+      "options": [
+        "Download a special Admin Insights connector from Tableau Exchange",
+        "Open Tableau Desktop, under Connect select Tableau Server (use Tableau Cloud link if needed), search for the data source name, select it and click Connect",
+        "Use a REST API to extract the data",
+        "Admin Insights is only available through Web Authoring, not Desktop"
+      ],
+      "correctAnswer": 1,
+      "explanation": "From Tableau Desktop: (1) Open Tableau Desktop, under Connect, select TABLEAU SERVER. (2) If not already signed in to Tableau Cloud, in the Tableau Server Sign In dialog, click the TABLEAU CLOUD hyperlink, enter credentials, and click Sign In. (3) In the search box, TYPE THE NAME of the data source you're looking for. (4) Select a data source and click CONNECT to get started with your analysis.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-desktop", "connection", "data-source-access", "authentication"]
+    },
+    {
+      "id": 4,
+      "question": "What is the Admin Insights Starter workbook and where can you find localized versions?",
+      "options": [
+        "A basic template with no data; localized versions are not available",
+        "A pre-built workbook serving as a template for detailed dashboards; starting October 2024, localized versions available as accelerators on Tableau Exchange",
+        "A training manual for administrators",
+        "A required workbook that must be configured before using Admin Insights"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The ADMIN INSIGHTS STARTER workbook is a PRE-BUILT WORKBOOK that serves as a TEMPLATE for creating more detailed dashboards and workbooks that address unique questions related to your site or organization. It helps answer questions about adoption, trends, popular content, and user activity. Starting in OCTOBER 2024, LOCALIZED VERSIONS of the Admin Insights Starter workbook are available as ACCELERATORS on TABLEAU EXCHANGE.",
+      "difficulty": "intermediate",
+      "tags": ["admin-insights-starter", "pre-built-workbook", "tableau-exchange", "localization"]
+    },
+    {
+      "id": 5,
+      "question": "What is the default data retention period for Admin Insights, and how does Advanced Management affect this?",
+      "options": [
+        "30 days standard; 180 days with Advanced Management",
+        "Up to 90 days standard; 365 days with Advanced Management license",
+        "Unlimited retention for all users",
+        "60 days standard; no enhancement with Advanced Management"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Admin Insights captures up to 90 DAYS of data by default. With an ADVANCED MANAGEMENT license, data retention extends to 365 DAYS. Note: While the default retention is 90 days, the \"Last Publish\" and \"Last Access\" dates can go back to as early as the date the site was created, providing historical context beyond the 90-day window for these specific metrics.",
+      "difficulty": "intermediate",
+      "tags": ["data-retention", "advanced-management", "storage", "historical-data"]
+    },
+    {
+      "id": 6,
+      "question": "Which Admin Insights data source functions as the primary audit data source containing sign-in, publishing, and view access events?",
+      "options": [
+        "TS Users",
+        "TS Events",
+        "Site Content",
+        "Job Performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "TS EVENTS functions as a PRIMARY AUDIT DATA SOURCE. It contains data about the various EVENTS happening on your site, including SIGN-IN, PUBLISHING, and ACCESSING VIEWS. This data source is critical for tracking user activity, understanding usage patterns, and monitoring site interactions for governance and compliance purposes.",
+      "difficulty": "intermediate",
+      "tags": ["ts-events", "audit-data", "data-sources", "event-tracking"]
+    },
+    {
+      "id": 7,
+      "question": "Which Admin Insights data source would you use to analyze effective permissions and identify gaps in permissions security?",
+      "options": [
+        "Site Content",
+        "TS Users",
+        "Permissions",
+        "Groups"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The PERMISSIONS data source contains the EFFECTIVE PERMISSIONS for all users and content on the site. Site administrators can use this data source to IDENTIFY GAPS in permissions security and ensure that only the appropriate users can access content items. This is essential for governance, security audits, and ensuring proper access control across the site.",
+      "difficulty": "intermediate",
+      "tags": ["permissions-data-source", "effective-permissions", "security", "governance"]
+    },
+    {
+      "id": 8,
+      "question": "What types of data are included in the Job Performance data source?",
+      "options": [
+        "User login times and session durations only",
+        "Events and runtime information for background jobs (extract refreshes, flow runs), including Tableau Bridge refresh data with client name, pooling data, and refresh times",
+        "View load times and user interaction metrics",
+        "License allocation and activation data"
+      ],
+      "correctAnswer": 1,
+      "explanation": "JOB PERFORMANCE contains EVENTS and RUNTIME INFORMATION for BACKGROUND JOBS on the site, such as EXTRACT REFRESHES and FLOW RUNS. It also includes TABLEAU BRIDGE refresh data, such as the Bridge CLIENT NAME, POOLING DATA, and refresh STARTED and COMPLETED TIMES. This data source is critical for monitoring data refresh performance, identifying bottlenecks, and ensuring timely data updates.",
+      "difficulty": "intermediate",
+      "tags": ["job-performance", "background-jobs", "extract-refresh", "tableau-bridge", "data-sources"]
+    }
+  ]
+}

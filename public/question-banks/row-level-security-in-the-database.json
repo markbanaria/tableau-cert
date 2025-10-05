@@ -1,0 +1,126 @@
+{
+  "title": "Row-Level Security in the Database - Practice Questions",
+  "description": "Practice questions for Row-Level Security in the Database covering database-native RLS mechanisms, authentication patterns, and enterprise deployment strategies",
+  "metadata": {
+    "topic": "Row-Level Security in the Database",
+    "domain": "domain2",
+    "difficulty": "ADVANCED",
+    "sourceUrl": "https://help.tableau.com/current/server/en-us/rls_datasource.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 8
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A financial services company using SQL Server wants to implement database-native RLS with impersonation. What is the primary requirement for this implementation to work effectively with Tableau?",
+      "options": [
+        "All users must have database administrator privileges",
+        "Users must exist in the SQL Server database with appropriate SELECT rights",
+        "Tableau Server must be installed on the same machine as SQL Server",
+        "All data must be stored in extracts for security enforcement"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For SQL Server impersonation to work with database-native RLS, users must exist in the SQL Server database with appropriate SELECT rights. The impersonation mechanism allows Tableau to execute queries under the context of the authenticated user, enabling the database's native security policies to be enforced automatically.",
+      "difficulty": "ADVANCED",
+      "tags": ["sql-server", "impersonation", "database-users", "authentication"]
+    },
+    {
+      "id": "2",
+      "question": "When implementing Oracle VPD (Virtual Private Database) with Tableau, which mechanism is used to establish the user context for security policy enforcement?",
+      "options": [
+        "Kerberos constrained delegation for user authentication",
+        "Initial SQL to set the context of the database connection",
+        "SAML delegation with Oracle-specific tokens",
+        "Direct user credential mapping through Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Oracle VPD uses Initial SQL to set the context of the database connection. This mechanism allows Tableau to execute specific SQL statements at the beginning of each session to establish the user context that Oracle's security policies can then use to filter data appropriately for each user.",
+      "difficulty": "ADVANCED",
+      "tags": ["oracle-vpd", "initial-sql", "user-context", "database-security"]
+    },
+    {
+      "id": "3",
+      "question": "What is a significant limitation of database-native RLS when considering cloud-based deployments?",
+      "options": [
+        "Database-native RLS requires on-premises Active Directory integration",
+        "Cloud databases do not support row-level security mechanisms",
+        "Database-native RLS is typically not available in cloud environments",
+        "Cloud deployments cannot maintain user session contexts"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Database-native RLS is typically not available in cloud environments due to the architectural limitations and security models of cloud database services. Cloud platforms often restrict direct user impersonation and advanced authentication delegation mechanisms that database-native RLS depends on, making alternative approaches like entitlements tables more suitable for cloud deployments.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["cloud-limitations", "database-native", "deployment-constraints"]
+    },
+    {
+      "id": "4",
+      "question": "For SAP HANA integration with database-native RLS, which authentication method is recommended by Tableau?",
+      "options": [
+        "Embedded credentials with service account impersonation",
+        "SSO (Single Sign-On) with viewer credentials",
+        "Database authentication with stored usernames and passwords",
+        "OAuth 2.0 token-based authentication"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For SAP HANA integration, Tableau recommends SSO (Single Sign-On) with viewer credentials. This approach enables seamless authentication while allowing SAP HANA's native security mechanisms to enforce row-level security based on the authenticated user's identity and permissions within the SAP system.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["sap-hana", "sso", "viewer-credentials", "authentication"]
+    },
+    {
+      "id": "5",
+      "question": "What is the primary performance consideration when implementing database-native RLS compared to Tableau-level RLS methods?",
+      "options": [
+        "Database-native RLS always provides better query performance",
+        "Database-native RLS requires live connections and may restrict cache sharing",
+        "Database-native RLS processes security filters after data retrieval",
+        "Database-native RLS automatically optimizes query execution plans"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Database-native RLS requires live connections and may restrict cache sharing between users due to the user-specific security contexts. Unlike Tableau-level methods that can benefit from shared caching, database-native RLS often requires dedicated connections per user, which can impact scalability and performance in high-concurrency scenarios.",
+      "difficulty": "ADVANCED",
+      "tags": ["performance", "live-connections", "cache-sharing", "scalability"]
+    },
+    {
+      "id": "6",
+      "question": "When troubleshooting database-native RLS implementation issues, which factor should be verified FIRST?",
+      "options": [
+        "Tableau Server has sufficient memory allocation",
+        "User existence and permissions in the target database system",
+        "Network connectivity between Tableau and database servers",
+        "Workbook permissions are correctly configured"
+      ],
+      "correctAnswer": 1,
+      "explanation": "User existence and permissions in the target database system should be verified first when troubleshooting database-native RLS. Since database-native RLS relies on the database's own security mechanisms, users must exist in the database with appropriate permissions for the security policies to function correctly. This is the foundational requirement for all other components to work.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["troubleshooting", "user-permissions", "database-security", "verification"]
+    },
+    {
+      "id": "7",
+      "question": "Which deployment scenario represents the optimal use case for implementing database-native RLS over Tableau-level alternatives?",
+      "options": [
+        "New Tableau deployment with no existing database security infrastructure",
+        "Organization with established, comprehensive database security policies across multiple applications",
+        "Cloud-first architecture with Tableau Cloud and cloud database services",
+        "Small organization with simple user access requirements"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Organizations with established, comprehensive database security policies across multiple applications represent the optimal use case for database-native RLS. This approach leverages existing security investments, ensures consistency across all applications accessing the database, and maintains centralized security management at the database level where expertise and policies already exist.",
+      "difficulty": "ADVANCED",
+      "tags": ["use-cases", "existing-infrastructure", "multi-application", "security-consistency"]
+    },
+    {
+      "id": "8",
+      "question": "What is the recommended alternative to database-native RLS for organizations that need both live connections and extract flexibility while maintaining enterprise-scale security?",
+      "options": [
+        "Manual user filters with workbook-level permissions",
+        "Dynamic user filters with calculated field security",
+        "Entitlements table approach with centralized security management",
+        "Site-based security with separate Tableau environments"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The entitlements table approach with centralized security management is recommended as it offers flexibility to work with both live connections and extracts while maintaining enterprise-scale security. This method provides scalable, maintainable security without the deployment limitations of database-native RLS, making it suitable for diverse enterprise environments including cloud deployments.",
+      "difficulty": "ADVANCED",
+      "tags": ["entitlements-table", "enterprise-scale", "flexibility", "centralized-security"]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "title": "Governance in Tableau - Practice Questions",
+  "description": "Comprehensive practice questions covering Tableau governance framework, data and content governance processes, security models, certification workflows, and enterprise deployment best practices for consultant-level certification",
+  "metadata": {
+    "topic": "Governance in Tableau",
+    "domain": "domain4",
+    "difficulty": "Mixed (Intermediate to Advanced)",
+    "sourceUrl": "https://help.tableau.com/current/blueprint/en-us/bp_governance_in_tableau.htm",
+    "relatedTopics": "Publish Data Sources and Workbooks; Data Security; Manage Content Access",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A consultant is helping an organization establish governance in Tableau. Which approach best balances control and agility in a self-service analytics environment?",
+      "options": [
+        "Create separate sites for each department to maintain strict boundaries and prevent any data sharing",
+        "Use a single site with locked projects, groups, and delegated administration to Project Owners while maintaining security",
+        "Allow all users full access to all content and rely on user training for governance",
+        "Implement unlocked projects with item-level permissions managed individually for each workbook"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The best practice is to use a single site with locked projects and groups, delegating administration to Project Owners or Project Leaders. This maintains security while enabling collaboration and content promotion. Sites create hard boundaries that prohibit collaboration, while unlocked projects with item-level permissions become unwieldy to manage at scale. Full access without controls doesn't provide governance.",
+      "difficulty": "intermediate",
+      "tags": ["governance-framework", "content-management", "projects", "best-practices"]
+    },
+    {
+      "id": "2",
+      "question": "In Tableau governance, what is the primary difference between data governance and content governance?",
+      "options": [
+        "Data governance focuses on upstream data processes while content governance manages published workbooks and dashboards",
+        "Data governance is only for Tableau Server while content governance is only for Tableau Cloud",
+        "Data governance requires Tableau Catalog while content governance does not",
+        "There is no difference; they are the same processes with different names"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Data governance in Tableau focuses on upstream data processes including data source management, data quality, security, enrichment/preparation, and metadata management. Content governance manages published content including projects, workbooks, dashboards, authorization, validation, promotion, certification, and utilization. Both are platform-agnostic and complement each other in the Modern Analytics Workflow.",
+      "difficulty": "beginner",
+      "tags": ["governance-models", "data-governance", "content-governance", "definitions"]
+    },
+    {
+      "id": "3",
+      "question": "An enterprise client needs to decide between creating Published Data Sources versus keeping data sources embedded in workbooks. According to governance best practices, what is the PRIMARY advantage of Published Data Sources for governance?",
+      "options": [
+        "Published Data Sources always perform faster than embedded data sources",
+        "Published Data Sources enable centralized governance, reduce duplication, and allow Tableau Data Server to secure and consolidate data models",
+        "Published Data Sources are required for all Tableau Cloud deployments",
+        "Published Data Sources automatically certify all data without validation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Published Data Sources enable centralized governance by allowing data stewards to manage and secure data models in one location, reduce duplication across workbooks, and leverage Tableau Data Server's capabilities for governed data access. They don't automatically perform faster, aren't required for Cloud, and still require validation before certification. This is a core data governance principle in Tableau.",
+      "difficulty": "intermediate",
+      "tags": ["data-source-management", "published-data-sources", "governance", "best-practices"]
+    },
+    {
+      "id": "4",
+      "question": "A consultant is setting up a content management structure. They need to support both ad-hoc analysis and certified content. What project structure aligns with Tableau governance best practices?",
+      "options": [
+        "Create a single project where all content is published and rely on content descriptions to indicate status",
+        "Create separate sandbox projects for ad-hoc content and production projects for validated, certified content",
+        "Use different sites for sandbox and production content to maintain strict separation",
+        "Create one project per user to isolate all content"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practice is to create separate sandbox and production projects. Sandbox projects contain ad-hoc/uncertified content where users can freely explore, while production projects contain validated, certified content with restricted publishing access. This provides clarity and trust for consumers. Using sites creates unnecessary hard boundaries, while single projects or per-user projects don't provide clear governance structure.",
+      "difficulty": "intermediate",
+      "tags": ["content-management", "projects", "sandbox", "certification", "best-practices"]
+    },
+    {
+      "id": "5",
+      "question": "An organization is implementing row-level security at scale. They have Tableau Data Management. Which approach provides the most scalable and governable solution for implementing user filtering across multiple data sources?",
+      "options": [
+        "Create user filters on each individual workbook as they are published",
+        "Use virtual connections with data policies to implement centralized row-level security",
+        "Embed database credentials in every published data source",
+        "Create separate sites for each user group that needs different data access"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With Tableau Data Management, virtual connections with data policies provide the most scalable approach for row-level security. They enable centralized management of data access rules that apply across multiple data sources and workbooks. Individual workbook filters don't scale, embedded credentials don't provide row-level filtering, and separate sites create management overhead and prevent collaboration.",
+      "difficulty": "advanced",
+      "tags": ["data-security", "row-level-security", "virtual-connections", "data-policies", "scalability"]
+    },
+    {
+      "id": "6",
+      "question": "What is the purpose of data quality warnings in Tableau Catalog, and who can set them?",
+      "options": [
+        "To automatically fix data quality issues; only Tableau Server Administrators can set them",
+        "To alert users about data issues like stale data or deprecated sources; Publishers with appropriate permissions can set them",
+        "To prevent users from accessing low-quality data; only database administrators can set them",
+        "To generate automated reports on data quality; they are set automatically by Tableau Catalog"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data quality warnings communicate issues to users (such as stale data, deprecated sources, warnings, or under maintenance status) to increase visibility and trust. Publishers with permissions to the data asset can set warnings, not just administrators. They don't automatically fix issues or prevent access; they inform users. This is a key governance feature in Tableau Catalog for maintaining data quality awareness.",
+      "difficulty": "intermediate",
+      "tags": ["data-quality", "tableau-catalog", "data-quality-warnings", "governance"]
+    },
+    {
+      "id": "7",
+      "question": "A consultant is advising on the content certification process. What are the THREE primary steps in the content governance workflow from creation to certification?",
+      "options": [
+        "Create → Validate → Certify",
+        "Create → Validate → Promote → Certify",
+        "Create → Publish → Certify",
+        "Create → Test → Deploy → Monitor"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The complete content governance workflow includes four key steps: Create (author content), Validate (verify accuracy, completeness, correctness), Promote (move to trusted project location), and Certify (designate as trusted content with certification badge). Simply creating and publishing doesn't ensure governance. Validation ensures quality, promotion moves content to the right location, and certification provides trust designation for end users.",
+      "difficulty": "intermediate",
+      "tags": ["content-certification", "content-validation", "content-promotion", "governance-workflow"]
+    },
+    {
+      "id": "8",
+      "question": "An enterprise client wants to enable self-service data preparation. According to governance best practices, how should Tableau Prep Conductor be used in a governed deployment?",
+      "options": [
+        "Prep Conductor should not be used as it bypasses governance controls",
+        "Prep flows should be published to Tableau Server/Cloud where Prep Conductor automates execution on schedule, ensuring consistent, auditable data preparation",
+        "Prep Conductor should only be used by IT; business users should not have access to Prep Builder",
+        "Each user should run Prep flows manually to maintain control over data preparation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practice is to publish validated Prep flows to Tableau Server/Cloud where Prep Conductor automates execution on schedule. This creates consistent processes, reduces manual errors, tracks success/failure, and provides visibility—all flows can be viewed on the server. Manual execution doesn't scale, restricting business users defeats self-service goals, and Conductor supports (not bypasses) governance through automation and auditability.",
+      "difficulty": "advanced",
+      "tags": ["data-preparation", "tableau-prep", "prep-conductor", "automation", "governance"]
+    },
+    {
+      "id": "9",
+      "question": "When should an organization use multiple sites on Tableau Server instead of multiple projects within a single site?",
+      "options": [
+        "When different departments want to customize their dashboard colors differently",
+        "When there is a deliberate need to prevent users from collaborating and maintain strict security boundaries between distinct user groups",
+        "When the organization has more than 100 users",
+        "When different departments need different data refresh schedules"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Sites should only be used when there's a deliberate need to prevent collaboration and maintain strict security boundaries—users in one site cannot see or access another site. Sites create hard boundaries that prevent content sharing and require duplication of data sources. For most cases, projects within a single site provide sufficient security while enabling collaboration. Dashboard colors, user count, and refresh schedules do not require separate sites.",
+      "difficulty": "advanced",
+      "tags": ["sites", "multi-tenancy", "content-management", "security-boundaries", "architecture-decisions"]
+    },
+    {
+      "id": "10",
+      "question": "A consultant is designing the permissions model for an organization. According to Tableau governance best practices, what is the recommended approach for managing permissions at scale?",
+      "options": [
+        "Set permissions individually on each workbook and data source for maximum control",
+        "Use groups, assign permissions at the project level, and lock projects to enforce permissions throughout the hierarchy",
+        "Grant all users the same permissions and rely on data-level security in the database",
+        "Create a separate site for each permission level needed"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practice is to use groups (local or synced from AD/LDAP), assign permissions at the project level, and lock projects to enforce those permissions throughout the project hierarchy including nested projects. This provides scalability and maintainability. Item-level permissions become unwieldy at scale, uniform permissions don't meet varied business needs, and separate sites create management overhead and prevent collaboration. Locked projects with groups are the foundation of governed access.",
+      "difficulty": "intermediate",
+      "tags": ["authorization", "permissions", "groups", "locked-projects", "scalability", "best-practices"]
+    }
+  ]
+}

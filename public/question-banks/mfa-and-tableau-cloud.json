@@ -1,0 +1,97 @@
+{
+  "title": "MFA and Tableau Cloud",
+  "description": "Master multi-factor authentication requirements for Tableau Cloud including MFA mandate (Feb 1, 2022), supported verification methods, SSO vs. Tableau with MFA options, recovery codes, lockout scenarios, and best practices for site administrators.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 6,
+    "estimatedTime": "9 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "When did MFA become a requirement for Tableau Cloud, and what are the two primary methods to satisfy this requirement?",
+      "options": [
+        "January 1, 2020; only SSO with MFA is supported",
+        "February 1, 2022; (1) SSO with MFA (recommended) or (2) Tableau with MFA (alternative if no SSO IdP)",
+        "MFA is optional for Tableau Cloud",
+        "March 1, 2023; only Tableau with MFA is supported"
+      ],
+      "correctAnswer": 1,
+      "explanation": "MFA authentication became a Tableau Cloud REQUIREMENT beginning FEBRUARY 1, 2022. As part of the broader Salesforce ecosystem, site owners must configure account security mechanisms. To meet the MFA requirement: (1) RECOMMENDED METHOD—SSO with MFA: Use your organization's SSO IdP with MFA; configure site to use Google, Salesforce, or SAML provider with MFA; (2) ALTERNATIVE METHOD—Tableau with MFA: If you don't work directly with an SSO IdP or if you use TableauID, enable MFA with Tableau authentication.",
+      "difficulty": "intermediate",
+      "tags": ["mfa-requirement", "february-2022", "sso-mfa", "tableau-with-mfa", "salesforce"]
+    },
+    {
+      "id": 2,
+      "question": "What verification methods are supported by Tableau with MFA?",
+      "options": [
+        "Only SMS text messages",
+        "Salesforce Authenticator app; Third-party TOTP apps (Google Authenticator, Microsoft Authenticator, Authy); Security keys (WebAuthn/U2F like YubiKey); Built-in authenticators (Touch ID, Face ID, Windows Hello); Recovery codes (backup only)",
+        "Email verification only",
+        "Only hardware security keys"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau with MFA supports the following verification methods: (1) SALESFORCE AUTHENTICATOR APP; (2) THIRD-PARTY TIME-BASED ONE-TIME PASSCODE (TOTP) authenticator apps, including Google Authenticator, Microsoft Authenticator, and Authy; (3) SECURITY KEYS that support WebAuthn or U2F, such as Yubico YubiKey or Google Titan Security Key; (4) BUILT-IN AUTHENTICATORS, including Touch ID, Face ID, and Windows Hello; (5) RECOVERY CODES (as backup only, for emergency use).",
+      "difficulty": "intermediate",
+      "tags": ["verification-methods", "totp", "security-keys", "authenticator-apps", "recovery-codes"]
+    },
+    {
+      "id": 3,
+      "question": "Which verification methods CANNOT be used when authenticating to Tableau Cloud from Tableau Desktop, Tableau Prep Builder, Tableau Bridge, and Content Migration Tool?",
+      "options": [
+        "All verification methods work with these clients",
+        "Security keys (WebAuthn/U2F) and Built-in authenticators (Touch ID, Face ID, Windows Hello); users should register an additional verification method for these clients",
+        "TOTP authenticator apps cannot be used",
+        "Only recovery codes can be used"
+      ],
+      "correctAnswer": 1,
+      "explanation": "IMPORTANT: SECURITY KEYS that support WebAuthn or U2F and BUILT-IN AUTHENTICATORS (Touch ID, Face ID, Windows Hello) CAN'T BE USED when authenticating to Tableau Cloud from TABLEAU DESKTOP, TABLEAU PREP BUILDER, TABLEAU BRIDGE, and TABLEAU CONTENT MIGRATION TOOL. If one of these verification methods has been registered, users should REGISTER AN ADDITIONAL VERIFICATION METHOD (like TOTP authenticator app) from their My Account Settings page in Tableau Cloud for use with these clients.",
+      "difficulty": "advanced",
+      "tags": ["client-limitations", "desktop-prep-bridge", "security-keys", "built-in-authenticators", "compatibility"]
+    },
+    {
+      "id": 4,
+      "question": "What are the recommended best practices for site admin accounts when enabling MFA?",
+      "options": [
+        "One verification method is sufficient for admins",
+        "Register a minimum of TWO verification methods (including Recovery Codes as backup); Designate at least ONE site admin account (Site Administrator Creator/Explorer) with permissions to manage users and MFA settings",
+        "Only the primary site admin needs MFA",
+        "Admin accounts are exempt from MFA requirements"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practices for site admin accounts: (1) Register a MINIMUM OF TWO VERIFICATION METHODS—For each site admin account, register at least two verification methods to reduce the risk of being locked out. After registering a primary method, add the RECOVERY CODES option to generate backup codes; (2) Designate at least ONE SITE ADMIN ACCOUNT to manage users and MFA—Designate at least one site admin-level account (Site Administrator Creator or Site Administrator Explorer) that has permissions to manage users and MFA settings. This redundancy helps prevent admin access delays if another admin is locked out.",
+      "difficulty": "advanced",
+      "tags": ["best-practices", "site-admin", "multiple-methods", "recovery-codes", "redundancy"]
+    },
+    {
+      "id": 5,
+      "question": "What are recovery codes and how should they be used?",
+      "options": [
+        "Primary verification method for all users",
+        "Emergency backup only; TEN ONE-TIME USE codes generated when added; immediately copy and store securely; NOT intended as primary method, only for emergencies when usual MFA methods unavailable",
+        "Unlimited-use codes for convenience",
+        "Codes that expire after 24 hours"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RECOVERY CODES are to be used in EMERGENCY CASES ONLY to help reduce the risk of a locked-out scenario. When you add the Recovery Codes option, a list of TEN ONE-TIME USE codes are generated that you can use to sign in to Tableau Cloud if you don't have access to your usual MFA verification methods. CRITICAL: (1) Because the list of codes ISN'T ACCESSIBLE after adding the Recovery Codes option, IMMEDIATELY COPY AND STORE these codes in a SAFE AND SECURE LOCATION; (2) Recovery codes are NOT INTENDED to be a primary verification method—they should be used as BACKUP ONLY for emergencies.",
+      "difficulty": "intermediate",
+      "tags": ["recovery-codes", "emergency-access", "one-time-use", "backup-method", "secure-storage"]
+    },
+    {
+      "id": 6,
+      "question": "How can a site admin reset MFA verification methods for a locked-out user, and what are the limitations?",
+      "options": [
+        "Contact Tableau Support for all MFA resets",
+        "From Users page: Select user > Actions > Reset MFA Verifiers (or Settings tab); LIMITATION: Site admin can only reset MFA verifiers for users on a SINGLE SITE; Cloud admins can use Tableau Cloud Manager (TCM) for multi-site resets",
+        "MFA verifiers cannot be reset—users must create new accounts",
+        "Only cloud admins can reset MFA verifiers"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To enable site access for a locked-out user, reset MFA verification methods: (1) Sign in to Tableau Cloud as a site admin; (2) Navigate to the Users page and select the user; (3) Click Actions menu, select 'Reset MFA Verifiers'; (4) On user's profile Settings tab, click 'Reset MFA Verifiers' button (must have 'Tableau with MFA' authentication). IMPORTANT LIMITATION: For security purposes, a site admin can ONLY RESET MFA VERIFIERS of a user that belongs to a SINGLE SITE. However, if you're also a CLOUD ADMIN, you can use TABLEAU CLOUD MANAGER (TCM) to reset verification methods of users on MULTIPLE SITES. After reset, user must register for MFA again.",
+      "difficulty": "advanced",
+      "tags": ["reset-mfa", "locked-out-users", "site-admin-limitations", "tcm", "single-site", "multi-site"]
+    }
+  ]
+}

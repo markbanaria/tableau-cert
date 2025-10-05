@@ -1,0 +1,154 @@
+{
+  "title": "Structure Data for Analysis - Practice Questions",
+  "description": "Practice questions covering data structure fundamentals, Tableau data model, relationships vs joins, normalization, pivoting, star/snowflake schemas, and best practices for structuring data for analysis",
+  "metadata": {
+    "topic": "Structure Data for Analysis",
+    "domain": "domain1",
+    "difficulty": "advanced",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/data_structure_for_analysis.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What are the two layers of the Tableau data model introduced in version 2020.2 and later?",
+      "options": [
+        "Primary layer and secondary layer",
+        "Logical layer (relationships) and physical layer (joins/unions)",
+        "Frontend layer and backend layer",
+        "Dimension layer and measure layer"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Tableau data model has two layers: the logical layer (relationships canvas) where you combine data using relationships (noodles), and the physical layer (join/union canvas) where you combine data using joins and unions. Each logical table can contain one or more physical tables. The logical layer is the default view you see in the Data Source page, while the physical layer is accessed by double-clicking a logical table.",
+      "difficulty": "intermediate",
+      "tags": ["data-model", "logical-layer", "physical-layer", "relationships", "tableau-2020"]
+    },
+    {
+      "id": "2",
+      "question": "In the Tableau data model logical layer, how do tables remain during analysis compared to physical layer joins?",
+      "options": [
+        "Logical tables are merged just like physical tables",
+        "Logical tables remain distinct (normalized), not merged; physical tables are merged into a single flat table",
+        "Both logical and physical tables remain distinct and normalized",
+        "Logical tables are temporary while physical tables are permanent"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In the logical layer, tables remain distinct (normalized) and are not merged in the data source—they maintain their native level of detail. In contrast, physical tables in the physical layer are merged into a single, flat table (denormalized) that defines the logical table. This key difference allows relationships to preserve table granularity while joins create flattened structures.",
+      "difficulty": "advanced",
+      "tags": ["data-model", "normalization", "relationships", "joins", "granularity"]
+    },
+    {
+      "id": "3",
+      "question": "What is the primary characteristic of 'wide' data that indicates it needs to be pivoted for better analysis in Tableau?",
+      "options": [
+        "The data has too many rows",
+        "Column names convey additional information rather than describing what the values represent (e.g., columns for years like 2020, 2021, 2022)",
+        "The data contains null values",
+        "The data has geographic fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Wide data is indicated when column names convey additional information rather than describing what the values are. For example, having columns named '2020', '2021', '2022' instead of a single 'Year' column and 'Value' column. This format creates multiple fields representing the same basic thing, making it hard to do analysis across time or categories. Pivoting converts this from wide (people-friendly) to tall (machine-readable) format.",
+      "difficulty": "intermediate",
+      "tags": ["pivot", "data-structure", "wide-data", "tall-data", "data-preparation"]
+    },
+    {
+      "id": "4",
+      "question": "When building a star schema in Tableau's logical layer, what is the recommended best practice for the order of adding tables?",
+      "options": [
+        "Add dimension tables first, then the fact table",
+        "Add the fact table first, then relate dimension tables to it",
+        "Order doesn't matter in Tableau's logical layer",
+        "Always add the largest table first regardless of type"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When creating a star schema, it's helpful to drag the fact table out first as the root table, and then relate dimension tables to that table. The first table dragged to the canvas becomes the root table for the data model. In star and snowflake schemas, measures are typically contained in a central fact table and dimensions are stored separately in independent dimension tables, making the fact table the logical starting point.",
+      "difficulty": "intermediate",
+      "tags": ["star-schema", "data-modeling", "fact-tables", "dimension-tables", "best-practices"]
+    },
+    {
+      "id": "5",
+      "question": "A consultant is working with data where the fact table contains measures and multiple dimension tables also contain measures. What problem does using relationships solve compared to joining these tables?",
+      "options": [
+        "Relationships make the query run faster in all cases",
+        "Relationships aggregate measures before performing joins, avoiding unnecessary duplication; joins would replicate measure values causing distorted aggregates",
+        "Relationships allow more tables to be combined than joins",
+        "Relationships automatically filter out null values"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When dimension tables contain measures and you join them to fact tables, the measures in dimension tables get replicated, resulting in distorted aggregates unless you use LOD calculations or COUNT DISTINCT. However, when you create relationships between these tables, Tableau aggregates measures before performing joins, avoiding the problem of unnecessary duplication. This relieves you of the need to carefully track the level of detail of your measures.",
+      "difficulty": "advanced",
+      "tags": ["relationships", "measures", "aggregation", "join-duplication", "data-modeling"]
+    },
+    {
+      "id": "6",
+      "question": "What is the purpose of normalization in database design, and how does it relate to Tableau's data modeling?",
+      "options": [
+        "Normalization only applies to SQL databases and has no relevance to Tableau",
+        "Normalization breaks up data into multiple tables to reduce redundancy; Tableau can work with normalized data using relationships while preserving each table's granularity",
+        "Normalization combines all data into a single table for easier analysis",
+        "Normalization is the process of removing null values from data"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Normalization is the process of breaking up data into multiple tables to reduce redundant data and simplify database organization. Each normalized table needs a unique identifier and key columns to connect back to other tables. Tableau's relationship feature (2020.2+) is designed to work with normalized data structures like star and snowflake schemas, preserving each table's native level of detail while allowing multi-table analysis without unnecessary joins and data duplication.",
+      "difficulty": "intermediate",
+      "tags": ["normalization", "database-design", "relationships", "data-modeling", "redundancy"]
+    },
+    {
+      "id": "7",
+      "question": "What is the key difference between 'discrete' and 'continuous' fields in Tableau, and how does this relate to data structure?",
+      "options": [
+        "Discrete fields are blue and always dimensions; continuous fields are green and always measures",
+        "Discrete means individually separate/distinct (creates panes in views); continuous means forming an unbroken whole (creates axes in views)",
+        "Discrete fields cannot be used in calculations; continuous fields can",
+        "Discrete and continuous are the same as dimensions and measures with no distinction"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Discrete means individually separate or distinct—in Tableau, discrete values come into the view as labels and create panes. Continuous means forming an unbroken, continuous whole—continuous values come into the view as an axis. While dimensions are usually discrete and measures are usually continuous, this isn't always the case. Dates can be either discrete (date parts like 'August') or continuous (date truncations like 'August 2024'), which affects how trend lines and analysis work.",
+      "difficulty": "intermediate",
+      "tags": ["discrete", "continuous", "dimensions", "measures", "field-types"]
+    },
+    {
+      "id": "8",
+      "question": "In Tableau 2024.2 and later, what type of data model supports unrelated tables through multi-fact relationships?",
+      "options": [
+        "Single-table model",
+        "Star schema only",
+        "Multi-fact relationship model with multiple base tables",
+        "Circular relationship model"
+      ],
+      "correctAnswer": 2,
+      "explanation": "In version 2024.2 and later, Tableau supports multi-fact relationship models with multiple base tables. This permits unrelated tables in the model when shared tables also exist. During analysis, fields from shared tables 'stitch' together otherwise unrelated tables based on shared dimensions (like location or time). This addresses scenarios like circular relationships, conformed dimensions, contextual OR relationships, and equivalent blends that weren't fully supported in earlier versions (2020.2-2024.1).",
+      "difficulty": "advanced",
+      "tags": ["multi-fact", "data-model", "tableau-2024", "base-tables", "shared-dimensions"]
+    },
+    {
+      "id": "9",
+      "question": "What is 'granularity' in data structure, and why is it important for analysis?",
+      "options": [
+        "Granularity refers to the size of the data file",
+        "Granularity is the level of detail represented by each row/record in the data; it's important because it determines what questions can be answered",
+        "Granularity is the number of columns in a table",
+        "Granularity measures data quality and accuracy"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Granularity is the level of detail that each row or record in the data represents. For example, a row could represent a day, a month, a transaction, or a customer. Understanding granularity is crucial because it determines what analysis is possible and helps you articulate what the 'TableName(Count)' field represents. If you can't clearly state what a row represents, the data might be structured poorly for analysis. This is also why TableName(Count) should always be checked when working with new data.",
+      "difficulty": "beginner",
+      "tags": ["granularity", "data-structure", "level-of-detail", "row-definition", "analysis"]
+    },
+    {
+      "id": "10",
+      "question": "What factors limit the benefits of using related tables in Tableau's data model?",
+      "options": [
+        "Related tables always perform better than joins with no limitations",
+        "Dirty data, data source filters, tables with many unmatched values, and (in versions before 2024.2) interrelating multiple fact tables with multiple dimension tables",
+        "Related tables can only be used with Tableau Server, not Desktop",
+        "The number of tables is limited to exactly three"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Several factors can limit the benefits of relationships: (1) Dirty data/poorly structured tables that mix measures and dimensions, (2) Data source filters that limit Tableau's ability to do join culling, (3) Tables with many unmatched values across relationships, and (4) In versions 2020.2-2024.1, interrelating multiple fact tables with multiple dimension tables (shared/conformed dimensions). Version 2024.2+ addresses the last limitation with multi-fact relationship models.",
+      "difficulty": "advanced",
+      "tags": ["relationships", "limitations", "performance", "data-quality", "join-culling"]
+    }
+  ]
+}

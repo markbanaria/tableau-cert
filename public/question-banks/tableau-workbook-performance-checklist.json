@@ -1,0 +1,154 @@
+{
+  "title": "Tableau Workbook Performance Checklist - Practice Questions",
+  "description": "Practice questions for Tableau Workbook Performance Checklist covering systematic performance optimization approaches, data source optimization, view design best practices, filtering strategies, and calculation optimization",
+  "metadata": {
+    "topic": "Tableau Workbook Performance Checklist",
+    "domain": "domain3",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/perf_checklist.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "According to Tableau's performance checklist, what is the most fundamental principle when approaching workbook performance optimization?",
+      "options": [
+        "Always use extracts instead of live connections",
+        "Performance tuning is highly individualized and requires testing in your specific context",
+        "Limit the number of calculated fields to less than 10 per workbook",
+        "Use only Boolean and integer data types in calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Tableau performance checklist emphasizes that 'performance tuning is highly individualized.' What works for one workbook may not work for another, so it's essential to test optimizations in your specific environment with your actual data and use cases. While the other options are performance recommendations, they are not universally applicable principles.",
+      "difficulty": "BEGINNER",
+      "tags": ["performance-principles", "optimization-approach"]
+    },
+    {
+      "id": "2",
+      "question": "Which filtering strategy is recommended as the first priority in the performance optimization hierarchy?",
+      "options": [
+        "Dashboard filters with \"Apply\" buttons enabled",
+        "Context filters on dimensions with high cardinality",
+        "Extract and data source filters",
+        "Quick filters with multi-select dropdown functionality"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Extract and data source filters are the highest priority in the filtering hierarchy because they reduce the data volume before any visualization processing occurs. These filters are applied at the data source level, meaning less data needs to be processed throughout the entire workbook. Dashboard filters, context filters, and quick filters all operate after the data has already been loaded and processed.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["filtering-strategy", "data-source-optimization"]
+    },
+    {
+      "id": "3",
+      "question": "When optimizing calculations for performance, which data types should be prioritized over others?",
+      "options": [
+        "Strings and text fields for better readability",
+        "Date and datetime fields for temporal analysis",
+        "Booleans and integers for faster processing",
+        "Floating point numbers for precision calculations"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Booleans and integers should be prioritized because they require less memory and processing power compared to strings, dates, or floating-point numbers. Boolean calculations are particularly fast as they involve simple true/false evaluations, while integers are more efficient than decimal numbers or text-based operations. This is a key recommendation in Tableau's performance checklist for calculation optimization.",
+      "difficulty": "BEGINNER",
+      "tags": ["calculation-optimization", "data-types"]
+    },
+    {
+      "id": "4",
+      "question": "Your company's sales dashboard contains 15 worksheets with live connections to a SQL Server database. Users report slow loading times during peak business hours. The dashboard includes several COUNTD calculations on customer IDs and multiple joins across fact and dimension tables. Following the performance checklist approach, what should be your first optimization step?",
+      "options": [
+        "Convert all COUNTD calculations to SUM calculations with pre-aggregated data",
+        "Create an extract from the live connection and schedule regular refresh cycles",
+        "Implement context filters on all date ranges to reduce query scope",
+        "Redesign the dashboard to use fewer worksheets and combine visualizations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Creating an extract should be the first step because extracts significantly improve performance by: 1) Pre-computing data locally, 2) Reducing network latency, 3) Avoiding database load during peak hours, 4) Enabling Tableau's optimized data engine. While the other options are valid optimizations, extracts provide the most immediate and comprehensive performance improvement for live connection issues, especially during peak usage periods.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["data-source-optimization", "extract-vs-live", "enterprise-scenarios"]
+    },
+    {
+      "id": "5",
+      "question": "A retail analytics team needs to create a regional performance dashboard that will be accessed by 200+ store managers daily. The dashboard requires filtering by region, store type, and date ranges. Based on performance best practices, how should the filtering strategy be implemented?",
+      "options": [
+        "Use quick filters for all three dimensions with \"Apply\" buttons disabled for real-time filtering",
+        "Implement data source filters for region and store type, with a dashboard filter for date ranges including an \"Apply\" button",
+        "Create separate dashboards for each region to avoid filtering overhead",
+        "Use parameter controls for all filters to minimize data processing"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The optimal approach combines data source filters for relatively stable dimensions (region, store type) with dashboard filters for frequently changed dimensions (date). Data source filters reduce the overall data volume, while the \"Apply\" button on multi-select filters prevents multiple queries during filter selection. This strategy balances performance with usability for high-traffic dashboards while following the filtering hierarchy principle.",
+      "difficulty": "ADVANCED",
+      "tags": ["filtering-strategy", "dashboard-design", "enterprise-scenarios"]
+    },
+    {
+      "id": "6",
+      "question": "During performance optimization, you discover that a workbook contains multiple calculated fields using string concatenation and COUNTD functions. Users need to analyze customer segments across different time periods. What optimization approach aligns with the performance checklist recommendations?",
+      "options": [
+        "Replace string concatenations with integer-coded lookup tables and explore alternatives to COUNTD",
+        "Increase the server memory allocation to handle the complex calculations",
+        "Convert all calculations to table calculations to improve processing speed",
+        "Implement row-level security to reduce the dataset size per user"
+      ],
+      "correctAnswer": 0,
+      "explanation": "This approach follows multiple performance checklist principles: 1) Using integers instead of strings improves calculation speed, 2) COUNTD functions are computationally expensive and should be minimized when possible, 3) Lookup tables can pre-compute segment assignments. The other options don't address the root performance issues - more memory won't fix inefficient calculations, table calculations aren't inherently faster, and row-level security is a security feature, not a performance optimization.",
+      "difficulty": "ADVANCED",
+      "tags": ["calculation-optimization", "data-types", "countd-alternatives"]
+    },
+    {
+      "id": "7",
+      "question": "An executive dashboard displays real-time KPIs from multiple data sources with automatic refresh every 5 minutes. Following the performance checklist, what design modification would most improve performance without compromising data freshness requirements?",
+      "options": [
+        "Implement incremental extract refreshes instead of full refreshes",
+        "Use fixed-size dashboards and disable automatic updates during dashboard building",
+        "Combine all data sources into a single connection using data blending",
+        "Reduce the refresh frequency to every 30 minutes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Incremental extract refreshes only update changed data, dramatically reducing refresh time and system load while maintaining the required 5-minute freshness. This directly addresses the performance checklist recommendation to optimize extract refresh strategies. Fixed-size dashboards help but don't address the refresh performance issue. Data blending can actually decrease performance, and reducing refresh frequency violates the business requirement.",
+      "difficulty": "ADVANCED",
+      "tags": ["extract-optimization", "real-time-data", "refresh-strategies"]
+    },
+    {
+      "id": "8",
+      "question": "You are tasked with optimizing a financial reporting workbook that contains 25 worksheets, extensive custom SQL queries, and multiple data blends. The performance recorder shows significant delays in data source queries. What systematic approach should you follow based on the performance checklist?",
+      "options": [
+        "Start with view-level optimizations before addressing data source issues",
+        "Focus on calculation optimization since financial data involves complex formulas",
+        "Begin with data source optimization, then move to view design and filtering strategies",
+        "Implement dashboard-level filters first to reduce the overall data processing load"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The performance checklist follows a systematic hierarchy: data source optimization provides the foundation for all other improvements. Since the performance recorder shows data source query delays, addressing custom SQL, joins, and data preparation first will have the biggest impact. Only after optimizing the data foundation should you move to view design, calculations, and filtering. This approach ensures you're not optimizing visualizations that are built on inefficient data structures.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["systematic-optimization", "performance-hierarchy", "custom-sql"]
+    },
+    {
+      "id": "9",
+      "question": "A healthcare analytics dashboard serves 500+ concurrent users and includes patient demographic filtering across multiple years of data. The current implementation uses \"Keep Only\" and \"Exclude\" actions on large patient ID lists. What performance optimization strategy would be most effective?",
+      "options": [
+        "Implement server-side caching to reduce repeated query execution",
+        "Replace discrete patient ID filtering with categorical demographic filters and date range filtering",
+        "Use Tableau Server's data engine to pre-calculate all possible filter combinations",
+        "Migrate to a column-store database to improve query performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The performance checklist specifically recommends avoiding \"Keep Only\" and \"Exclude\" on large datasets and instead filtering by summarized categories and value ranges. Demographic categories (age groups, gender, location) and date ranges are much more efficient than discrete patient ID lists. This approach reduces query complexity, improves caching effectiveness, and scales better with high user concurrency while maintaining analytical value.",
+      "difficulty": "ADVANCED",
+      "tags": ["filtering-strategy", "large-datasets", "healthcare-scenarios", "concurrent-users"]
+    },
+    {
+      "id": "10",
+      "question": "During a performance audit of an enterprise workbook, you identify that calculation performance could be improved. The workbook contains date calculations, aggregation functions, and conditional logic. Based on the performance checklist, which optimization principle should guide your approach?",
+      "options": [
+        "Convert all calculations to Level of Detail (LOD) expressions for better performance",
+        "Use native Tableau features when possible instead of complex calculated fields",
+        "Implement all calculations at the database level using custom SQL",
+        "Replace all conditional logic with parameter-driven calculated fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The performance checklist emphasizes using native Tableau features over custom calculations whenever possible. Native features like built-in aggregations, date functions, and filters are optimized by Tableau's engine and generally perform better than equivalent calculated fields. While LOD expressions, database-level calculations, and parameters have their uses, they should be considered after exhausting native feature options. This principle ensures you leverage Tableau's built-in optimizations before creating custom solutions.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["calculation-optimization", "native-features", "performance-principles"]
+    }
+  ]
+}

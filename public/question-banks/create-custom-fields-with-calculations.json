@@ -1,0 +1,182 @@
+{
+  "title": "Create Custom Fields with Calculations - Practice Questions",
+  "description": "Practice questions covering Tableau calculated fields including syntax, functions, string manipulation, date calculations, logical operations, and performance optimization",
+  "metadata": {
+    "topic": "Create Custom Fields with Calculations",
+    "domain": "domain3",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/calculations_calculatedfields.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 12
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What are the three main types of calculations you can create in Tableau?",
+      "options": [
+        "Basic calculations, Advanced calculations, and Complex calculations",
+        "Basic calculations, Level of Detail (LOD) expressions, and Table calculations",
+        "String calculations, Number calculations, and Date calculations",
+        "Dimension calculations, Measure calculations, and Filter calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The three main types of calculations in Tableau are Basic calculations (transform values at data source level), Level of Detail (LOD) expressions (provide granular control), and Table calculations (applied at visualization level).",
+      "difficulty": "basic",
+      "tags": ["calculations", "LOD", "table calculations", "basic calculations"]
+    },
+    {
+      "id": "2",
+      "question": "You need to extract the last 6 characters from an order ID field 'CA-2011-100006' to get just the order number '100006'. Which function would be most appropriate?",
+      "options": [
+        "LEFT('CA-2011-100006', 6)",
+        "RIGHT('CA-2011-100006', 6)",
+        "MID('CA-2011-100006', 6)",
+        "SPLIT('CA-2011-100006', '-', 3)"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The RIGHT function extracts a specified number of characters from the right side of a string. RIGHT('CA-2011-100006', 6) returns '100006'.",
+      "difficulty": "intermediate",
+      "tags": ["string functions", "RIGHT", "text manipulation"]
+    },
+    {
+      "id": "3",
+      "question": "In an enterprise dashboard, you have a calculation that references another calculated field multiple times, causing performance issues. What is the best optimization approach?",
+      "options": [
+        "Convert the calculation to a LOD expression",
+        "Rewrite the calculation to reference the base calculated field only once",
+        "Move the calculation to the data source level",
+        "Use table calculations instead of basic calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a calculation references another calculated field multiple times, it performs that calculation multiple times for each record. Rewriting to reference the base calculation only once improves performance significantly.",
+      "difficulty": "advanced",
+      "tags": ["performance optimization", "calculated fields", "efficiency"]
+    },
+    {
+      "id": "4",
+      "question": "You need to create a calculated field that categorizes customers based on multiple conditions. Which approach is generally more efficient and readable for complex logic?",
+      "options": [
+        "Nested IF statements",
+        "Multiple IIF functions",
+        "CASE statements",
+        "Boolean AND/OR operations"
+      ],
+      "correctAnswer": 2,
+      "explanation": "CASE statements are generally more efficient and readable than nested IF statements for complex conditional logic. They're more concise and easier to understand when dealing with multiple conditions.",
+      "difficulty": "intermediate",
+      "tags": ["logical functions", "CASE", "conditional logic", "best practices"]
+    },
+    {
+      "id": "5",
+      "question": "When working with date calculations, you need to find the number of business days between two dates. Which function combination would be most appropriate?",
+      "options": [
+        "DATEDIFF('day', [Start Date], [End Date])",
+        "DATEDIFF('weekday', [Start Date], [End Date])",
+        "DATEADD('day', -1, [End Date]) - [Start Date]",
+        "Custom calculation using DATEDIFF and weekend exclusion logic"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Tableau doesn't have a built-in business days function, so you need a custom calculation that uses DATEDIFF to get total days and then subtracts weekends and potentially holidays using additional logic.",
+      "difficulty": "advanced",
+      "tags": ["date functions", "DATEDIFF", "business logic", "custom calculations"]
+    },
+    {
+      "id": "6",
+      "question": "You're optimizing calculations for better performance. Which approach should you avoid when working with string functions?",
+      "options": [
+        "Using REGEXP_REPLACE for complex string manipulations",
+        "Concatenating multiple strings within calculated values during analysis",
+        "Using built-in string functions like SPLIT and RIGHT",
+        "Handling major string operations at the data source level"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Concatenating strings within calculated values during analysis can slow down processing power. It's better to handle major string operations outside the visualization tool or use more efficient string functions.",
+      "difficulty": "advanced",
+      "tags": ["performance optimization", "string functions", "best practices"]
+    },
+    {
+      "id": "7",
+      "question": "When creating a calculated field to parse dates from a non-standard string format like 'Jan-15-2023', which function is most appropriate?",
+      "options": [
+        "DATE([Date String])",
+        "DATEPARSE('MMM-dd-yyyy', [Date String])",
+        "DATEVALUE([Date String])",
+        "STR([Date String])"
+      ],
+      "correctAnswer": 1,
+      "explanation": "DATEPARSE allows you to specify the exact format of your date string, creating a map that Tableau uses to translate the string into a proper date field. The format 'MMM-dd-yyyy' matches 'Jan-15-2023'.",
+      "difficulty": "intermediate",
+      "tags": ["date functions", "DATEPARSE", "string parsing", "date formatting"]
+    },
+    {
+      "id": "8",
+      "question": "You need to create a calculated field that uses regular expressions to clean up customer segment data. You want to replace 'UNKNOWN', 'LEADER', 'ADVERTISING', etc. with 'UNKNOWN'. Which approach is most efficient?",
+      "options": [
+        "Multiple nested IF statements for each value",
+        "CASE statement with individual conditions",
+        "IF REGEXP_MATCH([Segment], 'UNKNOWN|LEADER|ADVERTISING|CLOSED|COMPETITOR|REPEAT') THEN 'UNKNOWN' ELSE [Segment] END",
+        "Separate calculated fields for each segment type"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Using REGEXP_MATCH with the pipe (|) operator allows you to check for multiple patterns in a single expression, making it more efficient than multiple IF statements or CASE conditions.",
+      "difficulty": "advanced",
+      "tags": ["regular expressions", "REGEXP_MATCH", "string manipulation", "efficiency"]
+    },
+    {
+      "id": "9",
+      "question": "In a complex enterprise calculation, you're experiencing performance issues with LOD expressions. What's the most effective optimization strategy?",
+      "options": [
+        "Convert all LOD expressions to table calculations",
+        "Restrict LOD expressions to only necessary calculations and examine their usage",
+        "Use only FIXED LOD expressions instead of INCLUDE/EXCLUDE",
+        "Move all LOD logic to the data source level"
+      ],
+      "correctAnswer": 1,
+      "explanation": "LOD expressions can be resource-heavy. Examining their use and restricting to necessary calculations alone often results in a 10-15% performance improvement. The key is strategic use, not elimination.",
+      "difficulty": "advanced",
+      "tags": ["LOD expressions", "performance optimization", "enterprise", "tuning"]
+    },
+    {
+      "id": "10",
+      "question": "You need to split a full name 'Jane Johnson' to extract the last name 'Johnson'. Which function provides the most reliable approach?",
+      "options": [
+        "RIGHT('Jane Johnson', 7)",
+        "SPLIT('Jane Johnson', ' ', 2)",
+        "TRIM(RIGHT(SUBSTITUTE('Jane Johnson', ' ', REPT(' ', 100)), 100))",
+        "REGEXP_EXTRACT('Jane Johnson', '\\s(.+)')"
+      ],
+      "correctAnswer": 1,
+      "explanation": "SPLIT('Jane Johnson', ' ', 2) splits the string by space and returns the second part ('Johnson'). This is more reliable than RIGHT because it works regardless of name length variations.",
+      "difficulty": "intermediate",
+      "tags": ["string functions", "SPLIT", "text parsing"]
+    },
+    {
+      "id": "11",
+      "question": "When creating calculated fields for date analysis, which practice provides the best performance and consistency?",
+      "options": [
+        "Always use string manipulation for date calculations",
+        "Utilize consistent date formats (like ISO 8601) and built-in date functions",
+        "Convert all dates to text fields for easier manipulation",
+        "Avoid using date functions and handle dates as numbers"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using consistent date formats (like ISO 8601: YYYY-MM-DD) and built-in date functions like DATEDIFF, DATEADD, and NOW provides better performance and accuracy while reducing conversion overhead.",
+      "difficulty": "intermediate",
+      "tags": ["date functions", "best practices", "ISO 8601", "performance"]
+    },
+    {
+      "id": "12",
+      "question": "You're building a consultant-level dashboard with complex calculations. A stakeholder asks about the difference between basic calculations and LOD expressions. What's the key distinction?",
+      "options": [
+        "Basic calculations are faster but less flexible than LOD expressions",
+        "Basic calculations transform values at data source level, while LOD expressions provide granular control over aggregation levels",
+        "LOD expressions can only be used with dimensions, basic calculations with measures",
+        "Basic calculations are deprecated in favor of LOD expressions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Basic calculations transform values at the data source or visualization level using standard aggregation, while LOD expressions (INCLUDE, EXCLUDE, FIXED) provide precise control over the level of detail at which calculations are performed, independent of the view's dimensions.",
+      "difficulty": "advanced",
+      "tags": ["calculated fields", "LOD expressions", "aggregation", "consultant knowledge"]
+    }
+  ]
+}

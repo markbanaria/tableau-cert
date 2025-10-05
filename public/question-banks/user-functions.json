@@ -1,0 +1,126 @@
+{
+  "title": "User Functions - Practice Questions",
+  "description": "Practice questions for User Functions covering USERNAME, FULLNAME, ISMEMBEROF, USERATTRIBUTE functions and their security implementations",
+  "metadata": {
+    "topic": "User Functions",
+    "domain": "domain2",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/functions_functions_user.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 8
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "Which user function should be used to create dynamic row-level security that filters data based on the authenticated user's identity in Tableau Server or Cloud?",
+      "options": [
+        "FULLNAME() to match against full name fields in the data",
+        "USERNAME() to match against username fields in the data",
+        "ISMEMBEROF() to check group membership permissions",
+        "USERATTRIBUTE() to retrieve custom user properties"
+      ],
+      "correctAnswer": 1,
+      "explanation": "USERNAME() is the primary function for creating user-specific filters in row-level security implementations. It returns the current user's username, which can be matched against username fields in the data to filter records appropriately. For example: [Manager] = USERNAME() would show only records where the Manager field matches the current user's username.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["USERNAME", "row-level-security", "user-filtering", "authentication"]
+    },
+    {
+      "id": "2",
+      "question": "When implementing group-based access control using ISMEMBEROF(), what is the correct syntax to check if the current user belongs to the 'Sales Managers' Active Directory group?",
+      "options": [
+        "ISMEMBEROF([Sales Managers])",
+        "ISMEMBEROF('Sales Managers')",
+        "ISMEMBEROF(Sales Managers)",
+        "ISMEMBEROF(\"Sales Managers\")"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The correct syntax for ISMEMBEROF() requires single quotes around the group name: ISMEMBEROF('Sales Managers'). This function returns TRUE if the current user is a member of the specified group and FALSE otherwise. The group name must be provided as a literal string in single quotes.",
+      "difficulty": "BEGINNER",
+      "tags": ["ISMEMBEROF", "group-membership", "syntax", "active-directory"]
+    },
+    {
+      "id": "3",
+      "question": "In an embedded analytics scenario using JWT authentication, which user function is specifically designed to retrieve custom attributes passed through the authentication token?",
+      "options": [
+        "USERNAME() with additional attribute parameters",
+        "USERATTRIBUTE() for JWT-based custom attributes",
+        "FULLNAME() extended with attribute mapping",
+        "ISMEMBEROF() with custom group definitions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "USERATTRIBUTE() is specifically designed for embedding workflows using JWT authentication to retrieve custom attributes passed through the authentication token. For example: USERATTRIBUTE('Region') would return the region attribute value for the current user. This function only works in embedding scenarios with proper JWT configuration.",
+      "difficulty": "ADVANCED",
+      "tags": ["USERATTRIBUTE", "JWT", "embedding", "custom-attributes"]
+    },
+    {
+      "id": "4",
+      "question": "What is a key limitation when working with user functions during workbook development in Tableau Desktop?",
+      "options": [
+        "User functions cannot be used in calculated fields",
+        "User functions always return NULL values in Desktop",
+        "Preview of user function results is not available during authoring",
+        "User functions require special licensing to use in Desktop"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Preview of user function results is not available during authoring in Tableau Desktop because these functions depend on the authentication context that exists when the workbook is accessed through Tableau Server or Cloud. During development, you cannot see the actual function output, making testing and validation more challenging.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["desktop-limitations", "authoring", "preview", "development"]
+    },
+    {
+      "id": "5",
+      "question": "A multinational company needs to create personalized dashboards where users only see data from their assigned region. The region information is stored in Active Directory groups like 'Region-Americas', 'Region-EMEA', etc. What is the most efficient approach?",
+      "options": [
+        "Use USERNAME() and maintain a separate user-to-region mapping table",
+        "Use multiple ISMEMBEROF() functions to check region group membership",
+        "Use FULLNAME() and parse the region from the user's full name",
+        "Use USERATTRIBUTE() to retrieve region from user profiles"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using multiple ISMEMBEROF() functions to check region group membership is the most efficient approach when region information is stored in Active Directory groups. You can create a calculated field like: IF ISMEMBEROF('Region-Americas') THEN 'Americas' ELSEIF ISMEMBEROF('Region-EMEA') THEN 'EMEA' END to determine the user's region and filter data accordingly.",
+      "difficulty": "ADVANCED",
+      "tags": ["regional-filtering", "ISMEMBEROF", "multiple-groups", "personalization"]
+    },
+    {
+      "id": "6",
+      "question": "When implementing user functions in a calculated field for security purposes, which practice helps ensure the most reliable performance?",
+      "options": [
+        "Use variables instead of literal strings in function arguments",
+        "Use literal strings in function arguments for optimal performance",
+        "Combine multiple user functions in complex nested expressions",
+        "Cache user function results in temporary tables"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using literal strings in function arguments provides optimal performance and reliability for user functions. Tableau can optimize queries more effectively when function arguments are literals rather than variables or complex expressions. For example, ISMEMBEROF('Sales Team') performs better than ISMEMBEROF([Group Name Field]).",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["performance", "literal-strings", "optimization", "best-practices"]
+    },
+    {
+      "id": "7",
+      "question": "A company's Active Directory group names contain special characters and spaces, such as 'Finance & Accounting Team'. How should this be handled in the ISMEMBEROF() function?",
+      "options": [
+        "Replace special characters with underscores in the function call",
+        "Use URL encoding for special characters in the group name",
+        "Use the exact group name with proper string encoding in single quotes",
+        "Create simplified group aliases in Tableau Server"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Use the exact group name with proper string encoding in single quotes: ISMEMBEROF('Finance & Accounting Team'). Tableau handles special characters and spaces in group names when they are properly enclosed in single quotes. The group name should match exactly as it appears in Active Directory, including special characters and spaces.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["special-characters", "group-names", "encoding", "active-directory"]
+    },
+    {
+      "id": "8",
+      "question": "When troubleshooting user function failures in a Tableau Server environment, which factor should be investigated FIRST?",
+      "options": [
+        "Tableau Server performance and memory allocation",
+        "User authentication and identity provider configuration",
+        "Workbook permissions and site access settings",
+        "Database connection and query optimization"
+      ],
+      "correctAnswer": 1,
+      "explanation": "User authentication and identity provider configuration should be investigated first when troubleshooting user function failures. User functions depend entirely on the authentication context and user identity information provided by the identity provider (Active Directory, LDAP, SAML, etc.). If authentication is not properly configured, user functions cannot retrieve the necessary user information to operate correctly.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["troubleshooting", "authentication", "identity-provider", "configuration"]
+    }
+  ]
+}

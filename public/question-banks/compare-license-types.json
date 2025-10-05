@@ -1,0 +1,154 @@
+{
+  "title": "Compare License Types - Practice Questions",
+  "description": "Practice questions for Tableau license types covering Creator, Explorer, and Viewer licensing models and enterprise decision-making",
+  "metadata": {
+    "topic": "Compare License Types",
+    "domain": "domain1",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://www.tableau.com/products/tableau",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary difference between Creator and Explorer licenses in Tableau?",
+      "options": [
+        "Creator includes Tableau Desktop and Prep, while Explorer is web-based only",
+        "Creator is more expensive but has the same functionality as Explorer",
+        "Explorer can create new data connections, while Creator cannot",
+        "Creator is only for administrators, while Explorer is for end users"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Creator licenses include access to Tableau Desktop and Tableau Prep for deep data preparation and analysis, while Explorer licenses are limited to web-based authoring using published data sources.",
+      "difficulty": "intermediate",
+      "tags": ["licensing", "Creator", "Explorer", "Tableau Desktop"]
+    },
+    {
+      "id": "2",
+      "question": "An enterprise client with 500 users wants to optimize their Tableau licensing costs. Most users only need to view dashboards and download summary data. What licensing strategy would be most cost-effective?",
+      "options": [
+        "Purchase 500 Creator licenses to ensure maximum flexibility",
+        "Use a mix of Creator, Explorer, and Viewer licenses based on user roles and needs",
+        "Purchase only Explorer licenses since they're the middle tier",
+        "Start with Viewer licenses and upgrade everyone to Creator as needed"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A mixed licensing approach is most cost-effective. Since 60-70% of users typically only need viewing capabilities, using primarily Viewer licenses ($15/month) with selective Creator and Explorer licenses optimizes costs while meeting user needs.",
+      "difficulty": "advanced",
+      "tags": ["licensing", "cost optimization", "enterprise", "strategy"]
+    },
+    {
+      "id": "3",
+      "question": "Which statement about Viewer licenses is correct?",
+      "options": [
+        "Viewer users can create new workbooks using published data sources",
+        "Viewer users can download full row-level data from any visualization",
+        "Viewer users can view, interact, comment, and download summary data only",
+        "Viewer users have the same capabilities as Explorer users in the web browser"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Viewer licenses allow users to view and interact with workbooks, add comments, export visuals, and download summary data, but cannot create new content or download full row-level data.",
+      "difficulty": "basic",
+      "tags": ["licensing", "Viewer", "capabilities", "limitations"]
+    },
+    {
+      "id": "4",
+      "question": "Your organization is implementing Tableau for the first time. What is the minimum licensing requirement to get started?",
+      "options": [
+        "At least one Viewer license",
+        "At least one Explorer license",
+        "At least one Creator license",
+        "Equal numbers of Creator and Explorer licenses"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Every Tableau deployment must include at least one Creator license, as Creator users are needed to establish data connections, prepare data, and create initial content that other users can consume.",
+      "difficulty": "basic",
+      "tags": ["licensing", "Creator", "minimum requirements", "deployment"]
+    },
+    {
+      "id": "5",
+      "question": "A business analyst needs to connect to new databases, perform data preparation, and create complex calculated fields. They also need to work offline occasionally. Which license type is most appropriate?",
+      "options": [
+        "Viewer license with additional permissions",
+        "Explorer license with database access",
+        "Creator license including Tableau Desktop",
+        "Enterprise Explorer license"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Creator license is required for connecting to new databases, advanced data preparation (via Tableau Prep), and offline work (via Tableau Desktop). Explorer licenses cannot create new data connections or work offline.",
+      "difficulty": "intermediate",
+      "tags": ["licensing", "Creator", "data preparation", "offline access"]
+    },
+    {
+      "id": "6",
+      "question": "What is the key advantage of Tableau Enterprise edition over standard licensing?",
+      "options": [
+        "Lower cost per user across all license types",
+        "Advanced administration, security, and data management capabilities",
+        "Includes unlimited Creator licenses",
+        "Provides access to Tableau Public features"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Enterprise edition provides advanced administration, security, and data management functionality designed for sophisticated business environments with complex governance requirements.",
+      "difficulty": "intermediate",
+      "tags": ["licensing", "Enterprise", "security", "administration"]
+    },
+    {
+      "id": "7",
+      "question": "In a cost optimization scenario, you discover that 60% of your Creator license users only view dashboards and never create new content. What action should you take?",
+      "options": [
+        "Keep all Creator licenses to maintain consistency",
+        "Downgrade appropriate users to Viewer licenses and reassign Creator licenses to power users",
+        "Upgrade everyone to Enterprise Creator licenses",
+        "Switch all users to Explorer licenses as a compromise"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Downgrading users who only consume content to Viewer licenses ($15/month vs $75/month for Creator) provides significant cost savings while reassigning Creator licenses to users who actually need content creation capabilities.",
+      "difficulty": "advanced",
+      "tags": ["licensing", "cost optimization", "license management", "downsizing"]
+    },
+    {
+      "id": "8",
+      "question": "Which scenario would require Explorer licenses rather than Viewer licenses?",
+      "options": [
+        "Users need to view dashboards and download summary data",
+        "Users need to create new dashboards using existing published data sources",
+        "Users need to access Tableau Mobile",
+        "Users need to receive data-driven alerts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Explorer licenses are needed when users need to create new dashboards and visualizations using published data sources. Viewer licenses can handle viewing, mobile access, and alerts, but cannot create new content.",
+      "difficulty": "intermediate",
+      "tags": ["licensing", "Explorer", "content creation", "capabilities"]
+    },
+    {
+      "id": "9",
+      "question": "An organization is planning a Tableau deployment across multiple departments with varying data needs. The IT team needs full data preparation capabilities, sales managers need to create departmental dashboards, and sales reps need to view performance metrics. What licensing mix is optimal?",
+      "options": [
+        "All Creator licenses for consistency",
+        "Creator for IT, Explorer for managers, Viewer for reps",
+        "Explorer licenses for everyone except IT",
+        "Creator for managers, Viewer for everyone else"
+      ],
+      "correctAnswer": 1,
+      "explanation": "This licensing strategy aligns capabilities with needs: Creator for IT (data prep and connections), Explorer for managers (dashboard creation from published sources), and Viewer for reps (consume dashboards and metrics).",
+      "difficulty": "advanced",
+      "tags": ["licensing", "organizational planning", "role-based licensing", "deployment strategy"]
+    },
+    {
+      "id": "10",
+      "question": "What licensing consideration is most important when planning for Tableau Cloud vs Tableau Server deployment in an enterprise environment?",
+      "options": [
+        "Tableau Cloud requires different license types than Tableau Server",
+        "License costs are significantly different between Cloud and Server",
+        "Both platforms use the same license types (Creator, Explorer, Viewer) with identical capabilities",
+        "Tableau Server requires additional licensing for on-premises deployment"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Both Tableau Cloud and Tableau Server use the same three license types (Creator, Explorer, Viewer) with identical user capabilities. The choice between Cloud and Server is primarily about deployment model (hosted vs self-hosted) rather than licensing differences.",
+      "difficulty": "intermediate",
+      "tags": ["licensing", "Tableau Cloud", "Tableau Server", "deployment", "enterprise"]
+    }
+  ]
+}

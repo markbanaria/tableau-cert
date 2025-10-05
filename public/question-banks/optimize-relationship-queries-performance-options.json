@@ -1,0 +1,125 @@
+{
+  "title": "Optimize Relationship Queries Using Performance Options",
+  "description": "Master relationship performance optimization through cardinality and referential integrity settings to improve query execution while maintaining data accuracy.",
+  "metadata": {
+    "domain": "Domain 1: Evaluate Current State",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate-advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the default Performance Options setting for relationships in Tableau's data model?",
+      "options": [
+        "One-to-Many cardinality with All Records Match referential integrity",
+        "Many-to-Many cardinality with Some Records Match referential integrity",
+        "One-to-One cardinality with All Records Match referential integrity",
+        "Many-to-One cardinality with Some Records Match referential integrity"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The default Performance Options setting is Many-to-Many cardinality with Some Records Match referential integrity. These defaults are conservative—they don't assume referential integrity (outer joins) and allow for many-to-many relationships, which provides semantic flexibility but may sacrifice some query performance. Tableau recommends keeping these defaults unless you're certain about your data structure.",
+      "difficulty": "intermediate",
+      "tags": ["performance-options", "relationships", "defaults", "cardinality", "referential-integrity"]
+    },
+    {
+      "id": 2,
+      "question": "How does setting cardinality to 'One' instead of 'Many' affect query execution for a relationship?",
+      "options": [
+        "It forces Tableau to use outer joins instead of inner joins",
+        "It causes aggregation to happen after the join rather than before",
+        "It requires Tableau to scan more records during query execution",
+        "It disables join culling optimization for better accuracy"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When cardinality is set to 'One', Tableau performs aggregation AFTER the join. When set to 'Many', aggregation happens BEFORE the join. This is similar conceptually to data blending where each data source is aggregated independently before combining. Setting 'One' incorrectly can cause incorrect values because data isn't properly aggregated at the appropriate granularity before being combined with other tables.",
+      "difficulty": "advanced",
+      "tags": ["cardinality", "aggregation", "query-optimization", "performance-options"]
+    },
+    {
+      "id": 3,
+      "question": "A consultant is setting up a relationship between an Orders table (with multiple rows per customer) and a Customers table (one row per customer). What should the cardinality be set to from Orders to Customers?",
+      "options": [
+        "One-to-One (1:1)",
+        "One-to-Many (1:m)",
+        "Many-to-One (m:1)",
+        "Many-to-Many (m:m)"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The cardinality should be Many-to-One (m:1) from Orders to Customers. Many orders can belong to one customer (each customer ID repeats multiple times in the Orders table, but each customer ID appears only once in the Customers table). The order of the tables matters—from Customers to Orders would be One-to-Many (1:m), similar to how left and right joins differ.",
+      "difficulty": "intermediate",
+      "tags": ["cardinality", "many-to-one", "relationships", "data-modeling"]
+    },
+    {
+      "id": 4,
+      "question": "What does setting referential integrity to 'All Records Match' assume about the relationship between two tables?",
+      "options": [
+        "Every row in both tables has a matching shared field value in the other table",
+        "The shared field has high cardinality with many unique values",
+        "Both tables have the same number of rows and granularity",
+        "The shared field is a primary key in both tables"
+      ],
+      "correctAnswer": 0,
+      "explanation": "'All Records Match' means there is referential integrity—every row in one table will have a matching row in the other table based on the shared field values. This allows Tableau to use inner joins for better performance. If this setting is incorrect and some records don't match, unmatched values will be dropped from the results, potentially causing data loss. The default 'Some Records Match' uses outer joins to preserve all records.",
+      "difficulty": "intermediate",
+      "tags": ["referential-integrity", "performance-options", "inner-joins", "outer-joins"]
+    },
+    {
+      "id": 5,
+      "question": "A Books table relates to an Editions table where one book can have multiple editions (hardcover, paperback, ebook). The Books table has 100 books, and Editions has 250 rows. What is the correct cardinality and potential impact of setting it incorrectly to One-to-One?",
+      "options": [
+        "Should be One-to-Many; incorrect One-to-One setting would cause the 250 edition records to be aggregated incorrectly",
+        "Should be Many-to-One; incorrect One-to-One setting would duplicate book information 250 times",
+        "Should be One-to-Many; incorrect One-to-One setting would show only the minimum value from Editions for each book",
+        "Should be Many-to-Many; incorrect One-to-One setting would drop books without editions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The correct cardinality is One-to-Many from Books to Editions (one book to multiple editions). If incorrectly set to One-to-One, Tableau would pair each book with only ONE record from Editions (typically the minimum value), causing incorrect aggregations. For example, if counting editions by book, you'd see only 1 edition per book instead of the actual count. This misconfiguration filters results unpredictably and causes incorrect values.",
+      "difficulty": "advanced",
+      "tags": ["cardinality", "one-to-many", "data-accuracy", "aggregation-errors"]
+    },
+    {
+      "id": 6,
+      "question": "What is the risk of incorrectly setting referential integrity to 'All Records Match' when some records don't actually match between tables?",
+      "options": [
+        "Query performance will degrade due to unnecessary outer joins",
+        "Unmatched values will be dropped from the results, causing data loss",
+        "Tableau will show duplicate records in the visualization",
+        "The relationship will be converted to a join automatically"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Incorrectly assuming referential integrity ('All Records Match') when it doesn't exist causes unmatched values to be dropped—it has a filter-like effect. For example, if an Editions table has two editions not held by any library, these would be lost from analysis. The setting allows inner joins for performance, but if referential integrity doesn't actually exist, you lose the power of retaining unmatched records that outer joins provide.",
+      "difficulty": "advanced",
+      "tags": ["referential-integrity", "data-loss", "inner-joins", "outer-joins"]
+    },
+    {
+      "id": 7,
+      "question": "When should a Tableau consultant consider changing the default Performance Options settings for a relationship?",
+      "options": [
+        "Whenever working with more than three related tables in the data model",
+        "Only when certain about data structure AND experiencing performance issues",
+        "Immediately after creating any relationship to optimize query speed",
+        "When the relationship uses a non-numeric shared field"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau strongly recommends keeping the default settings (Many-to-Many, Some Records Match) unless you are CERTAIN about your data structure AND have acceptable performance that could be improved. The defaults provide semantic flexibility—relationships adapt contextually based on which tables are used in the analysis. Changing settings can improve query speed but removes this flexibility and risks incorrect results if misconfigured. Only adjust when you understand the data relationships fully.",
+      "difficulty": "intermediate",
+      "tags": ["best-practices", "performance-options", "semantic-flexibility", "defaults"]
+    },
+    {
+      "id": 8,
+      "question": "A consultant relates a Catalog table (250 rows, multiple books per library) to a LibraryProfile table (90 rows, three staff types per library). When incorrectly joined instead of related with proper cardinality, what aggregation issue occurs?",
+      "options": [
+        "Books with multiple formats cause staff counts to be doubled due to row duplication",
+        "Libraries with multiple staff types cause book counts to be tripled",
+        "The relationship automatically converts to a cross join showing all combinations",
+        "NULL values in either table cause the entire relationship to fail"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When tables with different granularity or 'many' cardinality are joined (instead of properly related), duplication occurs. If an Editions table has two formats for one book (hardcover and paperback), the staff counts from LibraryProfile get doubled because the join creates duplicate rows. Books with one format show correct counts (3 staff records), but books with two formats show 6 records instead of 3. Proper relationships with correct Many-to-Many cardinality prevent this duplication by aggregating appropriately based on the viz context.",
+      "difficulty": "advanced",
+      "tags": ["cardinality", "joins-vs-relationships", "data-duplication", "granularity"]
+    }
+  ]
+}

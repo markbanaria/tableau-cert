@@ -1,0 +1,210 @@
+{
+  "title": "View Acceleration - Practice Questions",
+  "description": "Practice questions for View Acceleration covering configuration, performance optimization, monitoring, enterprise deployment, and integration with performance features",
+  "metadata": {
+    "topic": "View Acceleration",
+    "domain": "Design and Troubleshoot Calculations and Workbooks",
+    "sourceUrl": "https://help.tableau.com/current/server/en-us/data_acceleration.htm",
+    "relatedTopics": ["Performance Recording", "Data Freshness Policy", "Backgrounder Processes"],
+    "generatedDate": "2025-10-05",
+    "questionCount": 14
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary purpose of View Acceleration in Tableau Server?",
+      "options": [
+        "To precompute and fetch workbook data in background processes to improve view loading performance",
+        "To automatically optimize SQL queries sent to the database",
+        "To compress workbook files to reduce storage requirements",
+        "To cache user authentication credentials for faster login"
+      ],
+      "correctAnswer": 0,
+      "explanation": "View Acceleration allows administrators and workbook owners to precompute and fetch workbook data in background processes, which improves view loading performance by reducing query time. It specifically targets the data querying bottleneck. The other options describe different features - query optimization is handled separately, file compression is not the purpose of acceleration, and credential caching is unrelated to view performance.",
+      "difficulty": "Beginner",
+      "tags": ["view-acceleration", "performance", "basic-concepts"]
+    },
+    {
+      "id": "2",
+      "question": "Which of the following is a prerequisite for enabling View Acceleration on a workbook?",
+      "options": [
+        "The workbook must use only extract connections",
+        "The workbook must have embedded connection credentials",
+        "The workbook owner must have server administrator permissions",
+        "The workbook must be published to the default project"
+      ],
+      "correctAnswer": 1,
+      "explanation": "View Acceleration requires embedded connection credentials because the background processes need to access the data source without user interaction. Extract-only connections are not required (live connections can be accelerated), server admin permissions are not needed for workbook owners, and project location doesn't affect acceleration eligibility.",
+      "difficulty": "Intermediate",
+      "tags": ["view-acceleration", "prerequisites", "credentials"]
+    },
+    {
+      "id": "3",
+      "question": "A workbook takes 15 seconds to load initially but only 1.5 seconds to execute queries. How effective will View Acceleration be for improving this workbook's performance?",
+      "options": [
+        "Very effective, as it will reduce the 15-second load time significantly",
+        "Moderately effective, providing some improvement to overall performance",
+        "Minimally effective, since query time is not the primary bottleneck",
+        "Not effective at all, as View Acceleration only works for extract-based workbooks"
+      ],
+      "correctAnswer": 2,
+      "explanation": "View Acceleration specifically targets reducing data querying time. Since this workbook's queries execute in only 1.5 seconds while the total load time is 15 seconds, the bottleneck is likely elsewhere (rendering, network, etc.). View Acceleration would have minimal impact because it primarily addresses query execution time, not other performance factors. It also works with live connections, not just extracts.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "performance-analysis", "bottlenecks"]
+    },
+    {
+      "id": "4",
+      "question": "Which views are automatically selected for acceleration when View Acceleration is enabled?",
+      "options": [
+        "All published views in the workbook",
+        "Only the default view of the workbook",
+        "The top 10 custom views based on usage",
+        "Views manually selected by the administrator"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau automatically accelerates the top 10 custom views based on usage patterns. This intelligent selection ensures that the most frequently accessed views receive the performance benefit while managing server resource consumption. All views are not accelerated to prevent resource overload, it's not limited to just the default view, and while administrators can manage acceleration, the initial selection is automatic based on usage.",
+      "difficulty": "Intermediate",
+      "tags": ["view-acceleration", "automatic-selection", "usage-patterns"]
+    },
+    {
+      "id": "5",
+      "question": "Your organization has enabled View Acceleration on a heavily used dashboard that refreshes extracts every 2 hours. Users report that performance improvements are inconsistent throughout the day. What is the most likely cause?",
+      "options": [
+        "The backgrounder processes are insufficient for the workload",
+        "View Acceleration jobs are limited to 12 per day, so benefits only apply to the first 12 refreshes",
+        "The data freshness policy is conflicting with the acceleration schedule",
+        "Users are accessing different custom views that aren't accelerated"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To minimize resource consumption, precomputation jobs are limited to 12 per day. With refreshes every 2 hours (12 times per day), this hits the daily limit exactly. Additional refreshes beyond the 12th won't trigger acceleration, causing inconsistent performance. While backgrounder capacity and data freshness policy can affect performance, the 12-job daily limit is the most likely culprit for this specific scenario.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "limitations", "refresh-frequency", "troubleshooting"]
+    },
+    {
+      "id": "6",
+      "question": "A workbook cannot be accelerated. Which of the following is NOT a valid reason for this limitation?",
+      "options": [
+        "The workbook queries take less than 2 seconds to execute",
+        "The workbook uses user-based functions like USERNAME()",
+        "The workbook has been published with a live connection to PostgreSQL",
+        "The workbook owner account has been deactivated"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Live connections to databases like PostgreSQL can be accelerated as long as other requirements are met (embedded credentials, etc.). The connection type (live vs extract) is not a disqualifying factor. However, workbooks cannot be accelerated if they take less than 2 seconds to execute (minimal benefit), use user-based functions (results vary by user), or have an inactive owner (no one to manage the acceleration).",
+      "difficulty": "Intermediate",
+      "tags": ["view-acceleration", "limitations", "connection-types"]
+    },
+    {
+      "id": "7",
+      "question": "An enterprise deployment has 500 workbooks that could benefit from View Acceleration. What is the primary consideration an administrator should evaluate before enabling acceleration widely?",
+      "options": [
+        "Whether all workbooks have embedded credentials",
+        "The impact on backgrounder processes and server resource consumption",
+        "Whether users have appropriate permissions to view accelerated content",
+        "The compatibility with the organization's database systems"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The primary consideration is the significant impact on backgrounder processes and server resource consumption. Each accelerated workbook increases computation load and the number of background jobs. With 500 workbooks, this could overwhelm the backgrounder capacity and affect overall server performance. While embedded credentials are a prerequisite, the resource impact is the main strategic consideration for wide deployment.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "enterprise-deployment", "resource-management", "backgrounder"]
+    },
+    {
+      "id": "8",
+      "question": "Where is the precomputed data from View Acceleration stored?",
+      "options": [
+        "In the original database as temporary tables",
+        "In the Tableau Server repository database",
+        "As materialized views in Hyper",
+        "In memory on the VizQL server processes"
+      ],
+      "correctAnswer": 2,
+      "explanation": "View Acceleration stores precomputed data as materialized views in Hyper, Tableau's data engine. This provides fast access to the precomputed results without impacting the original database or requiring VizQL server memory. The repository database stores metadata, not cached data, and temporary tables in the source database would create unnecessary load.",
+      "difficulty": "Intermediate",
+      "tags": ["view-acceleration", "storage", "hyper", "technical-implementation"]
+    },
+    {
+      "id": "9",
+      "question": "Your company publishes workbooks that are frequently edited and republished during development cycles. How should View Acceleration be managed for these workbooks?",
+      "options": [
+        "Enable acceleration to improve development productivity",
+        "Avoid acceleration during development as each republish triggers precomputation",
+        "Use acceleration only for the default view to minimize resource impact",
+        "Configure acceleration with longer refresh intervals to reduce server load"
+      ],
+      "correctAnswer": 1,
+      "explanation": "View Acceleration should be avoided for frequently edited and republished workbooks because each republish triggers precomputation, creating unnecessary load on backgrounder processes. It's designed for workbooks published for consumption, not active development. The other options don't address the fundamental issue that republishing triggers expensive recomputation jobs.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "development-lifecycle", "best-practices", "republishing"]
+    },
+    {
+      "id": "10",
+      "question": "Which administrative view should be monitored to track the impact of View Acceleration on server performance?",
+      "options": [
+        "Background Tasks for Extracts",
+        "Background Tasks for Non Extracts",
+        "VizQL Server Performance",
+        "Data Server Performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The 'Background Tasks for Non Extracts' administrative view should be monitored for View Acceleration jobs, as these are background processes that aren't extract refreshes. This view shows long-running jobs and helps administrators understand the impact of acceleration on backgrounder processes. Extract-specific views won't show acceleration jobs, and VizQL/Data Server views focus on different performance aspects.",
+      "difficulty": "Intermediate",
+      "tags": ["view-acceleration", "monitoring", "administrative-views", "backgrounder"]
+    },
+    {
+      "id": "11",
+      "question": "A site administrator wants to prevent View Acceleration failures from impacting server performance. What configuration option should they enable?",
+      "options": [
+        "Set a maximum limit on accelerated views per site",
+        "Configure automatic suspension of failing accelerations",
+        "Enable notification alerts for suspended views",
+        "All of the above"
+      ],
+      "correctAnswer": 3,
+      "explanation": "All three options work together to manage View Acceleration effectively: setting maximum limits prevents resource overcommitment, automatic suspension prevents failing jobs from consuming resources repeatedly, and notifications ensure administrators are aware of issues. These are complementary configuration options that should be used together for robust enterprise management.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "administration", "failure-management", "enterprise-configuration"]
+    },
+    {
+      "id": "12",
+      "question": "How does the data freshness policy interact with View Acceleration?",
+      "options": [
+        "Data freshness policy determines when acceleration precomputation occurs",
+        "View Acceleration overrides any data freshness policy settings",
+        "If data freshness policy interval is less than 2 hours, acceleration benefits are limited to 12 refreshes daily",
+        "Data freshness policy and View Acceleration are independent features"
+      ],
+      "correctAnswer": 2,
+      "explanation": "When data freshness policy is set to less than 2 hours, it can refresh more than 12 times per day, but View Acceleration jobs are limited to 12 per day. This means acceleration benefits only apply to the first 12 refreshes daily, after which performance reverts to standard query execution. The features are related through this daily limit constraint.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "data-freshness-policy", "limitations", "integration"]
+    },
+    {
+      "id": "13",
+      "question": "Custom views that haven't been accessed in how many days will NOT be accelerated?",
+      "options": [
+        "7 days",
+        "14 days",
+        "30 days",
+        "90 days"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Custom views that haven't been accessed in 14 days will not be accelerated. This helps optimize resource usage by focusing acceleration on actively used content rather than abandoned or rarely accessed views. This automatic cleanup prevents wasted computation on content that users aren't viewing.",
+      "difficulty": "Beginner",
+      "tags": ["view-acceleration", "usage-tracking", "automatic-cleanup"]
+    },
+    {
+      "id": "14",
+      "question": "Your organization needs to implement View Acceleration across multiple sites with different performance requirements. Site A has critical real-time dashboards, Site B has analytical workbooks refreshed daily, and Site C has development workbooks. How should acceleration be configured?",
+      "options": [
+        "Enable acceleration on all sites with identical settings for consistency",
+        "Enable acceleration only on Site B, avoid on Sites A and C for different reasons",
+        "Enable acceleration on Sites A and B but with different refresh policies",
+        "Disable acceleration entirely to avoid complexity"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Site B (analytical workbooks refreshed daily) is ideal for View Acceleration as these are stable, consumption-focused workbooks. Site A should avoid acceleration because real-time requirements conflict with the precomputation model and 12-job daily limits. Site C should avoid acceleration because development workbooks are frequently republished, triggering unnecessary precomputation. Each site's use case determines the appropriate strategy.",
+      "difficulty": "Advanced",
+      "tags": ["view-acceleration", "multi-site", "enterprise-strategy", "use-case-analysis"]
+    }
+  ]
+}

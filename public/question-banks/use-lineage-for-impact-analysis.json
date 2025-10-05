@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "title": "Use Lineage for Impact Analysis",
+    "description": "Comprehensive question bank covering Tableau lineage for impact analysis, dependency tracking, data governance workflows, change management, troubleshooting, permissions, and enterprise implementation strategies for Tableau Consultant certification.",
+    "questionCount": 8,
+    "domain": "Domain 1: Tableau Products",
+    "difficulty": "Consultant Level",
+    "tags": ["Tableau Lineage", "Impact Analysis", "Dependency Tracking", "Data Governance", "Change Management", "Enterprise Implementation", "Troubleshooting"]
+  },
+  "questions": [
+    {
+      "id": "li_001",
+      "question": "A large financial services organization is planning to migrate their core customer database from Oracle to Snowflake. As the Tableau consultant, you need to assess the impact across their 500+ published workbooks and data sources. Which combination of lineage features would provide the most comprehensive impact assessment strategy?",
+      "options": [
+        "A) Use the Lineage tab for each affected data source and manually document downstream dependencies",
+        "B) Filter lineage by specific database fields to identify all workbooks using customer data, then use the email notification feature to contact content owners with migration timeline and testing requirements",
+        "C) Export all workbook metadata via REST API and perform impact analysis outside of Tableau",
+        "D) Review only published data sources since workbooks will automatically inherit changes"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides the most comprehensive and efficient approach for enterprise-scale impact analysis. By filtering lineage by specific database fields (customer ID, account numbers, etc.), you can identify all affected content regardless of connection type. The email notification feature allows you to systematically communicate with content owners, providing them with migration timelines and testing requirements directly from the lineage view. This leverages Tableau Catalog's built-in change management workflow. Option A is too manual for 500+ workbooks. Option C loses the benefit of Tableau's visual lineage and relationship mapping. Option D misses direct database connections and embedded data sources.",
+      "topic": "Enterprise Migration Impact Assessment",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "li_002",
+      "question": "During a quarterly data audit, you discover that a published data source is showing different lineage counts in the lineage view versus the Dependencies tab (15 dependencies in lineage vs 23 in Dependencies tab). As a consultant, what are the most likely causes and how should you investigate this discrepancy?",
+      "options": [
+        "A) The Dependencies tab is incorrect; always trust the lineage view count",
+        "B) Check for workbooks with different permission levels, unpublished content, and assets with incomplete indexing status that may not appear in lineage but exist in dependencies",
+        "C) This indicates a corrupted Catalog index requiring a full re-index",
+        "D) The difference is due to version control and should be ignored"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B correctly identifies the common causes of count discrepancies between lineage and Dependencies tabs. The lineage view only shows assets that are indexed by Catalog and visible to the current user based on permissions. The Dependencies tab may include: unpublished workbooks, content the user doesn't have permission to view, assets that haven't been fully indexed yet, or embedded assets with different visibility rules. To investigate: 1) Check if you have permissions to view all related content, 2) Verify Catalog indexing status, 3) Look for recently published or private content, 4) Consider whether embedded external assets are affecting counts. This is normal behavior, not a system error.",
+      "topic": "Lineage Troubleshooting and Data Validation",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "li_003",
+      "question": "A retail organization wants to implement a data governance process where any changes to their core product catalog table require approval from specific stakeholders. They need to identify all downstream content that would be affected by changes. What lineage-based workflow would you recommend for this governance requirement?",
+      "options": [
+        "A) Set up automated monitoring warnings on the product catalog table and rely on email alerts",
+        "B) Create a lineage-based change management process: use downstream impact visualization to identify affected content, document stakeholder requirements by filtering lineage to specific product fields, and establish an approval workflow with lineage screenshots for impact documentation",
+        "C) Require all users to manually register their dependencies with the data governance team",
+        "D) Implement row-level security to prevent unauthorized changes"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B establishes a comprehensive governance workflow that leverages Tableau's lineage capabilities for change management. The process includes: 1) Using lineage visualization to map all downstream dependencies, 2) Filtering by specific product catalog fields to understand granular impact, 3) Documenting affected workbooks and their owners, 4) Using lineage views as visual evidence for stakeholder approval meetings, 5) Implementing the email notification feature to alert content owners of approved changes. This creates a repeatable, auditable process that scales across the organization. Option A only alerts after changes occur. Option C doesn't leverage existing Tableau capabilities. Option D addresses access control but not change management workflows.",
+      "topic": "Data Governance and Change Management Workflows",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "li_004",
+      "question": "Your enterprise client has a complex data environment with virtual connections, flows, and embedded external assets. Users report that some expected lineage relationships are not appearing. As the consulting architect, what systematic approach would you use to troubleshoot incomplete lineage tracking?",
+      "options": [
+        "A) Recommend switching all connections to published data sources to ensure lineage tracking",
+        "B) Systematically verify: Data Management license status, Catalog enablement, custom SQL usage (limited lineage support), cube data source connections (not supported), and embedded vs shareable external asset configurations",
+        "C) Increase server memory allocation to improve Catalog indexing performance",
+        "D) Disable and re-enable Catalog to force a complete re-index"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides a systematic troubleshooting approach that addresses the most common causes of incomplete lineage tracking. The diagnostic checklist includes: 1) Verify Data Management license and Catalog are enabled, 2) Check for custom SQL connections which have limited lineage support, 3) Identify cube data sources which don't support lineage, 4) Review external asset configurations (embedded vs shareable affects visibility), 5) Validate virtual connection and flow lineage support, 6) Check permission-based visibility issues. This methodical approach addresses technical limitations rather than assuming system errors. Option A oversimplifies and may not be technically feasible. Option C addresses performance, not lineage gaps. Option D is a drastic measure that doesn't address root causes.",
+      "topic": "Advanced Lineage Troubleshooting and Technical Limitations",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "li_005",
+      "question": "A healthcare organization needs to implement HIPAA-compliant lineage tracking where certain sensitive data relationships must be hidden from most users while still allowing impact analysis for authorized compliance teams. What approach best balances security requirements with lineage functionality?",
+      "options": [
+        "A) Disable lineage tracking for all sensitive data sources",
+        "B) Use external asset permissions and lineage obfuscation features to hide sensitive relationships from unauthorized users while maintaining full lineage visibility for compliance teams with appropriate permissions",
+        "C) Create separate Tableau environments for sensitive and non-sensitive data",
+        "D) Rely only on manual documentation for sensitive data lineage"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B leverages Tableau's built-in security features specifically designed for this compliance scenario. External asset permissions allow granular control over who can see sensitive data sources and their lineage relationships. Lineage obfuscation features can hide sensitive connection details while preserving the overall data flow visualization for authorized users. This approach maintains the benefits of automated lineage tracking while meeting compliance requirements through: 1) Permission-based lineage visibility, 2) Selective obfuscation of sensitive connection details, 3) Role-based access control for compliance teams, 4) Audit trails of lineage access. Option A eliminates valuable governance capabilities. Option C creates unnecessary infrastructure complexity. Option D loses the automation and accuracy benefits of Catalog lineage.",
+      "topic": "Security and Compliance in Lineage Implementation",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "li_006",
+      "question": "During a data modernization project, your client wants to identify 'orphaned' data sources that are no longer being used so they can be safely deprecated. However, some data sources show zero downstream dependencies in lineage but are actually being used through embedded connections. How would you conduct a comprehensive usage analysis?",
+      "options": [
+        "A) Trust the lineage view and mark data sources with zero dependencies as safe for removal",
+        "B) Combine lineage analysis with Administrative Views usage statistics, check for embedded external assets, review workbook connections that may not appear in lineage, and validate with content owners before deprecation decisions",
+        "C) Use only server logs to determine usage patterns",
+        "D) Require all users to manually confirm their data source dependencies"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides a comprehensive approach that accounts for lineage limitations and hidden dependencies. The methodology includes: 1) Lineage analysis for visible published dependencies, 2) Administrative Views to check actual usage statistics and query frequency, 3) Identifying embedded external assets that may not show in standard lineage views, 4) Reviewing workbook-level connections that bypass published data sources, 5) Cross-referencing with content owners for business validation. This multi-layered approach prevents accidentally removing data sources that appear unused in lineage but are actually critical for business operations. Embedded connections and private workbooks often don't appear in standard lineage views, making this comprehensive validation essential for enterprise environments.",
+      "topic": "Data Source Lifecycle Management and Usage Analysis",
+      "difficulty": "Advanced"
+    },
+    {
+      "id": "li_007",
+      "question": "A multinational corporation has implemented federated Tableau environments across regions, each with their own Catalog instance. They need to understand cross-regional data dependencies where data sources in one region feed dashboards in another. What strategy would you recommend for comprehensive cross-environment impact analysis?",
+      "options": [
+        "A) Merge all regional environments into a single global Tableau instance",
+        "B) Use the Metadata API from each regional environment to extract lineage information, then create a consolidated impact analysis framework that maps cross-regional dependencies and implements coordinated change management processes",
+        "C) Manually document all cross-regional connections",
+        "D) Eliminate cross-regional data dependencies to simplify lineage tracking"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B recognizes that federated environments require a systematic approach to cross-regional dependency mapping. The strategy involves: 1) Using Metadata API to extract lineage information from each regional Catalog, 2) Creating a consolidated view that maps cross-regional data flows, 3) Implementing coordinated change management processes that consider global impact, 4) Establishing notification workflows that alert all affected regions of potential changes, 5) Developing a centralized impact analysis dashboard that aggregates regional lineage data. This approach maintains regional autonomy while providing global visibility for enterprise data governance. Option A may not be feasible due to data sovereignty requirements. Option C doesn't scale and lacks automation. Option D may conflict with business requirements for global data integration.",
+      "topic": "Federated Environment Lineage Management",
+      "difficulty": "Expert"
+    },
+    {
+      "id": "li_008",
+      "question": "Your client wants to automate their monthly data dependency review process using lineage information. They need to generate reports showing: data sources with the highest downstream impact, workbooks at risk from upstream changes, and assets with complex dependency chains. What implementation approach would provide the most comprehensive automated reporting solution?",
+      "options": [
+        "A) Create manual screenshots of lineage views for monthly review meetings",
+        "B) Develop automated reporting using the Metadata API to query lineage relationships, calculate impact scores based on downstream dependency counts, identify complex dependency chains, and generate executive dashboards with risk assessment metrics and trend analysis",
+        "C) Use only the built-in lineage views without additional automation",
+        "D) Implement third-party lineage tools instead of using Tableau Catalog"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Option B provides a comprehensive automated solution that leverages Tableau's Metadata API for enterprise-scale governance reporting. The implementation includes: 1) Automated lineage data extraction via Metadata API, 2) Impact scoring algorithms based on downstream dependency counts and complexity, 3) Risk assessment logic for identifying assets vulnerable to upstream changes, 4) Trend analysis to track changes in dependency patterns over time, 5) Executive dashboards built in Tableau showing dependency health metrics, 6) Automated report generation and distribution. This approach scales to enterprise environments and provides consistent, objective dependency analysis. The automation reduces manual effort while providing more comprehensive insights than ad-hoc lineage reviews. Option A doesn't scale and lacks analytical depth. Option C misses automation opportunities. Option D abandons existing Tableau investments and capabilities.",
+      "topic": "Automated Lineage Reporting and Governance Analytics",
+      "difficulty": "Expert"
+    }
+  ]
+}

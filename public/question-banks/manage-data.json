@@ -1,0 +1,154 @@
+{
+  "title": "Manage Data - Practice Questions",
+  "description": "Practice questions for Managing Data in Tableau Cloud covering publishing strategies, data connections, Tableau Bridge, Data Connect, storage limits, and keeping data fresh",
+  "metadata": {
+    "topic": "Manage Data",
+    "domain": "Plan and Prepare Data Connections",
+    "difficulty": "Intermediate",
+    "sourceUrl": "https://help.tableau.com/current/online/en-us/to_publish.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What types of content can be published to Tableau Cloud for managing data?",
+      "options": [
+        "Standalone data sources that users can share among multiple workbooks, and workbooks with embedded data connections and visualizations",
+        "Only workbooks with embedded data connections; standalone data sources are not supported",
+        "Only Tableau Prep flows; data sources and workbooks must remain in Tableau Desktop",
+        "Only extracts; live connections to data sources are not supported in Tableau Cloud"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Cloud supports publishing two main types of content: (1) standalone data sources that users can share among multiple workbooks, and (2) workbooks that contain embedded data connections with visualizations based on that data. Each type has pros and cons for collaboration and governance. Both extracts and live connections are supported depending on the connector type.",
+      "difficulty": "beginner",
+      "tags": ["manage-data", "publishing", "data-sources", "workbooks"]
+    },
+    {
+      "id": "2",
+      "question": "What is the storage limit for workbooks and extracts on a Tableau Cloud site?",
+      "options": [
+        "1 TB per site (not configurable)",
+        "500 GB per site with the option to purchase additional storage",
+        "Unlimited storage for all Tableau Cloud customers",
+        "2 TB per site for standard licenses, 5 TB for enterprise"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A Tableau Cloud site has a 1 TB storage limit for workbooks and extracts. This storage limit is not configurable. For enterprises that require more storage, Tableau+ or Tableau Enterprise licensing may be a good option. This is a fixed limit that consultants need to consider when planning Tableau Cloud deployments.",
+      "difficulty": "beginner",
+      "tags": ["manage-data", "storage-limits", "tableau-cloud"]
+    },
+    {
+      "id": "3",
+      "question": "Which cloud-based data sources support direct (live) connections to Tableau Cloud without requiring Tableau Bridge?",
+      "options": [
+        "Google BigQuery, Amazon Redshift, and SQL-based data hosted on cloud platforms like Amazon RDS or Microsoft SQL Azure",
+        "Only Google BigQuery and Amazon Redshift; all other sources require Bridge",
+        "All data sources require Tableau Bridge for security reasons",
+        "Only Microsoft SQL Azure; all other cloud platforms require extract connections"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Cloud supports direct (live) connections to Google BigQuery, Amazon Redshift, and SQL-based data hosted on cloud platforms such as Amazon RDS, Microsoft SQL Azure, or similar services. For these cloud-based sources, you usually need to add Tableau Cloud to your data provider's authorized list. On-premises data requires Tableau Bridge to maintain live connections.",
+      "difficulty": "intermediate",
+      "tags": ["manage-data", "live-connections", "cloud-data", "direct-connections"]
+    },
+    {
+      "id": "4",
+      "question": "Your organization has on-premises SQL Server databases that need to be accessed by Tableau Cloud workbooks with live connections. What solution should you implement?",
+      "options": [
+        "Use Tableau Bridge to maintain the connection between Tableau Cloud and the on-premises data",
+        "Migrate all data to cloud storage immediately; live connections to on-premises data are not possible",
+        "Use Data Connect instead, as Bridge only supports extracts",
+        "Create extracts only, as live connections to on-premises data are not supported"
+      ],
+      "correctAnswer": 0,
+      "explanation": "To connect Tableau Cloud to on-premises relational data (such as SQL Server or Oracle) using live connections, you must use Tableau Bridge to maintain the connection. Tableau Bridge acts as a secure tunnel between Tableau Cloud and your on-premises data. While extracts are an alternative, live connections are indeed possible with Bridge.",
+      "difficulty": "intermediate",
+      "tags": ["manage-data", "tableau-bridge", "on-premises-data", "live-connections"]
+    },
+    {
+      "id": "5",
+      "question": "When publishing a workbook with live connections to Tableau Cloud, what are the two credential options available?",
+      "options": [
+        "Embed database credentials so all users can see the data, or require users to provide their own database credentials",
+        "Only embedded credentials are supported; user-level credentials are not allowed",
+        "Only OAuth authentication; username/password credentials are not supported",
+        "Anonymous access only; no authentication is required for live connections"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When publishing content with live connections to Tableau Cloud, you can either embed database credentials so all users who have access to the published content can see the underlying data, or require users to provide their own database credentials. In the latter case, even if users can open the published content, they need to sign in to the underlying database to see it. This allows for flexible security models.",
+      "difficulty": "intermediate",
+      "tags": ["manage-data", "credentials", "authentication", "live-connections"]
+    },
+    {
+      "id": "6",
+      "question": "A consultant is planning to publish extracts to Tableau Cloud. When should extracts be created in Tableau Desktop before publishing, rather than during the publishing process?",
+      "options": [
+        "When you need finer control over the connection definition, such as publishing a sampling of data or setting up incremental refresh capability",
+        "Always create extracts during publishing; pre-creating extracts is deprecated",
+        "Only when the data source is smaller than 1 GB; larger sources must be extracted during publishing",
+        "Pre-creating extracts is only necessary for non-relational data sources"
+      ],
+      "correctAnswer": 0,
+      "explanation": "You should create an extract in Tableau Desktop before publishing when you want finer control over the connection definition. This is necessary if you want to publish a sampling of the data or set up the ability to refresh incrementally. Otherwise, Tableau creates the extract during publishing, but you can only do full refreshes. This distinction is important for optimizing performance and refresh strategies.",
+      "difficulty": "intermediate",
+      "tags": ["manage-data", "extracts", "publishing", "incremental-refresh"]
+    },
+    {
+      "id": "7",
+      "question": "What is the difference between Tableau Bridge and Data Connect for Private Network Data when managing data in Tableau Cloud?",
+      "options": [
+        "Tableau Bridge maintains connections to on-premises data and supports both live and extract refresh; Data Connect is a newer offering for private network data with enhanced security and management features",
+        "They are identical features with different names; both provide the same functionality",
+        "Bridge only supports extracts while Data Connect only supports live connections",
+        "Bridge is deprecated and has been fully replaced by Data Connect in all scenarios"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Bridge and Data Connect serve different purposes in the data management ecosystem. Tableau Bridge maintains connections between Tableau Cloud and on-premises data, supporting both live connections and extract refreshes. Data Connect for Private Network Data is a newer offering that provides enhanced security and management features for accessing private network data. Both are valid solutions, and the choice depends on specific organizational needs and infrastructure.",
+      "difficulty": "advanced",
+      "tags": ["manage-data", "tableau-bridge", "data-connect", "private-network"]
+    },
+    {
+      "id": "8",
+      "question": "An organization with 50 users across distinct business areas is planning their Tableau Cloud deployment. What approach should they take before opening the site for publishing?",
+      "options": [
+        "Create a test environment using publishing resources to work out authorization, data security, compliance requirements, and discoverability issues before opening to all users",
+        "Immediately open the site to all users and adjust practices as issues arise",
+        "Restrict all publishing to IT only and never allow business users to publish",
+        "Deploy only standalone data sources first, then add workbook publishing six months later"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For organizations with people using Tableau across distinct areas or with a large user population, it's recommended to create a test environment and work out authorization (permissions), data security and compliance requirements, and discoverability issues before opening the site to all active users. This proactive approach addresses permissions, security, compliance, and user experience considerations. While practices can still be adjusted later, it's much easier to establish good patterns before widespread adoption.",
+      "difficulty": "advanced",
+      "tags": ["manage-data", "deployment-planning", "governance", "best-practices"]
+    },
+    {
+      "id": "9",
+      "question": "A Tableau Cloud site has published workbooks connecting to both cloud-based data (Amazon Redshift) and on-premises data (SQL Server). How will the extract refreshes be executed for each type?",
+      "options": [
+        "Cloud data refreshes run directly from Tableau Cloud; on-premises data refreshes run through Tableau Bridge",
+        "All refreshes must run through Tableau Bridge regardless of data location",
+        "Cloud data refreshes require Data Connect; on-premises data refreshes use Bridge",
+        "All refreshes run directly from Tableau Cloud after initial Bridge setup"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When Tableau Cloud workbooks or data sources connect to underlying data in the cloud (like Amazon Redshift), refreshes are run from Tableau Cloud directly. However, if the underlying data is on your local network (like on-premises SQL Server), you must use Tableau Bridge to execute the refreshes. This hybrid approach allows organizations to leverage both cloud and on-premises data efficiently.",
+      "difficulty": "advanced",
+      "tags": ["manage-data", "extract-refresh", "tableau-bridge", "cloud-data"]
+    },
+    {
+      "id": "10",
+      "question": "What is the primary consideration when deciding between publishing standalone data sources versus workbooks with embedded connections in Tableau Cloud?",
+      "options": [
+        "Standalone data sources enable sharing and reuse across multiple workbooks with centralized governance, while embedded connections provide workbook-specific control but may lead to data duplication",
+        "Standalone data sources are always faster; embedded connections should never be used",
+        "Embedded connections are the only option that supports row-level security",
+        "The choice has no impact on governance, performance, or collaboration"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The choice between standalone data sources and workbooks with embedded connections has significant implications. Standalone data sources enable sharing and reuse across multiple workbooks, providing centralized governance and a single source of truth. However, workbooks with embedded connections provide workbook-specific control and may be appropriate for one-off analyses, though they can lead to data duplication and governance challenges. Each approach has pros and cons that consultants must evaluate based on organizational needs.",
+      "difficulty": "advanced",
+      "tags": ["manage-data", "data-sources", "governance", "architecture", "best-practices"]
+    }
+  ]
+}

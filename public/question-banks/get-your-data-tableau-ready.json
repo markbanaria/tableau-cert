@@ -1,0 +1,154 @@
+{
+  "title": "Get Your Data Tableau-Ready - Practice Questions",
+  "description": "Practice questions for Get Your Data Tableau-Ready covering data preparation, optimization strategies, and enterprise deployment patterns",
+  "metadata": {
+    "topic": "Get Your Data Tableau-Ready",
+    "domain": "domain2",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/datasource_prepare.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A large financial services company is experiencing slow dashboard performance with their current data architecture that uses multiple traditional joins across 8 tables. Each table has millions of rows. What is the BEST approach to optimize their data model in Tableau 2024?",
+      "options": [
+        "Convert all joins to cross-database joins to leverage multiple database engines",
+        "Replace the joins with data blending to keep tables separate",
+        "Restructure using relationships to preserve table granularity and enable context-aware joins",
+        "Create a single denormalized table with all fields to eliminate joins"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Relationships (introduced in 2020.2 and enhanced in 2024.2) are the optimal solution as they preserve native table granularity, prevent data duplication, and enable context-aware joins. This approach allows Tableau to generate optimized queries based on the specific visualization context. Denormalization would cause data duplication issues, blending has limitations with large datasets, and cross-database joins may actually decrease performance.",
+      "difficulty": "ADVANCED",
+      "tags": ["data-model", "performance", "relationships", "enterprise"]
+    },
+    {
+      "id": "2",
+      "question": "Your organization needs to implement a data preparation workflow that processes 500GB of daily transaction data. Performance testing shows that CSV output takes 2 hours 47 minutes. What optimization would provide the most significant improvement?",
+      "options": [
+        "Split the workflow into multiple parallel processes",
+        "Switch output format to Hyper extracts instead of CSV",
+        "Increase the sampling size to process more data at once",
+        "Add more cleaning steps to reduce data volume"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Based on Tableau's documented performance metrics, switching from CSV to Hyper extract format reduces processing time from 2 hours 47 minutes to approximately 11 minutes for large datasets. Hyper extracts are optimized for Tableau's columnar database engine and provide significant performance improvements. While parallel processing might help, the format change provides the most dramatic improvement.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["tableau-prep", "performance", "hyper", "data-processing"]
+    },
+    {
+      "id": "3",
+      "question": "When implementing the cascade principle for performance optimization, which sequence represents the correct order of optimization priority?",
+      "options": [
+        "Tableau Server → Tableau Desktop → Data Source",
+        "Tableau Desktop → Data Source → Tableau Server",
+        "Data Source → Tableau Desktop → Tableau Server",
+        "Tableau Server → Data Source → Tableau Desktop"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The cascade principle states that performance issues cascade downstream: if something is slow in the data source, it will be slow in Desktop, and consequently slow in Server. Therefore, optimization should start at the data source level (indexing, query optimization), then move to Desktop (workbook design), and finally Server (caching, configuration). This ensures foundational issues are resolved first.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["performance", "optimization", "best-practices"]
+    },
+    {
+      "id": "4",
+      "question": "A retail company with 2000 stores wants to implement row-level security while maintaining optimal query performance. They have a complex security model with store-manager hierarchies. What is the recommended approach?",
+      "options": [
+        "Implement all security logic in Tableau using user filters and calculated fields",
+        "Build security into the database layer and leverage it through Tableau",
+        "Create separate data sources for each security level",
+        "Use Tableau's built-in user functions with extract filters"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Best practice for enterprise row-level security is to implement it at the database layer and leverage existing database security through Tableau. This approach provides better performance, centralized security management, and consistency across all applications accessing the data. Tableau can then inherit and respect these security rules without duplicating complex logic.",
+      "difficulty": "ADVANCED",
+      "tags": ["security", "RLS", "enterprise", "performance"]
+    },
+    {
+      "id": "5",
+      "question": "Your client needs to combine data from multiple star schemas within a single Tableau data source for comprehensive analysis. Which Tableau 2024.2 feature specifically addresses this requirement?",
+      "options": [
+        "Cross-database join capabilities",
+        "Multi-fact relationships with shared dimensions",
+        "Data blending with primary and secondary sources",
+        "Union operations across multiple tables"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Multi-fact relationships, introduced in Tableau 2024.2, specifically enable combining multiple star or snowflake schemas in a single data source. This feature allows multiple fact tables to share dimension tables, supporting complex enterprise data warehouse patterns directly within Tableau without the limitations of traditional joins or blending.",
+      "difficulty": "ADVANCED",
+      "tags": ["multi-fact", "relationships", "2024-features", "data-modeling"]
+    },
+    {
+      "id": "6",
+      "question": "When preparing data for Tableau, which data type optimization strategy provides the best query performance improvement?",
+      "options": [
+        "Converting all date fields to strings for easier formatting",
+        "Using strings for categorical data to maintain flexibility",
+        "Preferring numbers and Booleans over strings and dates where possible",
+        "Storing all measures as strings to prevent aggregation errors"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Numbers and Booleans provide significantly better query performance than strings and dates in Tableau. They require less processing overhead, enable faster aggregations, and optimize memory usage. Converting categorical strings to numeric codes and using Boolean flags instead of string indicators can substantially improve dashboard performance, especially with large datasets.",
+      "difficulty": "BEGINNER",
+      "tags": ["data-types", "performance", "optimization"]
+    },
+    {
+      "id": "7",
+      "question": "A company's data governance team wants to balance centralized control with departmental autonomy for data preparation. Which Tableau architecture pattern best supports this requirement?",
+      "options": [
+        "Fully centralized model with all data sources managed by IT",
+        "Completely decentralized self-service without governance",
+        "Personal sandboxes for development with promotion workflows to production",
+        "Direct database connections for all users with no intermediate layer"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Personal sandboxes with promotion workflows represent the hybrid governance model that balances control with autonomy. This pattern allows departments to develop and test data preparations in isolated environments while maintaining governance through controlled promotion to production. This approach is recommended for enterprise deployments requiring both agility and compliance.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["governance", "enterprise", "data-management", "best-practices"]
+    },
+    {
+      "id": "8",
+      "question": "Your analysis reveals that a dashboard's primary performance bottleneck is the COUNTD function on a high-cardinality dimension with 10 million unique values. What is the most effective optimization strategy?",
+      "options": [
+        "Replace COUNTD with an approximate count using HyperLogLog in database",
+        "Add more RAM to the Tableau Server",
+        "Convert the dimension to a measure",
+        "Create an index on the dimension field"
+      ],
+      "correctAnswer": 0,
+      "explanation": "COUNTD is computationally expensive, especially on high-cardinality dimensions. Using HyperLogLog or similar approximate counting algorithms at the database level can provide near-accurate results (typically 97-99% accurate) with dramatically improved performance. This is a recommended practice for large-scale deployments where exact counts aren't critical. Simply adding resources or indexing won't address the algorithmic complexity.",
+      "difficulty": "ADVANCED",
+      "tags": ["performance", "calculations", "optimization", "COUNTD"]
+    },
+    {
+      "id": "9",
+      "question": "When implementing Tableau Prep workflows for enterprise data preparation, which feature provides automatic performance optimization for large datasets?",
+      "options": [
+        "Manual sampling configuration for each input",
+        "Intelligent automatic sampling with predicate pushdown",
+        "Disabling all sampling for complete data processing",
+        "Random sampling of first 1000 rows only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Prep's intelligent automatic sampling combined with predicate pushdown provides optimal performance for large datasets. The system automatically determines appropriate sampling strategies while predicate pushdown ensures filters and aggregations are processed at the data source level rather than in memory, significantly improving performance without manual configuration.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["tableau-prep", "performance", "sampling", "optimization"]
+    },
+    {
+      "id": "10",
+      "question": "A consulting client wants to modernize their data architecture for Tableau deployments. They currently have all data in CSV files on network shares. What should be the PRIMARY recommendation for immediate performance improvement?",
+      "options": [
+        "Move all CSV files to cloud storage for better accessibility",
+        "Implement a proper database system with native Tableau drivers",
+        "Increase network bandwidth for faster CSV access",
+        "Create Tableau extracts from the CSV files"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Implementing a proper database system with native Tableau drivers provides the most comprehensive performance improvement. Databases offer indexing, query optimization, concurrent access, and data integrity that CSV files cannot provide. While extracts can help, they're a workaround rather than a solution. Native database drivers enable Tableau to push down complex queries and leverage database optimization capabilities.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["architecture", "performance", "data-sources", "modernization"]
+    }
+  ]
+}

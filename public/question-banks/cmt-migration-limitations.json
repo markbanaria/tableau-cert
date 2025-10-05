@@ -1,0 +1,125 @@
+{
+  "title": "CMT Migration Limitations",
+  "description": "Master the limitations and unsupported features of Tableau Content Migration Tool (CMT) including version compatibility, configuration exclusions, data connection restrictions, and content requiring manual recreation.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the minimum Tableau version supported by the Content Migration Tool (CMT) for workbooks and published data sources?",
+      "options": [
+        "Version 2015.1.x and later",
+        "Version 2018.1.x and later (eight most recent versions)",
+        "Version 2020.1.x and later",
+        "All Tableau versions are supported"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Content Migration Tool supports migrating workbooks and published data sources saved in the EIGHT MOST RECENT VERSIONS of Tableau. Workbooks and published data sources saved BEFORE VERSION 2018.1.X are NOT SUPPORTED by CMT. Additionally, migrating content to previous Tableau versions can fail if the content includes features or formats not recognized by the previous version—CMT will alert you if incompatibilities are found.",
+      "difficulty": "intermediate",
+      "tags": ["version-compatibility", "cmt", "supported-versions", "tableau-advanced-management"]
+    },
+    {
+      "id": 2,
+      "question": "Which configurations are NOT migrated to the destination site when using CMT?",
+      "options": [
+        "Workbooks and data sources only",
+        "Users, Groups, and Site settings (custom logos, view recommendations, etc.)",
+        "Projects and permissions",
+        "Data connections and extracts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The following CONFIGURATIONS are NOT MIGRATED to the destination site when using CMT: (1) USERS—must be recreated or synced independently; (2) GROUPS—user groups must be recreated on the destination; (3) SITE SETTINGS—including custom logos, view recommendations, and other site-level configurations. These must be manually configured on the destination site after migration.",
+      "difficulty": "intermediate",
+      "tags": ["configurations", "users", "groups", "site-settings", "not-migrated"]
+    },
+    {
+      "id": 3,
+      "question": "Can embedded credentials be migrated with CMT, and what are the limitations?",
+      "options": [
+        "Yes, all embedded credentials migrate automatically",
+        "For security, Tableau Server removes embedded credentials during download; use 'Migrate Embedded Credentials' publish options (Server to Cloud) or 'Set Connection Info' transformation (Server to Server); OAuth credentials NOT supported",
+        "No, embedded credentials can never be migrated",
+        "Only OAuth credentials can be migrated"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For security purposes, Tableau Server REMOVES EMBEDDED CREDENTIALS from data sources during the download process. To include embedded credentials: (1) TABLEAU SERVER TO TABLEAU CLOUD—Use the 'Migrate Embedded Credentials for Workbooks' and 'Migrate Embedded Credentials for Data Source' publish options; (2) TABLEAU SERVER TO TABLEAU SERVER—Use the 'Set Connection Info' data source transformation. IMPORTANT: CMT does NOT SUPPORT embedded credential migration for OAUTH CONNECTIONS. To migrate OAuth credentials, use the Set Connection Info data source transformation.",
+      "difficulty": "advanced",
+      "tags": ["embedded-credentials", "oauth", "security", "data-source-transformation"]
+    },
+    {
+      "id": 4,
+      "question": "What happens to extract refresh schedules when migrating to Tableau Cloud using CMT?",
+      "options": [
+        "They migrate automatically and continue on the same schedule",
+        "Extract refresh schedules CANNOT be migrated to Tableau Cloud; run refreshes manually or create new schedules on the destination site",
+        "They migrate but must be manually activated",
+        "Only daily schedules migrate; hourly schedules must be recreated"
+      ],
+      "correctAnswer": 1,
+      "explanation": "EXTRACT REFRESH SCHEDULES CANNOT BE MIGRATED to Tableau Cloud destination sites. To refresh data on Tableau Cloud after migration, you can: (1) Run extract refreshes MANUALLY, or (2) Create NEW EXTRACT REFRESH SCHEDULES on the destination site. This is a significant limitation requiring post-migration configuration to restore automated data refresh functionality.",
+      "difficulty": "intermediate",
+      "tags": ["extract-refresh", "schedules", "tableau-cloud", "migration-limitations"]
+    },
+    {
+      "id": 5,
+      "question": "What happens to incremental extract refreshes during CMT migration?",
+      "options": [
+        "They migrate and continue as incremental refreshes",
+        "Incremental extract refreshes are CHANGED TO FULL EXTRACT REFRESHES; users must reconfigure incremental refreshes in Tableau Desktop and republish after migration",
+        "They are disabled and must be manually re-enabled",
+        "Incremental refreshes migrate only for Tableau Cloud destinations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "INCREMENTAL EXTRACT REFRESHES are CHANGED TO FULL EXTRACT REFRESHES on the destination site. Users must RECONFIGURE incremental refreshes in TABLEAU DESKTOP and PUBLISH EXTRACTS to the destination site AFTER MIGRATION. This is important for performance considerations—full refreshes take significantly longer than incremental refreshes, so reconfiguration should be prioritized for large datasets.",
+      "difficulty": "advanced",
+      "tags": ["incremental-refresh", "full-refresh", "extracts", "performance"]
+    },
+    {
+      "id": 6,
+      "question": "Which user-specific content types are NOT migrated and must be manually recreated? (Select the best answer)",
+      "options": [
+        "Workbooks and published data sources",
+        "Collections, Comments, Custom views, Favorites, and Subscriptions",
+        "Projects and permissions",
+        "Data connections and extracts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The following USER-SPECIFIC CONTENT is NOT MIGRATED and must be manually recreated: (1) COLLECTIONS—users must recreate on destination; (2) COMMENTS on views—users must re-add; (3) CUSTOM VIEWS—users must recreate; (4) FAVORITES—users must reselect favorite content; (5) SUBSCRIPTIONS—users must resubscribe to views and workbooks. This represents significant manual work for active users with personalized content.",
+      "difficulty": "intermediate",
+      "tags": ["collections", "comments", "custom-views", "favorites", "subscriptions", "user-content"]
+    },
+    {
+      "id": 7,
+      "question": "What happens to revision history when migrating content with CMT?",
+      "options": [
+        "All revision history migrates automatically",
+        "Revision history is NOT migrated; to migrate previous versions, download the versions to keep and republish the workbook to the destination site",
+        "Only the last 10 revisions migrate",
+        "Revision history migrates but becomes read-only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "REVISION HISTORY is NOT MIGRATED when using CMT. To migrate previous versions of workbooks to the destination site, users must: (1) DOWNLOAD the versions they wish to keep from the source site, (2) REPUBLISH the workbook to the destination site. This is a manual process that should be planned for critical workbooks where revision history is important for governance or rollback purposes.",
+      "difficulty": "intermediate",
+      "tags": ["revision-history", "version-control", "manual-migration"]
+    },
+    {
+      "id": 8,
+      "question": "What must be done with data-driven alerts, Ask Data lenses, and virtual connections during CMT migration?",
+      "options": [
+        "They migrate automatically with all configurations intact",
+        "All three must be RECREATED on the destination site—data-driven alerts by users (others can add themselves after), Ask Data lenses by lens creators, virtual connections by authorized users",
+        "Only data-driven alerts need recreation; others migrate",
+        "They migrate but require administrator activation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Three key features require COMPLETE RECREATION on the destination site: (1) DATA-DRIVEN ALERTS—Users must recreate alerts for dashboards and views; after creation, anyone with access can add themselves to existing alerts; (2) ASK DATA LENSES—Users must recreate lenses for specific audiences; (3) VIRTUAL CONNECTIONS—Users must recreate virtual connections on the destination site. These are significant governance and user experience features that require planning for post-migration recreation.",
+      "difficulty": "advanced",
+      "tags": ["data-driven-alerts", "ask-data", "virtual-connections", "recreation-required"]
+    }
+  ]
+}

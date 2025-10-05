@@ -1,0 +1,125 @@
+{
+  "title": "Work with Content Revisions",
+  "description": "Master revision history management for workbooks, data sources, and virtual connections including version control, restoration workflows, permission requirements, and potential issues with data changes and ownership.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What site roles and permissions are required to access revision history for workbooks?",
+      "options": [
+        "Any site role with View permission on the workbook",
+        "Creator or Explorer (Can Publish) site role; View, Save, and Download Workbook/Save As permissions on workbooks; View and Save on project",
+        "Administrator role only; no other permissions needed",
+        "Viewer role with Download permission"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To access revision history, you must have a CREATOR or EXPLORER (CAN PUBLISH) site role, PLUS the following permissions: PROJECT—View and Save; WORKBOOKS in the project—View, Save, and Download Workbook/Save As. For data sources, you need View, Save, and Download Data Source. For virtual connections, you need Creator site role with View and Overwrite permissions (requires Data Management license).",
+      "difficulty": "intermediate",
+      "tags": ["revision-history", "permissions", "site-roles", "access-requirements"]
+    },
+    {
+      "id": 2,
+      "question": "When you publish a workbook or data source with the same name to the same location, what happens to create a new revision?",
+      "options": [
+        "The old version is deleted and replaced",
+        "A new revision is automatically saved in the revision history; you must confirm overwrite",
+        "You must manually create a revision before publishing",
+        "Revisions are only created when you click 'Save as New Version'"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you publish a workbook or data source, a VERSION is saved in the REVISION HISTORY for Tableau Server and Tableau Cloud. To create a new revision: In Tableau Desktop, click Server > Publish Workbook or Publish Data Source, make changes, then publish again to the SAME PROJECT with the SAME NAME. You'll need to CONFIRM that you want to OVERWRITE the existing content. You can also save workbook revisions by editing and saving in the web-authoring interface.",
+      "difficulty": "beginner",
+      "tags": ["publishing", "revision-creation", "overwrite", "version-control"]
+    },
+    {
+      "id": 3,
+      "question": "What actions can you perform on a revision from the revision history interface?",
+      "options": [
+        "View only—no modifications allowed",
+        "Preview (if available), Download, Restore, and Delete",
+        "Compare with current version only",
+        "Edit in place and save"
+      ],
+      "correctAnswer": 1,
+      "explanation": "From a revision's actions menu (...), you can: (1) PREVIEW—Opens in a new browser tab if available (workbooks with OAuth connections may require download to Tableau Desktop); (2) DOWNLOAD—Download the revision as a .twb/.twbx or .tds/.tdsx file to open in Tableau Desktop; (3) RESTORE—Make the selected revision the current version; (4) DELETE—Remove the revision from history (shows as deleted in the list).",
+      "difficulty": "intermediate",
+      "tags": ["revision-actions", "preview", "download", "restore", "delete"]
+    },
+    {
+      "id": 4,
+      "question": "When restoring a workbook revision that uses a live data connection prompting for credentials, what must you do?",
+      "options": [
+        "Nothing—credentials are automatically restored",
+        "You have the option to embed credentials for the connection; for multiple connections, provide credentials for each one",
+        "Contact an administrator to restore credentials",
+        "Revisions with prompts cannot be restored"
+      ],
+      "correctAnswer": 1,
+      "explanation": "If a workbook uses a LIVE DATA CONNECTION that PROMPTS for a user name and password, you have the option to EMBED CREDENTIALS for the connection during restore. If the workbook uses a data source with MULTIPLE CONNECTIONS, you might need to PROVIDE CREDENTIALS FOR EACH ONE. For workbooks using data extracts with scheduled refreshes and embedded credentials, you'll need to edit the data connection to provide the credentials.",
+      "difficulty": "advanced",
+      "tags": ["restore-workbook", "credentials", "live-connections", "authentication"]
+    },
+    {
+      "id": 5,
+      "question": "Why won't a previous revision of a data source include the extract as it was originally published, and how do you restore it properly?",
+      "options": [
+        "Extracts are never saved in revisions; use the current extract only",
+        "For various reasons (e.g., refresh schedules), the extract won't match; download the revision (.tdsx), open in Tableau Desktop, and republish to restore the extract",
+        "Extracts are automatically restored when you click Restore",
+        "Contact Tableau Support to retrieve historical extracts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For a variety of reasons—for example, extracts commonly are on REFRESH SCHEDULES—a previous revision of a data source will NOT INCLUDE THE EXTRACT as it was published at the time. To restore the extract: (1) Navigate to the data source's revision history, (2) Download the revision (in .TDSX format) from the actions menu, (3) Open it in Tableau Desktop, (4) REPUBLISH it with the same name to the same location (confirming overwrite). The uploaded version becomes the most current version.",
+      "difficulty": "advanced",
+      "tags": ["data-source-revisions", "extracts", "restore-data-source", "refresh-schedules"]
+    },
+    {
+      "id": 6,
+      "question": "What happens to revision history and ownership when a different author publishes over content with the same name?",
+      "options": [
+        "A new, separate revision history is created for the new author",
+        "The most recent author becomes the owner of the content and can see its entire revision history",
+        "The original author retains ownership; new author creates a copy",
+        "Revision history is reset and previous versions are deleted"
+      ],
+      "correctAnswer": 1,
+      "explanation": "If a DIFFERENT AUTHOR publishes over a workbook or data source with the SAME NAME, the MOST RECENT AUTHOR becomes the OWNER of the content and can see its ENTIRE REVISION HISTORY. This is a potential issue to be aware of—ownership transfers with overwrite, and the new owner has access to all historical revisions created by previous authors.",
+      "difficulty": "intermediate",
+      "tags": ["ownership-transfer", "overwrite", "revision-history", "content-ownership"]
+    },
+    {
+      "id": 7,
+      "question": "Which types of data connections have revisions saved, and which do not?",
+      "options": [
+        "All data types have revisions saved equally",
+        "Revisions saved: .xls/.csv files (with extract), .hyper files (direct connection). Revisions NOT saved: .hyper extracts",
+        "Only published data sources have revisions; file-based connections do not",
+        "Revisions are saved for all extracts but not live connections"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Important data-related revision rules: (1) Revisions of workbooks and data sources that use .XLS or .CSV files are saved WITH AN EXTRACT of that data; (2) Revisions ARE SAVED for .HYPER files with a DIRECT CONNECTION; (3) Revisions are NOT SAVED for .hyper EXTRACTS. Additionally, workbooks and data sources are downloaded with the LATEST CONFIGURATION of their extract or data connection—if the data model or connection has changed between revisions, you might need to update the downloaded content.",
+      "difficulty": "advanced",
+      "tags": ["data-connections", "extracts", "hyper-files", "csv-files", "data-changes"]
+    },
+    {
+      "id": 8,
+      "question": "On Tableau Server, if revision history is turned off and then back on, what happens to version numbering?",
+      "options": [
+        "Version numbering resets to 1 when turned back on",
+        "Saved revisions are retained; new versions overwrite the latest while off; version numbering resumes from the last saved revision when turned back on",
+        "All revisions are deleted when turned off",
+        "Revision history cannot be turned off once enabled"
+      ],
+      "correctAnswer": 1,
+      "explanation": "On Tableau Server, server administrators can DISABLE revision history for specific sites. If revision history is turned on and then OFF: (1) SAVED REVISIONS ARE RETAINED, (2) New versions OVERWRITE THE LATEST VERSION (no new revisions saved). If revision history is then turned ON AGAIN, version numbering STARTS FROM THE LAST SAVED REVISION (not from 1). If a workbook or data source is DELETED from a site, ALL REVISIONS are also deleted.",
+      "difficulty": "intermediate",
+      "tags": ["revision-settings", "server-administration", "version-numbering", "site-settings"]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "title": "Tableau Products - Practice Questions",
+  "description": "Practice questions covering Tableau's product portfolio including Tableau Desktop, Server, Cloud, and deployment considerations for enterprise environments",
+  "metadata": {
+    "topic": "Tableau Products",
+    "domain": "domain1",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://www.tableau.com/products/tableau",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "A large enterprise needs to deploy Tableau analytics with full control over infrastructure, data security, and the ability to customize their deployment in a private cloud environment. Which Tableau product best meets these requirements?",
+      "options": [
+        "Tableau Cloud, as it provides enterprise-level security features",
+        "Tableau Server, as it offers self-hosted deployment with full control over infrastructure",
+        "Tableau Desktop, as it can be deployed across the enterprise",
+        "Tableau Public, as it supports private cloud deployment"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Server is the correct choice because it's a self-hosted analytics platform that allows organizations to gain full control of their data and analytics deployment on their own infrastructure or in private/public cloud instances. Tableau Cloud is fully hosted by Tableau and doesn't provide infrastructure control. Tableau Desktop is an authoring tool, not a server platform. Tableau Public is for public data sharing only.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-server", "deployment", "architecture", "enterprise"]
+    },
+    {
+      "id": "2",
+      "question": "What is the primary advantage of Tableau Cloud over Tableau Server for organizations that lack dedicated IT infrastructure teams?",
+      "options": [
+        "Tableau Cloud offers more advanced analytics features than Tableau Server",
+        "Tableau Cloud eliminates the need to manage servers, software upgrades, or scale hardware capacity",
+        "Tableau Cloud provides better data visualization capabilities",
+        "Tableau Cloud supports more data connectors than Tableau Server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Cloud's primary advantage is that it's a fully hosted, cloud-based analytics platform where organizations never need to configure servers, manage software upgrades, or scale hardware capacity, saving time and money. Both products offer the same core analytics and visualization features. The key differentiator is infrastructure management—Cloud handles it all, while Server requires organizations to manage it themselves.",
+      "difficulty": "beginner",
+      "tags": ["tableau-cloud", "deployment", "infrastructure", "cloud"]
+    },
+    {
+      "id": "3",
+      "question": "A consultant is advising a client who needs to perform data exploration, modeling, and visualization even when working offline in remote locations without internet connectivity. Which Tableau product should they recommend?",
+      "options": [
+        "Tableau Server with mobile app deployment",
+        "Tableau Cloud with offline sync enabled",
+        "Tableau Desktop with local data connections",
+        "Tableau Prep for offline data preparation"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau Desktop is the correct choice because it provides a governed, flexible environment to explore, model, and visualize data anytime, anywhere—even offline. Desktop can work with local data sources without internet connectivity. Tableau Server and Cloud are server-based platforms that require connectivity for most operations. While Tableau Prep can work offline, it's designed for data preparation, not exploration and visualization.",
+      "difficulty": "beginner",
+      "tags": ["tableau-desktop", "offline", "deployment", "connectivity"]
+    },
+    {
+      "id": "4",
+      "question": "An organization is planning a major operating system upgrade from Windows 2019 to Windows 2022 on their Tableau Server infrastructure. What is the recommended approach according to Tableau best practices?",
+      "options": [
+        "Perform the OS upgrade directly on the existing Tableau Server installation",
+        "Stop Tableau Server, upgrade the OS, then restart Tableau Server",
+        "Use a Blue/Green upgrade approach with separate infrastructure",
+        "Uninstall Tableau Server, upgrade the OS, then reinstall Tableau Server"
+      ],
+      "correctAnswer": 2,
+      "explanation": "According to Tableau documentation, any major version OS upgrade (e.g., Windows 2019 to Windows 2022) must be done using Blue/Green guidelines. Doing a major OS version upgrade directly on a machine running Tableau Server will render the installation unsupported and could leave it in an unstable state. Blue/Green upgrades involve setting up new infrastructure with the updated OS and migrating Tableau Server to it, ensuring minimal downtime and reduced risk.",
+      "difficulty": "advanced",
+      "tags": ["tableau-server", "upgrade", "blue-green", "infrastructure", "best-practices"]
+    },
+    {
+      "id": "5",
+      "question": "Which Tableau product is specifically designed to provide a governed, flexible environment for data exploration with the ability to discover and act on intelligent insights quickly, including offline capabilities?",
+      "options": [
+        "Tableau Prep Builder",
+        "Tableau Desktop",
+        "Tableau Mobile",
+        "Tableau Bridge"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Desktop is the correct answer as it's specifically described as a governed, flexible environment to explore, model, and visualize data anytime, anywhere—even offline—then discover and act on intelligent insights quickly. Tableau Prep Builder is for data preparation, not exploration and visualization. Tableau Mobile is for consuming published content on mobile devices. Tableau Bridge enables connectivity to on-premises data for Tableau Cloud.",
+      "difficulty": "beginner",
+      "tags": ["tableau-desktop", "features", "product-comparison"]
+    },
+    {
+      "id": "6",
+      "question": "A Tableau consultant is working with a client that needs to implement enterprise-level analytics with features like Advanced Management for limitless scalability, optimal efficiency, and simplified security. The client wants to avoid managing infrastructure. Which product combination should the consultant recommend?",
+      "options": [
+        "Tableau Server with Advanced Management add-on",
+        "Tableau Cloud Enterprise with Advanced Management capabilities",
+        "Tableau Desktop with Enterprise licensing",
+        "Tableau Server deployed on cloud infrastructure"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Cloud Enterprise with Advanced Management capabilities is the correct choice because it provides enterprise-level features including limitless scalability, optimal efficiency, and simplified security without requiring the client to manage infrastructure. While Tableau Server can also use Advanced Management, it requires infrastructure management. The question specifically states the client wants to avoid managing infrastructure, making Cloud the better choice.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-cloud", "enterprise", "advanced-management", "scalability"]
+    },
+    {
+      "id": "7",
+      "question": "What is the primary purpose of Blue/Green upgrades in Tableau Server deployments?",
+      "options": [
+        "To enable faster performance by using two parallel server clusters",
+        "To provide minimal downtime during upgrades by setting up parallel infrastructure",
+        "To separate production and development environments",
+        "To implement load balancing across multiple servers"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Blue/Green upgrades are designed to provide minimal downtime during upgrades by setting up new infrastructure (Green) alongside the existing production environment (Blue), then switching traffic to the new environment once validated. This approach requires knowledgeable IT staff and additional resources but ensures business continuity. It's not about performance enhancement, environment separation, or standard load balancing—it's specifically an upgrade strategy.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-server", "blue-green", "upgrade", "deployment", "high-availability"]
+    },
+    {
+      "id": "8",
+      "question": "A client wants to leverage Einstein's insights built into Tableau for automated analytics enrichment and use VizQL for drag-and-drop data exploration. Which statement best describes what they can expect?",
+      "options": [
+        "These features are only available in Tableau Desktop Enterprise edition",
+        "Einstein insights and VizQL are core Tableau features that automatically enrich analytics data with business context",
+        "These features require separate licensing for AI and machine learning capabilities",
+        "Einstein insights are only available in Tableau Cloud, while VizQL is only in Desktop"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Einstein's insights and VizQL are core features built into Tableau that work together to provide intuitive data experiences. Einstein automatically enriches analytics data with business context and meaning, while VizQL makes data exploration as easy as drag-and-drop. These features are integrated into the Tableau platform (across Desktop, Server, and Cloud) and don't require separate licensing or specific editions—they're part of Tableau's approach to making analytics accessible and intelligent.",
+      "difficulty": "intermediate",
+      "tags": ["einstein", "vizql", "features", "ai", "automation"]
+    },
+    {
+      "id": "9",
+      "question": "An enterprise client is concerned about security, compliance, and identity management for their Tableau deployment. Which capabilities should a consultant highlight as built-in security features across Tableau products?",
+      "options": [
+        "Single sign-on (SSO) integration, SOC2 and ISO certifications, and usage monitoring for compliance",
+        "Only basic authentication and authorization features",
+        "Security features that must be purchased separately through Advanced Management",
+        "Third-party security tools that must be integrated manually"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau provides built-in security capabilities including integration with SSO or identity providers, best-in-class security certification standards like SOC2 and ISO, and usage monitoring in one environment to efficiently stay in compliance. These are core security features available across Tableau products. While Advanced Management provides additional enterprise features, fundamental security capabilities like SSO integration and certification compliance are built into the platform.",
+      "difficulty": "intermediate",
+      "tags": ["security", "compliance", "sso", "enterprise", "governance"]
+    },
+    {
+      "id": "10",
+      "question": "When planning to upgrade Tableau Server from version 2018.2 or later on Windows, what is the standard upgrade approach if Blue/Green deployment is not being used?",
+      "options": [
+        "Remote upgrade using REST API",
+        "Cloud migration followed by reimport",
+        "In-place upgrade following documented procedures",
+        "Complete reinstallation with data backup and restore"
+      ],
+      "correctAnswer": 2,
+      "explanation": "For Tableau Server upgrades from 2018.2 and later on Windows, the standard approach (when not using Blue/Green) is an in-place upgrade following Tableau's documented upgrade procedures. This involves proper planning, testing, backup, and then running the upgrade on the existing installation. While backup and restore is part of the process, it's not a complete reinstallation. Remote upgrades and cloud migration are not standard upgrade paths for on-premises Server installations.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-server", "upgrade", "deployment", "windows", "in-place"]
+    }
+  ]
+}

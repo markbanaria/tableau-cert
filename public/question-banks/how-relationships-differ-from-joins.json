@@ -1,0 +1,154 @@
+{
+  "title": "How Relationships Differ from Joins - Practice Questions",
+  "description": "Practice questions for How Relationships Differ from Joins covering conceptual differences, performance implications, and implementation best practices",
+  "metadata": {
+    "topic": "How Relationships Differ from Joins",
+    "domain": "domain2",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/online/en-us/datasource_relationships_learnmorepage.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the fundamental conceptual difference between relationships and joins in Tableau's data model?",
+      "options": [
+        "Relationships are static while joins are dynamic based on visualization context",
+        "Relationships act like a contract between tables with dynamic join selection, while joins are predefined",
+        "Relationships only work with extracts while joins work with live connections",
+        "Relationships require identical field names while joins allow field mapping"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Relationships act like a 'contract between two tables' with automatic and context-aware join selection during visualization, while joins are predefined connections. This fundamental difference allows relationships to be dynamic and flexible, automatically selecting appropriate join types based on the specific analytical context of each visualization.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["relationships", "joins", "data-model", "conceptual-differences"]
+    },
+    {
+      "id": "2",
+      "question": "A data analyst notices that their dashboard using relationships shows different row counts for the same data compared to when they used joins. What is the most likely explanation for this behavior?",
+      "options": [
+        "Relationships have a bug that miscounts rows",
+        "Relationships preserve native table detail levels while joins may duplicate data",
+        "Relationships automatically filter out null values",
+        "Relationships only count distinct values"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Relationships preserve native table detail levels and prevent data duplication, while traditional joins can cause row multiplication when combining tables with different granularities. This preservation of natural granularity is a key advantage of relationships, eliminating the need for complex LOD expressions in many scenarios.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["data-duplication", "granularity", "row-counts", "native-detail"]
+    },
+    {
+      "id": "3",
+      "question": "When designing a data source with multiple fact tables, what is the primary advantage of using relationships over joins?",
+      "options": [
+        "Relationships process queries faster than joins",
+        "Relationships support many-to-many table connections naturally",
+        "Relationships require less memory than joins",
+        "Relationships work better with calculated fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Relationships naturally support many-to-many table connections, which is essential for multi-fact table scenarios. Traditional joins struggle with many-to-many relationships and often require complex workarounds or intermediate bridging tables. Relationships handle these scenarios elegantly by maintaining separate table domains.",
+      "difficulty": "ADVANCED",
+      "tags": ["many-to-many", "multi-fact", "table-connections", "data-architecture"]
+    },
+    {
+      "id": "4",
+      "question": "What is a key limitation when creating relationships between tables in Tableau?",
+      "options": [
+        "Relationships cannot be created between tables from different databases",
+        "Circular relationships are not permitted in the data model",
+        "Relationships require all tables to have the same number of rows",
+        "Relationships only work with numeric fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Circular relationships are not permitted in Tableau's relationship model. The system prevents circular dependencies to maintain query optimization and avoid ambiguous join paths. This ensures that there is always a clear, unambiguous path between any two tables in the data model.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["limitations", "circular-relationships", "data-model-constraints"]
+    },
+    {
+      "id": "5",
+      "question": "How do relationships optimize query performance compared to traditional joins?",
+      "options": [
+        "Relationships cache all possible join combinations in advance",
+        "Relationships only query tables with fields actually used in the visualization",
+        "Relationships automatically index all related fields",
+        "Relationships compress data more efficiently than joins"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Relationships optimize performance by only querying tables that contain fields actually used in the current visualization. This intelligent querying reduces unnecessary data processing and network traffic, unlike traditional joins which may bring in data from all joined tables regardless of whether that data is needed for the specific analysis.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["performance-optimization", "intelligent-querying", "selective-queries"]
+    },
+    {
+      "id": "6",
+      "question": "A consultant discovers that their client's data source filters are limiting the query optimization benefits of relationships. What is the recommended solution?",
+      "options": [
+        "Convert all relationships back to traditional joins",
+        "Remove data source filters and implement visualization-level filters instead",
+        "Understand that data source filters can limit relationship query optimization and design accordingly",
+        "Upgrade to a newer version of Tableau that resolves this limitation"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data source filters can limit the query optimization benefits of relationships because they may force Tableau to materialize joins earlier in the query process. The solution is to understand this limitation and design the data model accordingly, potentially using alternative filtering strategies or accepting the trade-off for necessary security or performance requirements.",
+      "difficulty": "ADVANCED",
+      "tags": ["data-source-filters", "query-optimization", "design-considerations"]
+    },
+    {
+      "id": "7",
+      "question": "What field requirement must be met when creating relationships between tables?",
+      "options": [
+        "Related fields must have identical names across tables",
+        "Related fields must have matching data types",
+        "Related fields must be primary keys in both tables",
+        "Related fields must contain only unique values"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Related fields must have matching data types to create valid relationships. While field names don't need to be identical (you can map different field names), the underlying data types must be compatible for Tableau to establish and maintain the relationship effectively.",
+      "difficulty": "BEGINNER",
+      "tags": ["field-requirements", "data-types", "relationship-creation"]
+    },
+    {
+      "id": "8",
+      "question": "When would you choose to use traditional joins instead of relationships in Tableau?",
+      "options": [
+        "When working with well-structured, normalized data",
+        "When you need to enforce specific join logic that relationships cannot accommodate",
+        "When connecting to cloud-based data sources",
+        "When working with large datasets that require performance optimization"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Traditional joins should be used when you need to enforce specific join logic that relationships cannot accommodate automatically. This includes scenarios where you need precise control over join types, complex join conditions, or when working with poorly structured data that doesn't benefit from relationship flexibility.",
+      "difficulty": "ADVANCED",
+      "tags": ["join-selection", "specific-logic", "use-cases", "design-decisions"]
+    },
+    {
+      "id": "9",
+      "question": "What happens to the need for Level of Detail (LOD) expressions when using relationships effectively?",
+      "options": [
+        "LOD expressions become more complex due to relationship dynamics",
+        "LOD expressions are completely eliminated from all analyses",
+        "The need for complex LOD expressions is often reduced or eliminated",
+        "LOD expressions must be rewritten to work with relationships"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The need for complex LOD expressions is often reduced or eliminated when using relationships effectively because relationships preserve native table detail levels automatically. Many scenarios that previously required LOD expressions to handle different granularities are now handled naturally by the relationship model's intelligence.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["LOD-expressions", "granularity-handling", "analysis-simplification"]
+    },
+    {
+      "id": "10",
+      "question": "Which scenario represents an ideal use case for relationships over joins?",
+      "options": [
+        "A simple two-table join with one-to-many relationship",
+        "Complex multi-table analytical scenarios requiring flexible data integration",
+        "Data cleaning operations that require specific join logic",
+        "Creating a single denormalized table for reporting"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Complex multi-table analytical scenarios requiring flexible data integration represent the ideal use case for relationships. These scenarios benefit from relationships' ability to automatically select appropriate join types, preserve native granularities, and support multiple analytical workflows without requiring different data model designs for each use case.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["use-cases", "multi-table", "analytical-scenarios", "flexibility"]
+    }
+  ]
+}

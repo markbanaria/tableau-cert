@@ -1,0 +1,155 @@
+{
+  "title": "Use radar charts to compare dimensions over several metrics - Practice Questions",
+  "description": "Practice questions for radar charts covering construction methods, design principles, use cases, and enterprise implementation considerations for Tableau Consultant certification",
+  "metadata": {
+    "topic": "Use radar charts to compare dimensions over several metrics",
+    "domain": "Design and Troubleshoot Calculations and Workbooks",
+    "difficulty": "Intermediate/Advanced",
+    "sourceUrl": "https://www.tableau.com/blog/use-radar-charts-compare-dimensions-over-several-metrics-41592",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10,
+    "relatedTopics": ["Order of Operations", "View Acceleration", "Performance Recording", "Designing Efficient Workbooks"]
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary mark type used when constructing radar charts in Tableau?",
+      "options": [
+        "Line marks with circular paths",
+        "Polygon marks with trigonometric calculations",
+        "Area marks with radial coordinates",
+        "Shape marks with custom geometries"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Polygon marks are the primary mark type for radar charts because they allow for connecting multiple data points to form the characteristic 'web' or 'spider' pattern. Trigonometric calculations (sine and cosine functions) are used to position these polygon vertices correctly around the circular axes. Line marks alone cannot create the filled area effect, area marks don't provide the precise control needed, and shape marks are not suitable for dynamic multi-point visualizations.",
+      "difficulty": "Beginner",
+      "tags": ["radar-charts", "mark-types", "polygon-marks"]
+    },
+    {
+      "id": "2",
+      "question": "Which aggregation type should be used for radar chart calculations to ensure accurate metric representation?",
+      "options": [
+        "SUM to total all metric values",
+        "AVERAGE to normalize across dimensions",
+        "MEDIAN to avoid outlier influence",
+        "MAXIMUM to show peak performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "AVERAGE aggregation is essential for radar charts because it provides a normalized view across different metrics and dimensions. Using SUM would inflate values and make comparisons meaningless, especially when dealing with different scales. MEDIAN might miss important data patterns, and MAXIMUM only shows best-case scenarios rather than overall performance. The article specifically mentions that radar charts use average aggregation, not sum, to ensure meaningful comparisons across multiple metrics.",
+      "difficulty": "Beginner",
+      "tags": ["radar-charts", "aggregation", "calculations"]
+    },
+    {
+      "id": "3",
+      "question": "What is a critical requirement for the metrics used in radar chart construction?",
+      "options": [
+        "All metrics must use the same data source",
+        "Metrics should have consistent scaling across dimensions",
+        "Each metric must represent a time-based measure",
+        "All metrics must be calculated fields rather than measures"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Consistent scaling across all dimensions is critical for radar charts because the visualization relies on the visual comparison of distances from the center point. If metrics use different scales (e.g., one from 0-10 and another from 0-1000), the chart will be visually misleading. While using the same data source is helpful, it's not strictly required. Time-based measures are not necessary, and metrics can be either measures or calculated fields as long as they're appropriately scaled.",
+      "difficulty": "Beginner",
+      "tags": ["radar-charts", "scaling", "design-principles"]
+    },
+    {
+      "id": "4",
+      "question": "A retail company wants to compare store performance across customer satisfaction, sales volume, inventory turnover, and profit margin for 15 locations. The data ranges vary significantly: satisfaction (1-5 scale), sales volume ($10K-$500K), turnover (2-12 times), and profit margin (5%-25%). What is the most important step before creating the radar chart?",
+      "options": [
+        "Create separate dashboards for each metric to avoid confusion",
+        "Normalize all metrics to a consistent scale (e.g., 0-100) using calculated fields",
+        "Use logarithmic scaling to handle the large value differences",
+        "Filter the data to only show top-performing stores"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Normalizing all metrics to a consistent scale is essential for meaningful radar chart visualization. Without normalization, the sales volume (with values in hundreds of thousands) would dominate the visualization, making other metrics appear insignificant. Creating calculated fields that convert all metrics to a 0-100 scale or similar ensures that each dimension contributes equally to the visual comparison. Separate dashboards would defeat the purpose of comparative analysis, logarithmic scaling doesn't solve the fundamental scaling issue, and filtering reduces the analytical value.",
+      "difficulty": "Intermediate",
+      "tags": ["radar-charts", "normalization", "retail-analysis", "scaling"]
+    },
+    {
+      "id": "5",
+      "question": "An enterprise client needs to display product comparison data in a radar chart on a public-facing dashboard that will be accessed by thousands of users. Which approach best balances performance and functionality?",
+      "options": [
+        "Use extract data source with pre-calculated trigonometric values and implement view acceleration",
+        "Create live connection with on-demand calculation of radar coordinates",
+        "Build separate bar charts for each metric and combine them in a container",
+        "Use a third-party extension for radar chart functionality"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Using an extract data source with pre-calculated trigonometric values combined with view acceleration provides the best performance for high-traffic scenarios. Radar charts require complex trigonometric calculations (sine/cosine) that can be computationally expensive when performed on-demand for thousands of users. Pre-calculating these values in the extract eliminates real-time computation overhead. View acceleration further improves response times by caching query results. Live connections would create performance bottlenecks, separate bar charts lose the comparative advantage of radar visualization, and third-party extensions introduce security and maintenance concerns.",
+      "difficulty": "Advanced",
+      "tags": ["radar-charts", "performance", "extracts", "view-acceleration", "enterprise"]
+    },
+    {
+      "id": "6",
+      "question": "A manufacturing company wants to use radar charts to compare supplier performance across quality, delivery time, cost, and compliance metrics in their executive dashboard. The dashboard will include filters for region, time period, and supplier category. What is the most critical design consideration?",
+      "options": [
+        "Use consistent color coding across all radar charts in the dashboard",
+        "Ensure trigonometric calculations account for filtered data and maintain proper axis positioning",
+        "Include data labels on each radar chart vertex",
+        "Create separate radar charts for each supplier category"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Ensuring that trigonometric calculations properly handle filtered data is critical because radar charts rely on precise coordinate positioning. When filters change the underlying dataset, the calculations for X and Y coordinates (using sine and cosine functions) must still maintain proper axis positioning and scaling. If not handled correctly, filtering could cause vertices to appear in wrong positions or the chart to become distorted. While consistent color coding and data labels improve usability, they don't affect chart functionality. Separate charts by category might reduce analytical value and complicate the executive view.",
+      "difficulty": "Advanced",
+      "tags": ["radar-charts", "filtering", "trigonometric-calculations", "executive-dashboard"]
+    },
+    {
+      "id": "7",
+      "question": "When implementing radar charts in a Tableau Server environment with Row-Level Security (RLS), which calculation approach ensures both security compliance and accurate visualization?",
+      "options": [
+        "Apply RLS filters after calculating radar chart coordinates",
+        "Incorporate security filters within the trigonometric calculations themselves",
+        "Use separate data sources for security and visualization calculations",
+        "Disable RLS for radar chart worksheets to avoid calculation conflicts"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Incorporating security filters within the trigonometric calculations ensures that coordinate positioning and scaling are based only on data the user is authorized to see. This maintains both security compliance and visualization accuracy. If RLS filters are applied after coordinate calculations, the positioning might be based on unauthorized data, creating misleading visualizations. Using separate data sources complicates architecture and may create synchronization issues. Disabling RLS violates security requirements and could expose sensitive data. The calculations must be designed to work with Tableau's order of operations, where security filters are applied early in the process.",
+      "difficulty": "Advanced",
+      "tags": ["radar-charts", "row-level-security", "calculations", "security-compliance"]
+    },
+    {
+      "id": "8",
+      "question": "A consulting team is building radar charts to compare software vendors across technical capability, support quality, cost effectiveness, and strategic fit for a client's ERP selection. The client wants to weight strategic fit as twice as important as other factors. How should this be implemented?",
+      "options": [
+        "Create two separate axes for strategic fit in the radar chart",
+        "Apply a 2x multiplier to strategic fit values in the normalization calculation",
+        "Use a larger polygon mark size for the strategic fit dimension",
+        "Display strategic fit with a different color in the radar chart"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Applying a 2x multiplier to strategic fit values in the normalization calculation is the correct approach because it mathematically weights this dimension's influence on the overall visualization while maintaining the radar chart's structural integrity. The multiplier should be applied during the normalization process to ensure the weighted values still fit within the chart's scale. Creating two separate axes would distort the radar chart structure, larger polygon marks don't affect weighting calculations, and different colors only provide visual distinction without changing the analytical weight. This approach maintains the radar chart's comparative function while reflecting the client's priorities.",
+      "difficulty": "Intermediate",
+      "tags": ["radar-charts", "weighting", "vendor-analysis", "normalization"]
+    },
+    {
+      "id": "9",
+      "question": "In a complex dashboard with multiple radar charts showing departmental KPIs, users report that the charts appear distorted when certain filters are applied. The issue occurs specifically when filtering reduces the dataset to fewer than 8 data points per chart. What is the most likely cause and solution?",
+      "options": [
+        "Tableau's automatic mark sizing is affecting polygon rendering; disable automatic sizing",
+        "The trigonometric calculations assume a minimum number of data points; add conditional logic to handle sparse data",
+        "Filter context is not properly set for the radar chart calculations; use FIXED LOD expressions",
+        "The polygon mark type is not suitable for small datasets; switch to line marks with filled areas"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Filter context issues with radar chart calculations are the most likely cause because trigonometric positioning depends on consistent data availability across all dimensions. When filters drastically reduce data points, the calculations may lose reference points needed for proper positioning. Using FIXED LOD expressions ensures that the coordinate calculations have access to the necessary data regardless of filter context, maintaining chart structure. Automatic mark sizing affects visual appearance but not distortion. Trigonometric calculations don't inherently require minimum data points if properly designed. Switching mark types would not solve the underlying calculation context issue.",
+      "difficulty": "Advanced",
+      "tags": ["radar-charts", "filter-context", "lod-expressions", "troubleshooting"]
+    },
+    {
+      "id": "10",
+      "question": "A global corporation needs radar charts comparing regional sales performance across 8 metrics in a dashboard that must load in under 3 seconds for 500+ concurrent users. Performance testing shows the trigonometric calculations are the primary bottleneck. Which optimization strategy provides the best performance improvement while maintaining functionality?",
+      "options": [
+        "Reduce the number of metrics from 8 to 4 to decrease calculation complexity",
+        "Pre-calculate trigonometric values in the data pipeline and store as dimensions in the extract",
+        "Use Tableau's built-in radar chart feature instead of custom calculations",
+        "Implement client-side caching using Tableau's JavaScript API"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Pre-calculating trigonometric values in the data pipeline and storing them as dimensions in the extract provides the best performance improvement because it eliminates the computational overhead of sine/cosine calculations during query execution. This approach moves the complex calculations to the data preparation phase, allowing Tableau to simply retrieve pre-calculated coordinate values. Reducing metrics decreases analytical value, Tableau doesn't have a built-in radar chart feature, and JavaScript API caching doesn't address the fundamental calculation bottleneck. This ETL-based optimization is a common enterprise strategy for complex visualizations requiring real-time performance.",
+      "difficulty": "Advanced",
+      "tags": ["radar-charts", "performance-optimization", "data-pipeline", "enterprise-scale"]
+    }
+  ]
+}

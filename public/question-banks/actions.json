@@ -1,0 +1,154 @@
+{
+  "title": "Actions - Practice Questions",
+  "description": "Practice questions for Actions covering dashboard interactivity, action types, configuration, and enterprise deployment considerations",
+  "metadata": {
+    "topic": "Actions",
+    "domain": "domain3",
+    "difficulty": "Mixed",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/actions.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the correct execution order of Actions in Tableau when multiple action types are triggered simultaneously?",
+      "options": [
+        "Filter, Parameter, Highlight, Go to URL, Go to Sheet, Change Set Values",
+        "Parameter, Change Set Values, Filter, Go to Sheet, Highlight, Go to URL",
+        "Highlight, Filter, Parameter, Go to Sheet, Go to URL, Change Set Values",
+        "Go to URL, Go to Sheet, Filter, Highlight, Parameter, Change Set Values"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau executes actions in a specific order: 1) Parameter, 2) Change Set Values, 3) Filter, 4) Go to Sheet, 5) Highlight, 6) Go to URL. This order ensures that data modifications occur before navigation and visual changes. Within each action type, individual actions are executed alphabetically.",
+      "difficulty": "BEGINNER",
+      "tags": ["action-types", "execution-order", "fundamentals"]
+    },
+    {
+      "id": "2",
+      "question": "Which trigger option for Actions provides the most responsive user experience but may impact dashboard performance with large datasets?",
+      "options": [
+        "Select trigger with single-mark selection",
+        "Hover trigger with immediate response",
+        "Menu trigger with tooltip activation",
+        "Select trigger with multi-mark selection"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Hover triggers provide the most responsive user experience as they activate immediately when users move their cursor over marks. However, they can impact performance with large datasets because they fire frequently and may trigger complex filter or parameter actions repeatedly. Select triggers are more performance-friendly as they only fire on explicit user clicks.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["triggers", "performance", "user-experience"]
+    },
+    {
+      "id": "3",
+      "question": "What is the primary difference between Filter Actions and Highlight Actions in terms of data processing?",
+      "options": [
+        "Filter Actions modify the underlying query while Highlight Actions only change visual appearance",
+        "Filter Actions are faster than Highlight Actions for large datasets",
+        "Filter Actions work with dimensions while Highlight Actions work with measures",
+        "Filter Actions require published data sources while Highlight Actions work with any data source"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Filter Actions modify the underlying query sent to the data source, actually changing what data is retrieved and displayed. Highlight Actions only change the visual appearance by dimming non-selected marks while keeping all data loaded. This makes Filter Actions more performance-efficient for large datasets but Highlight Actions better for maintaining context.",
+      "difficulty": "BEGINNER",
+      "tags": ["filter-actions", "highlight-actions", "data-processing"]
+    },
+    {
+      "id": "4",
+      "question": "A financial services company needs to create a dashboard where selecting a business unit filters multiple charts and opens a regulatory report URL specific to that unit. The solution must work for 50+ business units and maintain audit trails. What is the most efficient approach?",
+      "options": [
+        "Create separate Filter Actions for each chart and individual URL Actions for each business unit",
+        "Use a single Filter Action targeting multiple sheets and a parameterized URL Action with field substitution",
+        "Implement separate dashboards for each business unit with embedded URL links",
+        "Use Highlight Actions with tooltip-based navigation to external reports"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A single Filter Action can target multiple sheets simultaneously, reducing configuration overhead. A parameterized URL Action with field substitution (e.g., https://reports.company.com/unit=[Business Unit]) scales automatically to all business units without individual configuration. This approach is maintainable, scales well, and provides consistent behavior across the dashboard.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["enterprise-deployment", "scalability", "url-actions", "filter-actions"]
+    },
+    {
+      "id": "5",
+      "question": "Your organization has deployed a customer analytics dashboard where sales managers need to drill down from regional summaries to individual customer details, then navigate to customer profiles in the CRM system. The dashboard experiences slow performance when managers select large regions. What combination of Actions and techniques would best address this scenario?",
+      "options": [
+        "Use Highlight Actions only to avoid query performance issues, with tooltip-based navigation",
+        "Implement Go to Sheet Actions for drill-down with context filters, and parameterized URL Actions for CRM integration",
+        "Create separate dashboards for each region with embedded customer lists and direct CRM links",
+        "Use Filter Actions with extract-only data sources and static URL links in tooltips"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Go to Sheet Actions with context filters provide efficient drill-down capability without requiring full data reloading. Context filters are processed at the database level, improving performance for large datasets. Parameterized URL Actions enable seamless CRM integration with customer-specific links. This combination provides the required functionality while maintaining good performance.",
+      "difficulty": "ADVANCED",
+      "tags": ["performance-optimization", "drill-down", "context-filters", "crm-integration"]
+    },
+    {
+      "id": "6",
+      "question": "A retail company wants to implement a dashboard where hovering over a store location highlights all stores in the same district and displays a parameter control to filter by store performance metrics. However, they're experiencing issues with actions interfering with each other. What is the most likely cause and solution?",
+      "options": [
+        "Highlight and Parameter Actions have conflicting source sheets; use different trigger types",
+        "Multiple Highlight Actions are configured alphabetically; rename actions to control execution order",
+        "Parameter Actions are executing before Highlight Actions; this is expected behavior per Tableau's execution order",
+        "The parameter control is interfering with hover triggers; use Select triggers instead"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau executes Parameter Actions before Highlight Actions in its predefined execution order. If the Parameter Action changes data that affects what should be highlighted, this can cause conflicts. The solution is to use different trigger types (e.g., Select for Parameter, Hover for Highlight) or restructure the workflow to avoid dependencies between these action types.",
+      "difficulty": "ADVANCED",
+      "tags": ["action-conflicts", "execution-order", "parameter-actions", "troubleshooting"]
+    },
+    {
+      "id": "7",
+      "question": "An e-commerce company needs to create a product analytics dashboard where users can select product categories to filter detailed views and automatically update a 'Compare Products' parameter set. The dashboard must support both single and multiple category selections. What configuration approach is required?",
+      "options": [
+        "Use Filter Actions with 'All Corresponding Values' and Change Set Actions with 'Add Values to Set'",
+        "Configure separate Filter Actions for single and multiple selections with different triggers",
+        "Implement Parameter Actions with comma-separated value concatenation",
+        "Use Highlight Actions combined with calculated fields to simulate filtering"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Filter Actions with 'All Corresponding Values' properly handle both single and multiple selections by filtering on all values when multiple marks are selected. Change Set Actions with 'Add Values to Set' allow building up a comparison set incrementally. This combination provides the flexibility needed for both filtering and parameter set management while maintaining intuitive user interaction.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["multiple-selections", "set-actions", "filter-configuration", "product-analytics"]
+    },
+    {
+      "id": "8",
+      "question": "A healthcare organization is implementing a patient outcomes dashboard with strict data governance requirements. Actions must be auditable, and users should only access data for patients in their assigned regions. The dashboard will integrate with external patient records systems. What security and governance considerations are most critical for Actions implementation?",
+      "options": [
+        "Disable URL Actions entirely and use only internal navigation Actions",
+        "Implement row-level security on data sources and validate URL Action targets against approved domains",
+        "Use only Highlight Actions to prevent data exposure through filtering",
+        "Create separate dashboards for each region without cross-regional Actions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Row-level security ensures users only see appropriate patient data regardless of Action triggers. URL Action validation against approved domains prevents security risks from malicious external links. This approach maintains functionality while meeting healthcare data governance requirements. Actions themselves should be logged for audit purposes, and URL patterns should be validated to prevent data leakage through query parameters.",
+      "difficulty": "ADVANCED",
+      "tags": ["data-governance", "security", "row-level-security", "healthcare", "url-validation"]
+    },
+    {
+      "id": "9",
+      "question": "A manufacturing company has a production monitoring dashboard where operators need to quickly switch between different production lines and drill down to specific equipment issues. The current implementation uses multiple Filter Actions, but performance is degrading as more production lines are added. What optimization strategy would be most effective?",
+      "options": [
+        "Replace Filter Actions with Highlight Actions to avoid query processing overhead",
+        "Implement Go to Sheet Actions with pre-filtered worksheets instead of dynamic filtering",
+        "Use Change Parameter Actions to control visibility of production line data with calculated fields",
+        "Combine data source extracts with context filters and optimize Action target specifications"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Data source extracts improve overall query performance, while context filters are processed efficiently at the database level before other filters. Optimizing Action target specifications to include only necessary sheets reduces processing overhead. This combination maintains the dynamic filtering capability needed for operations while significantly improving performance as the system scales.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["performance-optimization", "manufacturing", "context-filters", "extracts", "scaling"]
+    },
+    {
+      "id": "10",
+      "question": "Your organization has deployed a complex executive dashboard with multiple Action types that occasionally exhibit inconsistent behavior across different user sessions and devices. Users report that sometimes Actions don't trigger as expected, particularly on mobile devices. The dashboard includes Filter Actions, URL Actions, and Parameter Actions with various trigger types. What systematic approach would best diagnose and resolve these issues?",
+      "options": [
+        "Standardize all Actions to use Select triggers and disable mobile access until issues are resolved",
+        "Document Action execution order, test trigger behavior across devices, validate target sheet specifications, and implement Action clearing strategies",
+        "Rebuild the dashboard with simpler Action configurations and fewer action types",
+        "Implement JavaScript-based custom Actions using the Extensions API for consistent behavior"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A systematic troubleshooting approach addresses the most common Action issues: understanding execution order prevents conflicts, testing across devices identifies platform-specific issues, validating target specifications ensures Actions fire correctly, and proper clearing strategies prevent stale state issues. This comprehensive approach maintains the dashboard's functionality while ensuring reliable behavior across all user scenarios.",
+      "difficulty": "ADVANCED",
+      "tags": ["troubleshooting", "cross-platform", "action-clearing", "enterprise-deployment", "mobile-compatibility"]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "title": "Filter Data from Your Views - Practice Questions",
+  "description": "Practice questions for Filter Data from Your Views covering different filter types, order of operations, performance implications, and enterprise filtering strategies",
+  "metadata": {
+    "topic": "Filter Data from Your Views",
+    "domain": "domain3",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/filtering.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 12
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the correct order of operations for filter execution in Tableau?",
+      "options": [
+        "Data source filters → Context filters → Dimension filters → Measure filters → Extract filters",
+        "Extract filters → Data source filters → Context filters → Dimension filters → Measure filters",
+        "Context filters → Extract filters → Data source filters → Dimension filters → Measure filters",
+        "Dimension filters → Measure filters → Context filters → Data source filters → Extract filters"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The correct order is Extract filters → Data source filters → Context filters → Dimension filters → Measure filters. This order ensures that data is progressively filtered from the broadest level (extract) to the most specific (measures). Understanding this order is crucial for consultants designing complex filtering strategies that behave predictably in enterprise environments.",
+      "difficulty": "BEGINNER",
+      "tags": ["order-of-operations", "filter-types", "fundamentals"]
+    },
+    {
+      "id": "2",
+      "question": "Which filter type should be used when you need to establish a filtering hierarchy where one filter affects the available values for subsequent filters?",
+      "options": [
+        "Dimension filter",
+        "Measure filter",
+        "Context filter",
+        "Extract filter"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Context filters should be used to establish filtering hierarchies. Context filters execute before dimension and measure filters, ensuring that subsequent filters operate on the already-filtered data. This is essential for scenarios like 'top 10 customers in New York City' where you need the geographic filter to apply first, then the top 10 selection.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["context-filters", "filter-hierarchy", "order-of-operations"]
+    },
+    {
+      "id": "3",
+      "question": "When filtering large datasets, what is the recommended approach to optimize performance when working with measures?",
+      "options": [
+        "Use measure filters directly on the original field",
+        "Create calculated fields and filter on those",
+        "Create sets based on the measures and filter on the sets",
+        "Use table calculations instead of filters"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Creating sets based on measures and filtering on the sets is recommended for large datasets. This approach pre-calculates the filtered values and can significantly improve performance compared to direct measure filtering, which requires real-time calculations. This is particularly important in enterprise environments with large data volumes.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["performance", "sets", "measure-filters", "optimization"]
+    },
+    {
+      "id": "4",
+      "question": "What is the primary difference between a data source filter and a context filter in terms of when they are applied?",
+      "options": [
+        "Data source filters apply to all worksheets, context filters apply to single worksheets",
+        "Data source filters apply before context filters in the order of operations",
+        "Context filters apply before data source filters in the order of operations",
+        "There is no difference in when they are applied"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data source filters apply before context filters in the order of operations, and they affect all worksheets using that data source, while context filters are worksheet-specific and apply after data source filters but before dimension/measure filters. This distinction is crucial for enterprise deployments where consistent filtering across multiple worksheets is required.",
+      "difficulty": "BEGINNER",
+      "tags": ["data-source-filters", "context-filters", "scope", "order-of-operations"]
+    },
+    {
+      "id": "5",
+      "question": "Your organization needs to implement row-level security where users can only see data for their specific region, and within that region, they need interactive filters for product categories. You also need a 'Top 10 Products by Sales' filter that operates within their allowed region. What combination of filter types would you implement?",
+      "options": [
+        "Data source filter for security, dimension filters for categories and top products",
+        "Data source filter for security, context filter for region, dimension filters for categories and top products",
+        "Extract filter for security, context filter for categories, dimension filter for top products",
+        "Data source filter for security, context filter for categories, measure filter for top products"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For this scenario, you need a data source filter for row-level security (applied across all worksheets), and dimension filters for interactive category selection and top products. The security filter ensures users only see their regional data, while dimension filters provide the required interactivity. Context filters aren't necessary here since the top products calculation will automatically operate within the security-filtered data.",
+      "difficulty": "ADVANCED",
+      "tags": ["row-level-security", "enterprise-filtering", "data-source-filters", "dimension-filters"]
+    },
+    {
+      "id": "6",
+      "question": "A consultant is building a dashboard with multiple worksheets showing different views of sales data. Users need to filter by date range across all worksheets, but also need worksheet-specific filters for different dimensions. What is the most efficient filtering strategy?",
+      "options": [
+        "Use dashboard actions to synchronize filters across worksheets",
+        "Apply date filters at the data source level and dimension filters at the worksheet level",
+        "Use context filters for dates and dimension filters for other attributes",
+        "Create parameters for dates and use calculated fields for filtering"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Applying date filters at the data source level ensures consistent date filtering across all worksheets while allowing worksheet-specific dimension filters. This approach is most efficient because the date filtering happens once at the data source level, reducing query complexity, while maintaining flexibility for worksheet-specific filtering needs.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["dashboard-design", "data-source-filters", "multi-worksheet", "efficiency"]
+    },
+    {
+      "id": "7",
+      "question": "When should you use the 'Only Relevant Values' option in dimension filters?",
+      "options": [
+        "Always, to improve performance",
+        "When you want to show all possible values regardless of other filters",
+        "When you want the filter to dynamically update based on other applied filters",
+        "Only when working with date dimensions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "'Only Relevant Values' should be used when you want the filter options to dynamically update based on other applied filters. This creates a cascading filter effect where subsequent filters only show values that exist in the already-filtered data. This is particularly useful in enterprise dashboards where users expect intuitive, contextual filtering behavior.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["dimension-filters", "relevant-values", "cascading-filters", "user-experience"]
+    },
+    {
+      "id": "8",
+      "question": "In a complex enterprise dashboard, you notice that applying multiple dimension filters is causing unexpected results where some expected data points are missing. What is the most likely cause and solution?",
+      "options": [
+        "Filters are applied in the wrong order; reorder them manually",
+        "Multiple dimension filters are intersecting rather than creating unions; use sets instead",
+        "The data source connection is corrupted; refresh the connection",
+        "Table calculations are interfering; move filters to context"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When multiple dimension filters cause unexpected missing data, they're likely intersecting (AND logic) rather than creating unions (OR logic). This is common when users expect to see data that meets any of the filter criteria rather than all criteria. Using sets allows for more complex logic including unions, intersections, and exclusions, providing the flexibility needed for enterprise filtering requirements.",
+      "difficulty": "ADVANCED",
+      "tags": ["troubleshooting", "dimension-filters", "sets", "filter-logic"]
+    },
+    {
+      "id": "9",
+      "question": "What type of filter would you recommend for controlling which data is included in an extract to minimize extract size while maintaining analytical flexibility?",
+      "options": [
+        "Context filters",
+        "Dimension filters",
+        "Extract filters",
+        "Data source filters"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Extract filters are specifically designed to control which data is included in an extract during the extraction process. They permanently reduce the extract size by excluding unwanted data before the extract is created, which is ideal for minimizing storage and improving performance while maintaining analytical flexibility on the included data.",
+      "difficulty": "BEGINNER",
+      "tags": ["extract-filters", "performance", "data-management"]
+    },
+    {
+      "id": "10",
+      "question": "A client reports that their dashboard performance is degrading as their dataset grows, particularly when users apply measure filters. As a consultant, what would be your primary recommendation to address this performance issue?",
+      "options": [
+        "Move all filters to the context level",
+        "Replace measure filters with dimension filters where possible",
+        "Create sets based on the measure criteria and filter on sets instead",
+        "Implement extract filters to reduce data volume"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Creating sets based on measure criteria and filtering on sets is the best approach for performance optimization with large datasets. Sets pre-calculate the filtering criteria and become dimension-like objects that filter more efficiently than dynamic measure calculations. This is especially important in enterprise environments where query performance directly impacts user adoption.",
+      "difficulty": "ADVANCED",
+      "tags": ["performance-optimization", "measure-filters", "sets", "scalability"]
+    },
+    {
+      "id": "11",
+      "question": "When implementing a global filter that should affect multiple worksheets in a dashboard but not apply to a specific summary worksheet, what approach should you use?",
+      "options": [
+        "Use dashboard actions to selectively apply filters",
+        "Apply data source filters and exclude the summary worksheet from the data source",
+        "Use context filters on individual worksheets except the summary",
+        "Create separate data sources for different worksheet types"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Dashboard actions provide the flexibility to selectively apply filters across worksheets. You can configure filter actions to affect specific worksheets while excluding others, such as a summary worksheet that should show unfiltered totals. This approach maintains data source consistency while providing the required filtering behavior.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["dashboard-actions", "selective-filtering", "dashboard-design"]
+    },
+    {
+      "id": "12",
+      "question": "An enterprise client needs to implement a complex filtering scenario where Region filters should create context for Country filters, which should then create context for City filters, and finally a Top N filter should show the top cities within the selected hierarchy. The performance must be optimized for a dataset with millions of rows. What filtering strategy would you recommend?",
+      "options": [
+        "Use cascading dimension filters with 'Only Relevant Values' enabled",
+        "Implement Region and Country as context filters, City as dimension filter, and Top N as a set",
+        "Use parameters for all geographic levels and calculated fields for filtering",
+        "Create a single calculated field combining all geographic levels and filter on that"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Using Region and Country as context filters establishes the proper filtering hierarchy and ensures subsequent filters operate on the already-filtered data. The City dimension filter with 'Only Relevant Values' will show only cities within the selected region/country. The Top N implementation as a set will perform better than a measure filter on large datasets. This approach optimizes both performance and user experience in enterprise environments.",
+      "difficulty": "ADVANCED",
+      "tags": ["complex-filtering", "context-filters", "hierarchical-filtering", "performance", "enterprise-design"]
+    }
+  ]
+}

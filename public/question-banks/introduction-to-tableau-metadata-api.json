@@ -1,0 +1,127 @@
+{
+  "title": "Introduction to Tableau Metadata API - Practice Questions",
+  "description": "Comprehensive practice questions covering Tableau Metadata API fundamentals including GraphQL queries, authentication, metadata discovery, lineage tracking, impact analysis, and integration with REST API for consultant-level certification",
+  "metadata": {
+    "topic": "Introduction to Tableau Metadata API",
+    "domain": "domain4",
+    "difficulty": "Mixed (Intermediate to Advanced)",
+    "sourceUrl": "https://help.tableau.com/current/api/metadata_api/en-us/index.html",
+    "relatedTopics": "About Tableau Catalog; Governance in Tableau; Manage Data",
+    "generatedDate": "2025-10-05",
+    "questionCount": 8
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary difference between the Tableau Metadata API and the Tableau REST API when querying metadata?",
+      "options": [
+        "The Metadata API is only available on Tableau Cloud, while REST API works on both Cloud and Server",
+        "The Metadata API uses GraphQL with a single endpoint allowing filtered queries for specific data, while REST API requires multiple requests to different endpoints",
+        "The REST API can only write metadata, while the Metadata API can only read metadata",
+        "The Metadata API requires Data Management license, while REST API does not"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Unlike REST APIs that require multiple requests to different endpoints to gather related data, the Metadata API uses GraphQL with a single endpoint where you can make one query and have it filtered to return only what you ask for. GraphQL returns data in the same shape as your query. Both APIs work on Cloud and Server, both support read/write operations (with Data Management for write operations), and both use the same authentication. The key architectural difference is the GraphQL query model vs. multiple REST endpoints.",
+      "difficulty": "intermediate",
+      "tags": ["graphql", "rest-api", "api-architecture", "metadata-api"]
+    },
+    {
+      "id": "2",
+      "question": "A consultant needs to enable the Metadata API on a Tableau Server deployment. What command must be run, and what should they be aware of?",
+      "options": [
+        "Run 'tsm maintenance metadata-services enable' via TSM CLI; this stops and starts some services and creates a new metadata index",
+        "The Metadata API is enabled by default on all Tableau Server versions; no configuration needed",
+        "Configure it through the Tableau Server web interface under Settings > Metadata",
+        "Install it as a separate package using 'tableau-metadata-api-installer.exe'"
+      ],
+      "correctAnswer": 0,
+      "explanation": "On Tableau Server, a server admin must enable the Metadata API using the 'tsm maintenance metadata-services enable' command through TSM CLI. This command stops and starts some services (making certain functionality temporarily unavailable), and creates a new index of metadata. Running it subsequently replaces the previous index. The Metadata API is installed with Tableau Server but disabled by default. On Tableau Cloud, it's always enabled.",
+      "difficulty": "intermediate",
+      "tags": ["tableau-server", "tsm", "metadata-api", "configuration", "administration"]
+    },
+    {
+      "id": "3",
+      "question": "What is the purpose of lineage in the Tableau Metadata API, and how does it enable impact analysis?",
+      "options": [
+        "Lineage tracks user login history; impact analysis shows how often dashboards are accessed",
+        "Lineage reveals the origin of objects and relationships between content/assets; impact analysis uses upstream/downstream relationships to evaluate impacts of changes",
+        "Lineage only tracks data source connections; impact analysis only works with extracts",
+        "Lineage is a Data Management-only feature that cannot be used without a license"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Lineage reveals the origin of an object and its relationships to other content and assets in Tableau. Using lineage, you can perform impact analysis by understanding upstream and downstream relationships. For example, you can find all worksheets that depend on a database table column or identify authors to notify when a data source changes. This enables proactive change management and helps prevent breaking changes. Both lineage and impact analysis are core Metadata API capabilities.",
+      "difficulty": "intermediate",
+      "tags": ["lineage", "impact-analysis", "metadata-api", "relationships", "change-management"]
+    },
+    {
+      "id": "4",
+      "question": "A consultant wants to query all databases named 'adventureworks' and their tables using the Metadata API. Which GraphQL query structure is correct?",
+      "options": [
+        "GET /api/databases?name=adventureworks&include=tables",
+        "query { databases (filter: {name: \"adventureworks\"}) { name tables { name } } }",
+        "SELECT name, tables FROM databases WHERE name = 'adventureworks'",
+        "POST /api/metadata/databases with body {\"filter\": \"adventureworks\"}"
+      ],
+      "correctAnswer": 1,
+      "explanation": "GraphQL queries specify objects and their attributes in a nested structure. The correct format is: 'query { databases (filter: {name: \"adventureworks\"}) { name tables { name } } }'. This queries the databases object with a filter argument, and specifies which attributes to return (name and nested tables with their names). Option A is REST API style, option C is SQL style, and option D doesn't follow GraphQL query structure. The query returns data in the same shape as specified.",
+      "difficulty": "intermediate",
+      "tags": ["graphql-queries", "query-syntax", "metadata-api", "filtering"]
+    },
+    {
+      "id": "5",
+      "question": "What is the GraphQL endpoint URI for the Tableau Metadata API, and what authentication is required?",
+      "options": [
+        "https://<server>/graphql; requires separate GraphQL authentication token",
+        "https://<server>/api/metadata/graphql; uses the same authentication token as Tableau REST API",
+        "https://<server>/api/v3/metadata; requires OAuth 2.0 authentication",
+        "https://<server>/metadata; uses SAML authentication only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Metadata API GraphQL endpoint is 'https://<server>/api/metadata/graphql'. It uses the same authentication process and token as the Tableau REST API, simplifying integration for applications that already use REST API. You must first authenticate via REST API and then use that token for Metadata API queries. This unified authentication approach makes it easier to build applications that leverage both APIs.",
+      "difficulty": "beginner",
+      "tags": ["endpoint", "authentication", "rest-api", "metadata-api", "integration"]
+    },
+    {
+      "id": "6",
+      "question": "What are the differences in capabilities when querying the Metadata API WITH versus WITHOUT a Data Management license?",
+      "options": [
+        "Without Data Management, you cannot use the Metadata API at all",
+        "With Data Management, you can see all content and external assets with explicit permissions, and edit metadata; without it, you can only see Tableau content (and external assets with derived permissions if enabled)",
+        "Data Management only affects write operations via REST API, not Metadata API queries",
+        "Without Data Management, queries are limited to 100 results; with it, unlimited results"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With Data Management: you can see Tableau content, related external assets, and external assets you've been granted explicit permissions to see; you can also edit metadata and manage permissions for external assets. Without Data Management: you can see Tableau content, and if derived permissions is enabled, related external assets; editing metadata for external assets is not supported. Both scenarios allow querying the Metadata API, but the scope of visible data and write capabilities differ based on licensing.",
+      "difficulty": "advanced",
+      "tags": ["data-management", "licensing", "permissions", "external-assets", "capabilities"]
+    },
+    {
+      "id": "7",
+      "question": "A consultant needs to explore the Metadata API schema interactively in a browser. What tool should they use and how do they access it?",
+      "options": [
+        "Use Postman with the REST API endpoint; no native browser tool exists",
+        "Use GraphiQL by navigating to https://<server>/metadata/graphiql/ after signing in to Tableau",
+        "Use the Tableau Desktop metadata viewer under Help > Metadata",
+        "Install the Tableau Metadata Explorer desktop application"
+      ],
+      "correctAnswer": 1,
+      "explanation": "GraphiQL is an interactive in-browser tool for exploring the Metadata API schema and testing queries. Access it by signing in to Tableau Cloud or Server, then navigating to 'https://<server>/metadata/graphiql/'. You can also access it from Tableau Catalog by clicking 'Query metadata (GraphiQL)' in the upper-right corner of the External Assets page. GraphiQL provides query building, validation, results viewing, history, and schema documentation exploration, making it ideal for learning and testing.",
+      "difficulty": "beginner",
+      "tags": ["graphiql", "schema-exploration", "testing", "interactive-tools", "metadata-api"]
+    },
+    {
+      "id": "8",
+      "question": "In the Metadata API, what are 'upstream' and 'downstream' objects in the context of lineage traversal, and why are they important for impact analysis?",
+      "options": [
+        "Upstream objects are newer versions; downstream objects are older versions; important for version control",
+        "Upstream objects are above the evaluated object in lineage (data sources feeding into it); downstream objects are below it (dependent content); important for understanding change impacts",
+        "Upstream objects are in higher environments (production); downstream objects are in lower environments (dev); important for deployment",
+        "Upstream and downstream only refer to data flow direction, not object relationships"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When traversing lineage, 'upstream' refers to objects above the one you're evaluating (e.g., database tables feeding a data source), while 'downstream' refers to objects below it (e.g., workbooks depending on that data source). This is crucial for impact analysis: understanding upstream dependencies helps identify data origins and quality issues, while understanding downstream dependencies shows what will be affected by changes. For example, finding all worksheets downstream of a table column helps assess the impact of changing that column.",
+      "difficulty": "advanced",
+      "tags": ["lineage", "upstream-downstream", "impact-analysis", "dependencies", "metadata-model"]
+    }
+  ]
+}

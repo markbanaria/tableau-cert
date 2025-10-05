@@ -1,0 +1,153 @@
+{
+  "title": "Tableau Prep: Save and Share Your Work",
+  "description": "Publishing flows, output options (files, published data sources, databases), flow sharing and permissions, scheduling with Tableau Prep Conductor, incremental refresh, credentials management, running flows from web, monitoring flow runs, versioning and revision history.",
+  "metadata": {
+    "domain": "Domain 2: Plan and Prepare Data Connections",
+    "certification": "Tableau Consultant Certification",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "You want to publish a Tableau Prep flow from Tableau Prep Builder to Tableau Server to share with your team. What are the key requirements before publishing? (Choose three)",
+      "options": [
+        "The flow must have no errors (identified by red exclamation marks)",
+        "All output steps must be configured to save to local files only",
+        "Input connectors and features must be compatible with the Tableau Server version",
+        "Flow output steps set to 'Publish as data source' must point to the same server/site where the flow is published"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Before publishing a flow: (1) Verify there are no errors in the flow - flows with errors will fail when run on the server, (2) Verify input connectors/features are compatible with your Tableau Server version (you can publish incompatible flows but can't schedule them), (3) If output steps are set to 'Publish as data source', all must point to the same server or site (they can point to different projects, but only one server/site). Local file outputs are one option but not required. The correct answers are A, C, and D.",
+      "difficulty": "intermediate",
+      "tags": ["publish", "requirements", "compatibility"]
+    },
+    {
+      "id": 2,
+      "question": "When authoring flows in Tableau Prep on the web (Tableau Server or Tableau Cloud), how does autosave work?",
+      "options": [
+        "Manual saves are required every few minutes or changes are lost",
+        "Changes are automatically saved every few seconds as a draft, tagged with 'Draft' and 'Never Published' badges until first publication",
+        "Autosave is not available in web authoring, only in Tableau Prep Builder",
+        "Changes are immediately published to the server and visible to all users with permissions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In web authoring, Tableau Prep automatically saves your work every few seconds as a draft when you make changes (connect to data source, add step, etc.). Draft flows can only be seen by you until published, and are tagged with a 'Draft' badge. If never published, a 'Never Published' badge also appears. After first publication, editing and republishing creates new versions tracked in Revision History. Autosave is enabled by default but can be disabled via REST API (not recommended).",
+      "difficulty": "intermediate",
+      "tags": ["web authoring", "autosave", "draft"]
+    },
+    {
+      "id": 3,
+      "question": "What are the available output format options when creating an extract file in Tableau Prep Builder? (Choose all that apply)",
+      "options": [
+        "Hyper Extract (.hyper) - latest Tableau extract file type",
+        "Comma Separated Value (.csv) with UTF-8 BOM encoding",
+        "Microsoft Excel (.xlsx) spreadsheet with support for worksheets",
+        "Tableau Packaged Workbook (.twbx)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Prep Builder supports three extract file output formats: (1) Hyper Extract (.hyper) - the latest Tableau extract file type, (2) Comma Separated Value (.csv) - exported with UTF-8 with BOM encoding, and (3) Microsoft Excel (.xlsx) - added in version 2021.1.2, allows creating new worksheets or appending/replacing data in existing worksheets. .twbx packaged workbooks are not an output option (you can preview data samples in Desktop but not save as .twbx). The correct answers are A, B, and C.",
+      "difficulty": "intermediate",
+      "tags": ["output", "file formats", "extracts"]
+    },
+    {
+      "id": 4,
+      "question": "When outputting Tableau Prep flow data to Microsoft Excel (.xlsx) files (version 2021.1.2+), what limitations apply?",
+      "options": [
+        "Only .xls format is supported, not .xlsx",
+        "Incremental refresh is fully supported for Excel outputs",
+        "Header names are added when creating new worksheets but not when appending to existing worksheets; formatting and formulas in existing worksheets are not preserved",
+        "Excel output is only available in web authoring, not Tableau Prep Builder"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Excel output limitations include: Only .xlsx format is supported (not .xls), worksheet rows begin at cell A1, first row assumed to be headers when appending/replacing, header names added when creating new worksheets but NOT when adding to existing, existing formatting/formulas are not applied to flow output, writing to named tables/ranges not supported, and incremental refresh NOT supported. Three write options available: Create table, Append to table, Replace data. Excel output is available in Tableau Prep Builder only, not web authoring.",
+      "difficulty": "intermediate",
+      "tags": ["output", "Excel", "limitations"]
+    },
+    {
+      "id": 5,
+      "question": "Your organization wants to output Tableau Prep flow data to an external database. What are the three write options available and their behaviors?",
+      "options": [
+        "Append to table: adds data to existing table (creates if doesn't exist); Create table: creates new table or replaces existing with new structure; Replace data: deletes data but preserves table structure and properties",
+        "Insert: adds new rows only; Update: modifies existing rows only; Upsert: inserts or updates based on primary key",
+        "Overwrite: replaces entire table; Merge: combines with existing data; Archive: creates backup before writing",
+        "Full refresh: replaces all data; Incremental refresh: adds only changed data; Delta refresh: syncs differences only"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The three write options for database output are: (1) Append to table - adds data to existing table (creates table on first run if doesn't exist, subsequent runs add new rows), (2) Create table - creates new table with flow data (if table exists, deletes and replaces entire table including structure/properties, all flow fields added), (3) Replace data - deletes data in existing table and replaces with flow data but preserves structure and properties (creates table on first run if doesn't exist). You can also use Custom SQL scripts to run before/after data writes (e.g., create table backup, add indexes, add properties).",
+      "difficulty": "intermediate",
+      "tags": ["output", "database", "write options"]
+    },
+    {
+      "id": 6,
+      "question": "Which databases are supported for outputting Tableau Prep flow data? (Choose three)",
+      "options": [
+        "Amazon Redshift (field names converted to lowercase, up to 8192 characters for text)",
+        "Snowflake (up to 8192 characters for text, warehouse auto-resume required)",
+        "MongoDB (NoSQL database support)",
+        "PostgreSQL (up to 8192 characters for text values)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Supported databases for Tableau Prep output include: Amazon Redshift (collation sequences not supported, field names converted to lowercase, up to 8192 chars for text), Amazon S3 (output only), Databricks (ODBC 2.8.2+, Create write option only, Full refresh only), Google BigQuery (up to 2GB output), Microsoft SQL Server (up to 3072 chars for text), MySQL (up to 8192 chars), Oracle (field/table names max 30 chars, up to 1000 chars for text), PostgreSQL (up to 8192 chars), SAP HANA (up to 8192 chars), Snowflake (up to 8192 chars, warehouse auto-resume must be enabled), Teradata (up to 1000 chars), and Vertica (up to 8192 chars). MongoDB is not supported. The correct answers are A, B, and D.",
+      "difficulty": "intermediate",
+      "tags": ["output", "databases", "supported"]
+    },
+    {
+      "id": 7,
+      "question": "When publishing a flow with file input connections to Tableau Server from Tableau Prep Builder, what are the two connection options and when should each be used?",
+      "options": [
+        "Package files with flow (default, files not refreshed on server runs) or Direct Connection (retrieves current data, requires server access and safe listed location)",
+        "Embedded credentials (stores file passwords in flow) or Prompt User (requires authentication each run)",
+        "Local storage (files copied to server) or Cloud storage (files accessed from S3/Azure)",
+        "Static connection (file path never changes) or Dynamic connection (file path can include parameters)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For file input connections: (1) Package files with flow (default) - files are uploaded with the flow but NOT refreshed when flow runs on server, useful for static reference data, (2) Direct Connection - retrieves most current data when refreshing outputs, but requires Tableau Server can connect to file location AND location is included in organization's safe list. All files must have same setting. For network shares (UNC paths), use safe list or package with flow. Starting in version 2022.1.1, parameters in file paths can be scheduled/run on web with direct connections; packaged flows convert parameters to static current values.",
+      "difficulty": "intermediate",
+      "tags": ["publish", "file connections", "safe list"]
+    },
+    {
+      "id": 8,
+      "question": "You're publishing a Tableau Prep flow that connects to multiple databases. What authentication types are available and their use cases?",
+      "options": [
+        "Server Run As Account (server's Run As User authenticates all users), Prompt User (credentials entered in server before running), Embedded Password (saved credentials from connection, re-enter when editing)",
+        "Windows Authentication (Active Directory credentials), OAuth (third-party authentication), Kerberos (enterprise single sign-on)",
+        "Anonymous access (no credentials required), Public access (read-only permissions), Admin access (full permissions)",
+        "Basic Authentication (username/password only), Certificate-based (SSL certificates), Token-based (API tokens)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Three authentication types for database connections: (1) Server Run As Account - the server's Run As User account authenticates all users, (2) Prompt User - you must edit connection in Tableau Server and enter database credentials before running flow, (3) Embedded Password - credentials used to connect are saved with connection and used when flow runs on schedule (must re-enter when editing flow). For cloud connectors (version 2020.1.1+), you can add credentials directly from Publish Flow dialog via Account Settings page. Note: Windows Authentication is NOT supported for database output - must use username/password.",
+      "difficulty": "intermediate",
+      "tags": ["publish", "authentication", "credentials"]
+    },
+    {
+      "id": 9,
+      "question": "What is Tableau Prep Conductor and when is Data Management license required vs optional?",
+      "options": [
+        "Conductor is the scheduler; Data Management required only for scheduled runs (version 2020.4.1+), NOT required for publishing or manual runs",
+        "Conductor is a separate application; Data Management always required for any flow publishing or running",
+        "Conductor is a web browser tool; Data Management required for publishing but optional for running",
+        "Conductor is a command line utility; Data Management required for web authoring but optional for desktop"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Tableau Prep Conductor is the scheduling component for running flows automatically on Tableau Server or Tableau Cloud. Starting in version 2020.4.1, Data Management is NO LONGER required to publish flows to Server/Cloud or run flows manually on the web. Data Management (with Tableau Prep Conductor enabled) is ONLY required if you plan to run flows on a schedule. Flows created/edited on web (version 2020.4+) must be published before they can be run. This change makes flow publishing and manual execution available to more users without Data Management add-on.",
+      "difficulty": "intermediate",
+      "tags": ["Conductor", "Data Management", "licensing"]
+    },
+    {
+      "id": 10,
+      "question": "A Tableau Prep flow includes input steps pointing to files in a network share (UNC path). What happens during publishing and how can you resolve safe list warnings?",
+      "options": [
+        "Flow publishes successfully but will error when running unless location is safe listed; resolve by moving files to safe listed location or packaging files with flow and outputting to published data source",
+        "Flow publishing is blocked completely until safe list requirements are met",
+        "Network shares are automatically safe listed during publishing process",
+        "UNC paths are converted to local paths automatically by Tableau Server"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Flows with network share (UNC path) input/output steps will PUBLISH successfully, but you get a warning message if location isn't safe listed. The flow will ERROR when you try to run it (manually or scheduled) unless file location is accessible by server AND included in safe list. Solutions: (1) Move files to safe listed location and update flow to point to new location (click 'list' link in warning to see safe list), or (2) Package input files with flow and publish output to Server as published data source. Tableau Cloud doesn't support network shares - files must be packaged. Safe list configured via tsm commands by administrators.",
+      "difficulty": "intermediate",
+      "tags": ["publish", "network shares", "safe list"]
+    }
+  ]
+}

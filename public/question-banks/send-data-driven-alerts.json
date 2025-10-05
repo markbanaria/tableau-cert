@@ -1,0 +1,125 @@
+{
+  "title": "Send Data-Driven Alerts from Tableau Cloud or Tableau Server",
+  "description": "Master configuring and managing data-driven alerts that automatically notify users when data reaches important thresholds, including alert creation, notification management, and troubleshooting.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What types of charts and axes support data-driven alerts in Tableau Cloud or Server?",
+      "options": [
+        "Any chart type with any axis type",
+        "Continuous numeric axis of any chart EXCEPT Gantt charts or maps; numeric bins and discrete numeric axes not supported",
+        "Only bar charts and line charts with continuous axes",
+        "All chart types including maps and story points"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data-driven alerts require a CONTINUOUS NUMERIC AXIS and work on any chart EXCEPT Gantt charts or maps. NUMERIC BINS and DISCRETE NUMERIC AXES are NOT supported. Alerts can be set on dashboards and views, but NOT on story points. This ensures alerts work with measurable, continuous data that can meaningfully cross thresholds.",
+      "difficulty": "intermediate",
+      "tags": ["data-driven-alerts", "continuous-axis", "chart-requirements", "supported-charts"]
+    },
+    {
+      "id": 2,
+      "question": "How can data-driven alert notifications be delivered to users?",
+      "options": [
+        "Email only",
+        "Email, in-site Tableau notifications, or Slack notifications through Tableau for Slack app",
+        "SMS text messages and email",
+        "Push notifications to Tableau Mobile app only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data-driven notifications can be delivered through: (1) EMAIL—traditional email notifications, (2) IN YOUR TABLEAU SITE—notifications appear in the Tableau interface, (3) SLACK—notifications in a connected Slack workspace through the Tableau for Slack application. Users can manage notification preferences through their account settings to choose which delivery methods they prefer.",
+      "difficulty": "beginner",
+      "tags": ["notifications", "delivery-methods", "email", "slack", "tableau-notifications"]
+    },
+    {
+      "id": 3,
+      "question": "When creating a data-driven alert, what does the 'Make visible to others' option do?",
+      "options": [
+        "It publishes the alert to all users on the Tableau site automatically",
+        "It allows other users to SEE your alert and ADD THEMSELVES to it",
+        "It makes the underlying data visible to users who don't have permissions",
+        "It creates a dashboard showing all alert thresholds"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Selecting 'Make visible to others' allows OTHER USERS to SEE YOUR ALERT and ADD THEMSELVES to it. Anyone with access to a view can see alerts created by others, view details (threshold, schedule, notification frequency), and select 'Add Me' to subscribe to the alert. This enables collaborative alert management where users can discover and subscribe to relevant alerts without requiring the owner to manually add each recipient.",
+      "difficulty": "intermediate",
+      "tags": ["alert-visibility", "collaboration", "add-me", "alert-sharing"]
+    },
+    {
+      "id": 4,
+      "question": "For time-based charts, what filter approach is recommended to ensure alerts work correctly as new data appears?",
+      "options": [
+        "Fixed date ranges that must be manually updated",
+        "Relative date filters so people automatically receive alerts as new data appears",
+        "Custom date calculations with parameters",
+        "No filtering—alerts work best with all historical data"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For time-based charts, use RELATIVE DATE FILTERS so people automatically receive alerts as new data appears. For example, 'Last 30 Days' or 'Current Month' will automatically update as time passes, ensuring the alert continues to evaluate current data rather than becoming stale with a fixed historical range. If you don't own the content, ask the author to make this change.",
+      "difficulty": "intermediate",
+      "tags": ["relative-date-filters", "time-based-charts", "alert-configuration", "best-practices"]
+    },
+    {
+      "id": 5,
+      "question": "What are common reasons why data-driven alerts fail?",
+      "options": [
+        "Too many recipients on the alert",
+        "Temporary connectivity issues, data source removed, credentials expired, or workbook/sheet removed",
+        "Alert threshold set too high or too low",
+        "User's email inbox is full"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Common reasons alerts fail: (1) TEMPORARY CONNECTIVITY ISSUES—usually self-resolving, (2) DATA SOURCE REMOVED, (3) CREDENTIALS TO DATA EXPIRED, (4) WORKBOOK OR SHEET the alert was created on has been REMOVED. If an alert fails, you receive a notification email with which alert failed, when, and a link to fix the problem. Alert owners can edit settings to resolve issues.",
+      "difficulty": "intermediate",
+      "tags": ["alert-failures", "troubleshooting", "connectivity", "credentials"]
+    },
+    {
+      "id": 6,
+      "question": "How can non-owners add themselves to an existing data-driven alert?",
+      "options": [
+        "Contact a site administrator to add them",
+        "Select the alert in the Alerts side panel to see details and click 'Add Me', or click 'Add me to this alert' from a forwarded alert email",
+        "Create a duplicate alert with the same settings",
+        "Only alert owners can add recipients"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Non-owners can add themselves to alerts by: (1) Selecting the alert from the ALERTS SIDE PANEL to see details (threshold, schedule, notification frequency) and clicking 'ADD ME', or (2) If the alert owner forwards an alert email, clicking 'ADD ME TO THIS ALERT' link in the email. This self-service approach allows users to subscribe to alerts without requiring owner intervention.",
+      "difficulty": "beginner",
+      "tags": ["add-me", "alert-subscription", "self-service", "alert-management"]
+    },
+    {
+      "id": 7,
+      "question": "If an alert fails repeatedly and becomes suspended, how can an alert owner or administrator resume it?",
+      "options": [
+        "Suspended alerts cannot be resumed and must be recreated",
+        "From My Content area select '...' > 'Resume Alert', OR click 'Resume Alert' in the notification email",
+        "Wait 24 hours for automatic resumption",
+        "Contact Tableau Support to reset the alert"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To resume a SUSPENDED alert (owner or administrator): (1) From MY CONTENT area, an icon appears in the 'Last checked' column indicating suspension—select '...' > 'RESUME ALERT', OR (2) Click 'RESUME ALERT' in the notification email. The notification will either allow you to resume the alert or indicate that the view has changed and the alert should be deleted. You'll receive an email when the alert is working again.",
+      "difficulty": "intermediate",
+      "tags": ["suspended-alerts", "alert-recovery", "alert-management", "troubleshooting"]
+    },
+    {
+      "id": 8,
+      "question": "Where can alert owners manage their data-driven alerts?",
+      "options": [
+        "Only from the Tableau Desktop application",
+        "From the My Content area of Tableau web pages, from alert emails (manage all alerts, add/remove yourself, edit settings), or from the Actions menu in the Alerts side panel",
+        "Alerts can only be managed by site administrators",
+        "Through the Tableau Mobile app exclusively"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Alert owners can manage alerts from multiple locations: (1) MY CONTENT AREA of Tableau web pages—centralized alert management, (2) DIRECTLY FROM ALERT EMAILS—click links to manage all alerts, add/remove yourself, or 'Edit this alert' (owner only) to change threshold, schedule, recipients, (3) ACTIONS MENU from the ALERTS SIDE PANEL of the dashboard or view. Managing from emails is often quicker for immediate actions.",
+      "difficulty": "beginner",
+      "tags": ["alert-management", "my-content", "alert-owner", "edit-alerts"]
+    }
+  ]
+}

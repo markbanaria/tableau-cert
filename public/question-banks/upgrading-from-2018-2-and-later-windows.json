@@ -1,0 +1,97 @@
+{
+  "title": "Upgrading from 2018.2 and Later (Windows)",
+  "description": "Tableau Desktop and Prep Builder upgrade processes, version compatibility, workbook migration, command-line upgrade options, side-by-side installation, licensing considerations, and automated deployment strategies.",
+  "metadata": {
+    "domain": "Domain 1: Evaluate Current State",
+    "certification": "Tableau Consultant Certification",
+    "totalQuestions": 6,
+    "estimatedTime": "9 minutes",
+    "difficulty": "intermediate"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the critical compatibility consideration when upgrading Tableau Desktop in an organization that also uses Tableau Server?",
+      "options": [
+        "Tableau Desktop and Server versions must always match exactly",
+        "You cannot publish to Tableau Server from Desktop if Desktop version is newer than Server version; ensure Desktop is compatible with Server version before upgrading",
+        "Tableau Server automatically updates to match Desktop version when workbooks are published",
+        "Compatibility issues only occur with maintenance releases, not major version upgrades"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You can run into compatibility issues when sharing files between different versions of Tableau Desktop and between Desktop and Server/Cloud. Critical rule: You CANNOT publish to Tableau Server from Desktop if you're using a Desktop version that is newer than your Server version. Before upgrading Desktop, ensure the new version is compatible with your Server version. Use Tableau Release Navigator to check compatibility. This is why power users should test new versions before organization-wide rollout.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "compatibility", "server"]
+    },
+    {
+      "id": 2,
+      "question": "After upgrading to a new release version of Tableau Desktop (e.g., 2021.3 to 2021.4), what happens to existing workbooks when you open and save them in the newer version?",
+      "options": [
+        "Workbooks remain compatible with all previous versions for backward compatibility",
+        "Workbooks are automatically upgraded and can no longer be opened with older versions unless downgraded; this affects both existing and new workbooks",
+        "Only new workbooks created in the new version are incompatible with older versions",
+        "Workbooks maintain their original version format until explicitly converted"
+      ],
+      "correctAnswer": 1,
+      "explanation": "After you open and save a workbook or data source with the upgraded version of Tableau Desktop, you can NO LONGER open it with older versions. After upgrade, these workbooks (as well as any new workbooks you create) can't be opened with older versions unless you downgrade the workbook. This is why organizations must consider: Are you ready to upgrade all workbooks? Bookmarks, workbooks, and data sources in local Tableau repository are still available in new version, recent workbooks/connections/customizations are automatically imported, but once saved in newer version, backward compatibility is lost.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "workbooks", "compatibility"]
+    },
+    {
+      "id": 3,
+      "question": "Can multiple release upgrade versions of Tableau Desktop be installed on the same Windows computer, and what determines if an upgrade will overwrite the currently installed version?",
+      "options": [
+        "No, only one version can be installed at a time; all upgrades overwrite previous installations",
+        "Yes, multiple release versions can coexist side-by-side; maintenance releases (e.g., 2021.4.1 → 2021.4.2) overwrite, but major releases (e.g., 2021.3.1 → 2021.4.1) do not",
+        "Multiple versions can only be installed if using different product keys",
+        "Side-by-side installation is only supported for Tableau Prep Builder, not Desktop"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You can install multiple release upgrade versions of Tableau Desktop and Tableau Prep Builder on the same computer. You don't have to uninstall older version before installing new version. Overwrite rules: Upgrading a maintenance release (dot release like 2021.4.1 → 2021.4.2) overwrites the older version. Major release upgrades (like 2021.3.1 → 2021.4.1) do NOT overwrite - they install side-by-side. Installed items shared by each version (file type actions, registry entries) aren't versioned and are assigned to last version installed. After using newer version and upgrading workbooks, good practice to uninstall older version to avoid confusion. Note: Only one version of Tableau Desktop Public Edition can be installed at a time.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "installation", "versions"]
+    },
+    {
+      "id": 4,
+      "question": "What is Automatic Product Updates in Tableau Desktop, and what types of releases does it handle?",
+      "options": [
+        "Automatically installs all upgrades including major releases without user intervention",
+        "By default, automatically installs dot (maintenance) releases only (e.g., 2022.1.1); does NOT automatically install major upgrades; prompts on first start after maintenance release available with option to postpone or skip",
+        "Only checks for updates but never installs them without explicit user approval",
+        "Automatically installs major releases but requires approval for maintenance updates"
+      ],
+      "correctAnswer": 1,
+      "explanation": "By default, Tableau Desktop is configured to automatically install dot releases (maintenance upgrades like 2022.1.1) through Automatic Product Updates feature. When you start Desktop for first time after dot release becomes available, you see prompt offering to download after you exit Desktop - you can postpone or skip. Product Update feature will NOT automatically install major upgrades. You can also check for product updates anytime via Help menu > Check for Product Updates. Installers are downloaded to Downloads/TableauAutoUpdate folder (or TEMP/TableauAutoUpdate if Downloads doesn't exist). Feature can be turned off/on via Help > Settings and Performance > Enable Automatic Product Updates (only available if enabled during install). Administrator can disable this feature organization-wide.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "automatic updates", "maintenance"]
+    },
+    {
+      "id": 5,
+      "question": "When installing a release version upgrade of Tableau Desktop on a DIFFERENT computer from the original installation, what licensing considerations must be addressed?",
+      "options": [
+        "No special considerations; the product key automatically transfers to the new computer",
+        "With product key licensing: must deactivate key on original computer before activating on new computer; with login-based license management: just sign in on new computer (old version automatically reclaimed if unused)",
+        "Must purchase a new product key for the new computer installation",
+        "License transfer is only possible within 30 days of the original installation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Two scenarios for installing on different computer: (1) Product key licensing - you MUST first deactivate product key for Desktop/Prep Builder on original computer, then use that product key to activate on new computer. You won't be able to use new version until license is transferred. (2) Login-based license management (with Tableau Cloud/Server) - you only need to sign in to activate new installation. You do NOT need to deactivate older version - it's automatically reclaimed by login-based license management if unused. Important note: Tableau Prep Builder is designed to work with Tableau Desktop and should be installed on same machine as Desktop.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "licensing", "activation"]
+    },
+    {
+      "id": 6,
+      "question": "To support automated/silent upgrades across an organization, what command-line options can be used, and what key considerations apply?",
+      "options": [
+        "Silent upgrades are only supported through GUI; command-line installation requires user interaction",
+        "Use /quiet (no prompts/UI), /norestart (no reboot), ACCEPTEULA=1 (accept license), REMOVEINSTALLEDAPP=1 (remove older versions before installing latest - Desktop only); extract .msi files using WiX Toolset if deployment tool requires .msi format",
+        "Command-line options are identical across Windows and Mac platforms",
+        "Automated upgrades require administrator approval for each installation"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Command-line upgrade options for silent/automated deployment: /quiet (runs installer without prompts, UI, or license dialog), /norestart (finishes without restarting), ACCEPTEULA=1 (accepts EULA), ACTIVATE_KEY '<key>' (applies product key during install), REGISTER='1' (runs -register during install), AUTOUPDATESERVER (configure non-default update server), REPORTINGSERVER (send license reporting to internal Server), REMOVEINSTALLEDAPP=1 (Desktop only - uninstalls all older versions before installing latest). If deployment tool requires .msi file, extract from .exe using WiX Toolset's Dark.exe command. Can also activate/register post-install using tableau.exe -activate <key> and -register. Example: tableauDesktop-64bit-2021-4-4.exe /quiet /norestart ACCEPTEULA=1 REMOVEINSTALLEDAPP=1",
+      "difficulty": "intermediate",
+      "tags": ["upgrade", "command-line", "deployment"]
+    }
+  ]
+}

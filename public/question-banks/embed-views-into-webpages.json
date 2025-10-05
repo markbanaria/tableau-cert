@@ -1,0 +1,125 @@
+{
+  "title": "Embed Views into Webpages",
+  "description": "Master embedding interactive Tableau views into web pages, blogs, and applications using the Embedding API v3, including authentication requirements, embedding restrictions, and customization options.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 8,
+    "estimatedTime": "12 minutes",
+    "difficulty": "intermediate-advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "Starting with Tableau Server 2022.3 and later and Tableau Cloud, which API version is used for embedding views?",
+      "options": [
+        "JavaScript API v1",
+        "Embedding API v2",
+        "Embedding API v3",
+        "REST API v3.x"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The embed code for Tableau Server 2022.3 and later and Tableau Cloud has changed to use EMBEDDING API V3. This is the current standard for embedding Tableau views. Organizations using older versions (JSAPI v1 or v2) should migrate to Embedding API v3 for access to the latest features and support.",
+      "difficulty": "beginner",
+      "tags": ["embedding-api", "embedding-api-v3", "tableau-2022", "api-version"]
+    },
+    {
+      "id": 2,
+      "question": "What is the default authentication requirement for users to view embedded Tableau views?",
+      "options": [
+        "No authentication required—embedded views are public by default",
+        "Users must have an account on the Tableau site the view is embedded from (with exception for Guest account on core-based licensing)",
+        "Only OAuth authentication is supported for embedded views",
+        "Embedded views use anonymous access tokens automatically"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Embedded views follow the same LICENSING and PERMISSION RESTRICTIONS as Tableau Server/Cloud. To see an embedded view, the person must have an ACCOUNT ON THE TABLEAU SITE it is embedded from. EXCEPTION: Organizations using CORE-BASED LICENSE on Tableau Server with a GUEST ACCOUNT enabled allow people to view/interact with embedded views WITHOUT signing in. Contact your administrator to check if Guest user is enabled.",
+      "difficulty": "intermediate",
+      "tags": ["authentication", "embedded-views", "guest-account", "licensing"]
+    },
+    {
+      "id": 3,
+      "question": "Can Tableau administrators control where Tableau views can be embedded?",
+      "options": [
+        "No—once published, views can be embedded anywhere",
+        "Yes—administrators can limit embedding to specific sites via an allow list or disable embedding entirely",
+        "Only site administrators can embed views, not content creators",
+        "Embedding restrictions can only be set at the workbook level"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau administrators can LIMIT THE SITES where embedding is allowed or DISABLE EMBEDDING ENTIRELY. If your embedded view doesn't load, check with your administrator to ensure the site where you embedded it is on the EMBEDDING ALLOW LIST. This provides security control over where organizational content can be displayed. See 'Tableau Site Settings for Embedding' for more information.",
+      "difficulty": "intermediate",
+      "tags": ["embedding-security", "allow-list", "administrator-controls", "site-settings"]
+    },
+    {
+      "id": 4,
+      "question": "What is the easiest way to get started with embedding a Tableau view?",
+      "options": [
+        "Write custom HTML and JavaScript from scratch",
+        "Copy the embed code from the Share button in the view toolbar and paste into your webpage",
+        "Use the REST API to generate embedding tokens",
+        "Download the workbook and re-host it on your own server"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The easiest way to embed a view: (1) With a view open, click the SHARE button in the toolbar, (2) Click 'COPY EMBED CODE', (3) Paste the code into your webpage. This provides ready-to-use embed code that can be customized using the Tableau Embedding API options. The Share dialog provides the quickest path to basic embedding.",
+      "difficulty": "beginner",
+      "tags": ["embed-code", "share-button", "quick-embedding", "basic-embedding"]
+    },
+    {
+      "id": 5,
+      "question": "Do embedded Tableau views update automatically when the underlying data or workbook changes?",
+      "options": [
+        "No—embedded views are static snapshots that must be manually refreshed",
+        "Yes—embedded views update as underlying data changes or as workbooks are updated on Tableau Server/Cloud",
+        "Updates only occur if the embedding API is configured with auto-refresh parameter",
+        "Views must be re-embedded whenever the workbook is updated"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Embedded views UPDATE AUTOMATICALLY as the underlying data changes OR as their workbooks are updated on Tableau Server or Tableau Cloud. This means users viewing embedded views always see current data without any action required from the embed administrator. The views remain 'live' connections to the Tableau content.",
+      "difficulty": "beginner",
+      "tags": ["embedded-views", "auto-update", "data-freshness", "live-content"]
+    },
+    {
+      "id": 6,
+      "question": "What advanced capabilities can be achieved using the Tableau Embedding API beyond basic embedding?",
+      "options": [
+        "Only controlling the size and position of embedded views",
+        "Enable SSO for embedded content, customize toolbar options, apply filters, trigger actions for events, enable embedded web authoring, use connected apps for data access control",
+        "Embedding API is only for basic view display—no customization possible",
+        "Advanced features require purchasing separate embedding licenses"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Tableau Embedding API enables: Enable SINGLE SIGN-ON (SSO) for embedded content, Customize and control user access to data with TABLEAU CONNECTED APPS, Control TOOLBAR OPTIONS, Apply FILTERS, Trigger ACTIONS for EVENTS, Enable EMBEDDED WEB AUTHORING, and more. The API provides extensive customization beyond the basic embed code from the Share dialog.",
+      "difficulty": "advanced",
+      "tags": ["embedding-api", "sso", "connected-apps", "advanced-embedding", "customization"]
+    },
+    {
+      "id": 7,
+      "question": "Where can Tableau views be embedded using the Embedding API?",
+      "options": [
+        "Only in corporate intranets",
+        "Web pages, blogs, wiki pages, web applications, and intranet portals",
+        "Only in applications built with specific frameworks like React or Angular",
+        "Embedding is restricted to Salesforce applications only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You can embed interactive Tableau views into: WEB PAGES, BLOGS, WIKI PAGES, WEB APPLICATIONS, and INTRANET PORTALS. The Embedding API is framework-agnostic and works wherever HTML/JavaScript can be executed, providing flexibility for diverse integration scenarios across public and private web environments (subject to administrator allow list controls).",
+      "difficulty": "beginner",
+      "tags": ["embedding-locations", "web-pages", "applications", "integration"]
+    },
+    {
+      "id": 8,
+      "question": "If you need to migrate from an older embedding implementation (JSAPI v1 or v2) to Embedding API v3, where can you find migration guidance?",
+      "options": [
+        "Migration is not supported—views must be re-created",
+        "Tableau Embedding API help and 'Migrating from Embedding JSAPI v1 or v2 to Embedding API v3' guide on GitHub",
+        "Contact Tableau Support for custom migration scripts",
+        "Migration tools are available only for Enterprise customers"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For migrating from JSAPI v1 or v2 to Embedding API v3, see: (1) The TABLEAU EMBEDDING API HELP for comprehensive embedding guidance, and (2) 'MIGRATING FROM EMBEDDING JSAPI V1 OR V2 TO EMBEDDING API V3' guide on GITHUB (tableau/embedding-api-v3-guide). These resources provide step-by-step migration instructions and best practices for updating existing embedded implementations.",
+      "difficulty": "intermediate",
+      "tags": ["migration", "jsapi-v1", "jsapi-v2", "embedding-api-v3", "upgrade"]
+    }
+  ]
+}

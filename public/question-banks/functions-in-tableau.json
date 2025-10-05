@@ -1,0 +1,505 @@
+{
+  "title": "Functions in Tableau - Comprehensive Practice Questions",
+  "description": "Comprehensive practice questions for Functions in Tableau covering all major function categories: Number Functions, String Functions, Date Functions, Logical Functions, Aggregate Functions, User Functions, Table Calculations, Type Conversion, and Pass-Through Functions for consultant-level certification scenarios",
+  "metadata": {
+    "topic": "Functions in Tableau",
+    "domain": "domain3",
+    "difficulty": "Mixed (Beginner to Advanced)",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/functions_all_categories.htm",
+    "relatedTopics": "LOD and Aggregation; Best Practices for Calculations",
+    "generatedDate": "2025-10-05",
+    "questionCount": 35
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the primary difference between aggregate functions and table calculation functions in Tableau's order of operations?",
+      "options": [
+        "Aggregate functions operate on the entire dataset while table calculations operate on the query result set",
+        "Aggregate functions only work with numerical data while table calculations work with all data types",
+        "Aggregate functions are faster than table calculations in all scenarios",
+        "Aggregate functions require Level of Detail expressions while table calculations do not"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Aggregate functions operate at the data source level on the entire dataset before the query results are returned to Tableau, while table calculations operate on the query result set that is already in Tableau's cache. This fundamental difference affects when and how these functions are computed in Tableau's order of operations.",
+      "difficulty": "Beginner",
+      "tags": ["aggregate-functions", "table-calculations", "order-of-operations"]
+    },
+    {
+      "id": "2",
+      "question": "Which Number Function combination would be most appropriate for calculating the distance between two geographic coordinates using the Haversine formula?",
+      "options": [
+        "ABS() and SQRT() functions only",
+        "SIN(), COS(), ATAN2(), SQRT(), and POWER() functions",
+        "CEILING() and FLOOR() functions with basic arithmetic",
+        "LOG() and EXP() functions for exponential calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The Haversine formula requires trigonometric functions (SIN, COS), inverse trigonometric functions (ATAN2), square root (SQRT), and power functions (POWER) to calculate the great-circle distance between two points on Earth given their latitude and longitude coordinates.",
+      "difficulty": "Advanced",
+      "tags": ["number-functions", "trigonometric", "geographic-calculations", "haversine"]
+    },
+    {
+      "id": "3",
+      "question": "Your data contains product codes in the format 'ABC-123-XYZ-456'. You need to extract only the second numeric portion ('123'). Which String Function approach would be most reliable?",
+      "options": [
+        "MID([Product Code], 5, 3)",
+        "SPLIT([Product Code], '-', 2)",
+        "REGEX_EXTRACT([Product Code], '\\-(\\d+)\\-', 1)",
+        "RIGHT(LEFT([Product Code], 7), 3)"
+      ],
+      "correctAnswer": 2,
+      "explanation": "REGEX_EXTRACT([Product Code], '\\-(\\d+)\\-', 1) is most reliable as it specifically looks for digits between hyphens, handling variations in code length. The regex pattern '\\-(\\d+)\\-' captures any sequence of digits between hyphens, making it robust against format variations.",
+      "difficulty": "Intermediate",
+      "tags": ["string-functions", "regex", "pattern-extraction", "data-parsing"]
+    },
+    {
+      "id": "4",
+      "question": "When implementing text analysis on customer feedback, which combination of String Functions would effectively clean and standardize text data for sentiment analysis?",
+      "options": [
+        "UPPER() and TRIM() only",
+        "REGEX_REPLACE(), TRIM(), LOWER(), and SUBSTITUTE()",
+        "SPLIT() and CONTAINS() functions",
+        "LEFT() and RIGHT() functions with fixed lengths"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Effective text cleaning for sentiment analysis requires REGEX_REPLACE() to remove special characters and HTML tags, TRIM() to remove whitespace, LOWER() for case normalization, and SUBSTITUTE() to replace specific unwanted characters. This combination ensures consistent text formatting for analysis.",
+      "difficulty": "Advanced",
+      "tags": ["string-functions", "text-analysis", "data-cleaning", "sentiment-analysis"]
+    },
+    {
+      "id": "5",
+      "question": "Your organization operates across multiple time zones and needs to calculate business days between order and delivery dates, excluding weekends and holidays. Which Date Function strategy would be most comprehensive?",
+      "options": [
+        "Simple DATEDIFF('day', [Order Date], [Delivery Date])",
+        "DATEDIFF('weekday', [Order Date], [Delivery Date]) with holiday exclusions",
+        "Custom calculation using DATEPART('weekday') with conditional logic",
+        "DATEADD and DATETRUNC functions in combination"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A custom calculation using DATEPART('weekday') with conditional logic allows you to identify weekends (weekday 1=Sunday, 7=Saturday) and exclude them, while also incorporating business rules for holiday exclusions. This provides the most flexible approach for complex business day calculations.",
+      "difficulty": "Advanced",
+      "tags": ["date-functions", "business-days", "weekday-calculations", "holiday-exclusions"]
+    },
+    {
+      "id": "6",
+      "question": "When working with international datasets, what is the key consideration when using DATEPARSE() function for standardizing date formats?",
+      "options": [
+        "DATEPARSE automatically detects all date formats",
+        "The format string must exactly match the input date format pattern",
+        "DATEPARSE only works with English date formats",
+        "All dates must be converted to strings first"
+      ],
+      "correctAnswer": 1,
+      "explanation": "DATEPARSE requires the format string to exactly match the input date pattern. For example, 'yyyy-MM-dd' for '2023-12-25' or 'dd/MM/yyyy' for '25/12/2023'. The format specifiers (yyyy, MM, dd) must correspond precisely to the input date structure for successful parsing.",
+      "difficulty": "Intermediate",
+      "tags": ["date-functions", "dateparse", "internationalization", "format-strings"]
+    },
+    {
+      "id": "7",
+      "question": "Your financial dashboard needs to implement complex conditional logic for credit scoring that evaluates multiple criteria simultaneously. Which Logical Function approach would be most maintainable and performant?",
+      "options": [
+        "Nested IF statements for all conditions",
+        "Multiple IIF functions combined with AND/OR operators",
+        "CASE statement with complex boolean expressions",
+        "Separate calculated fields for each condition, then combine"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Separate calculated fields for each condition, then combining them, provides the most maintainable approach. This modular design makes debugging easier, improves readability, allows for testing individual components, and can actually improve performance by allowing Tableau to optimize each component separately.",
+      "difficulty": "Advanced",
+      "tags": ["logical-functions", "complex-logic", "maintainability", "modular-design"]
+    },
+    {
+      "id": "8",
+      "question": "In enterprise security implementations, when would you use USERATTRIBUTE() instead of ISMEMBEROF() for row-level security?",
+      "options": [
+        "When users belong to multiple groups",
+        "When security attributes are dynamically assigned through JWT tokens",
+        "When working with Tableau Server only",
+        "When implementing column-level security"
+      ],
+      "correctAnswer": 1,
+      "explanation": "USERATTRIBUTE() is used when security attributes are dynamically passed through authentication workflows (like JWT tokens in embedded scenarios), allowing for more flexible, context-aware security. ISMEMBEROF() works with static group memberships, while USERATTRIBUTE() supports dynamic attribute-based access control.",
+      "difficulty": "Advanced",
+      "tags": ["user-functions", "row-level-security", "jwt-tokens", "dynamic-attributes"]
+    },
+    {
+      "id": "9",
+      "question": "What is the critical security consideration when using USERNAME() function in published workbooks?",
+      "options": [
+        "USERNAME() only works with Tableau Server, not Tableau Cloud",
+        "The function must be used in combination with FULLNAME()",
+        "USERNAME() should be used as a data source filter, not a worksheet filter",
+        "The function requires administrator permissions to execute"
+      ],
+      "correctAnswer": 2,
+      "explanation": "USERNAME() should be implemented as a data source filter rather than a worksheet filter for security reasons. Data source filters are applied before data reaches the workbook, making them more secure. Worksheet filters can potentially be modified or removed by users with appropriate permissions, compromising security.",
+      "difficulty": "Intermediate",
+      "tags": ["user-functions", "security", "data-source-filters", "username"]
+    },
+    {
+      "id": "10",
+      "question": "Your retail analytics requires calculating the correlation coefficient between promotional spending and sales lift across different product categories. Which Aggregate Function combination would provide the most statistically robust analysis?",
+      "options": [
+        "CORR([Promo Spend], [Sales Lift]) with proper grouping",
+        "COVAR([Promo Spend], [Sales Lift]) divided by standard deviations",
+        "Simple ratio of SUM([Sales Lift]) / SUM([Promo Spend])",
+        "PERCENTILE functions to compare distributions"
+      ],
+      "correctAnswer": 0,
+      "explanation": "CORR([Promo Spend], [Sales Lift]) directly calculates the Pearson correlation coefficient, which is the standard statistical measure for linear relationships. When properly grouped by product categories, this provides the most accurate and interpretable measure of correlation between promotional spending and sales performance.",
+      "difficulty": "Intermediate",
+      "tags": ["aggregate-functions", "correlation", "statistical-analysis", "promotional-analysis"]
+    },
+    {
+      "id": "11",
+      "question": "When implementing statistical process control in manufacturing dashboards, which combination of Aggregate Functions would be essential for calculating control limits?",
+      "options": [
+        "AVG() and COUNT() functions only",
+        "AVG(), STDEV(), MIN(), and MAX() functions",
+        "MEDIAN() and PERCENTILE() functions",
+        "SUM() and COVAR() functions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Statistical process control requires AVG() for the center line, STDEV() for calculating upper and lower control limits (typically ±3 standard deviations), and MIN()/MAX() for range calculations. These functions together provide the foundation for SPC charts and process capability analysis.",
+      "difficulty": "Advanced",
+      "tags": ["aggregate-functions", "statistical-process-control", "manufacturing", "control-limits"]
+    },
+    {
+      "id": "12",
+      "question": "Your organization needs to calculate running totals that restart at the beginning of each fiscal quarter within each region. Which Table Calculation configuration would accomplish this most effectively?",
+      "options": [
+        "RUNNING_SUM(SUM([Sales])) computed along Date",
+        "RUNNING_SUM(SUM([Sales])) partitioned by Region and Fiscal Quarter",
+        "WINDOW_SUM(SUM([Sales]), FIRST(), 0) with specific addressing",
+        "INDEX() and SIZE() functions to manually calculate running totals"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RUNNING_SUM(SUM([Sales])) partitioned by both Region and Fiscal Quarter ensures the running total calculation restarts for each unique combination of region and fiscal quarter. This partitioning strategy creates separate calculation scopes for each region-quarter combination, achieving the required restart behavior.",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "running-totals", "partitioning", "fiscal-quarters"]
+    },
+    {
+      "id": "13",
+      "question": "In advanced analytics scenarios, when would you use WINDOW_PERCENTILE() instead of the aggregate PERCENTILE() function?",
+      "options": [
+        "When calculating percentiles across the entire dataset",
+        "When you need percentiles within specific row ranges or moving windows",
+        "When working with string data types",
+        "When the data source doesn't support aggregate functions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "WINDOW_PERCENTILE() is used when you need to calculate percentiles within specific row ranges or moving windows, such as the 90th percentile of the last 12 months of data. This table calculation allows for dynamic window definitions using FIRST()+n and LAST()-n offsets, providing more flexibility than aggregate PERCENTILE().",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "percentiles", "moving-windows", "advanced-analytics"]
+    },
+    {
+      "id": "14",
+      "question": "Your customer cohort analysis requires calculating the rank of customers based on their lifetime value within each acquisition cohort. Which ranking approach would provide the most meaningful business insights?",
+      "options": [
+        "RANK_DENSE() to avoid gaps in ranking",
+        "RANK() with standard competition ranking",
+        "RANK_PERCENTILE() to show relative position",
+        "INDEX() function for simple sequential numbering"
+      ],
+      "correctAnswer": 2,
+      "explanation": "RANK_PERCENTILE() provides the most meaningful business insights for cohort analysis as it shows each customer's relative position within their cohort as a percentage (0-1). This makes it easy to identify top 10% performers regardless of cohort size and enables consistent comparison across different cohorts.",
+      "difficulty": "Intermediate",
+      "tags": ["table-calculations", "ranking", "cohort-analysis", "customer-analytics"]
+    },
+    {
+      "id": "15",
+      "question": "When implementing time series forecasting calculations, which Table Calculation function would be most appropriate for calculating moving averages with dynamic window sizes?",
+      "options": [
+        "RUNNING_AVG() with fixed parameters",
+        "WINDOW_AVG() with LAST(-n) and LAST(0) parameters",
+        "AVG() aggregate function",
+        "LOOKUP() function to manually calculate averages"
+      ],
+      "correctAnswer": 1,
+      "explanation": "WINDOW_AVG() with LAST(-n) and LAST(0) parameters allows for dynamic window sizing in moving averages. For example, WINDOW_AVG(SUM([Sales]), LAST(-11), LAST(0)) creates a 12-period moving average. This approach provides flexibility to adjust window sizes based on business requirements or data availability.",
+      "difficulty": "Intermediate",
+      "tags": ["table-calculations", "moving-averages", "time-series", "forecasting"]
+    },
+    {
+      "id": "16",
+      "question": "Your enterprise dashboard needs to handle data type inconsistencies where numeric values are sometimes stored as strings. Which type conversion strategy would be most robust?",
+      "options": [
+        "Use STR() to convert everything to strings",
+        "Use FLOAT() with error handling for failed conversions",
+        "Use INT() function for all numeric conversions",
+        "Implement IF ISNUMBER() THEN FLOAT() ELSE 0 END logic"
+      ],
+      "correctAnswer": 3,
+      "explanation": "IF ISNUMBER() THEN FLOAT() ELSE 0 END provides the most robust approach by first checking if the string can be converted to a number using ISNUMBER(), then converting with FLOAT() for successful cases, and providing a default value (0) for failed conversions. This prevents errors and handles edge cases gracefully.",
+      "difficulty": "Intermediate",
+      "tags": ["type-conversion", "error-handling", "data-quality", "float-conversion"]
+    },
+    {
+      "id": "17",
+      "question": "When working with legacy systems that require specific SQL functions not available in Tableau's standard library, which Pass-Through Function approach would be most appropriate for calculating database-specific statistical functions?",
+      "options": [
+        "RAWSQL_REAL() for numeric statistical results",
+        "RAWSQL_STR() for all calculations to avoid type issues",
+        "RAWSQLAGG_REAL() for aggregate statistical calculations",
+        "Multiple RAWSQL functions combined in calculated fields"
+      ],
+      "correctAnswer": 2,
+      "explanation": "RAWSQLAGG_REAL() is specifically designed for aggregate calculations that need to be passed through to the database. For statistical functions like database-specific variance calculations or custom aggregations, this function ensures the calculation is performed at the database level and returns the appropriate numeric result.",
+      "difficulty": "Advanced",
+      "tags": ["pass-through-functions", "rawsql", "database-specific", "statistical-functions"]
+    },
+    {
+      "id": "18",
+      "question": "Your organization uses RAWSQL_SPATIAL() functions for geographic analysis. What is the primary performance consideration when implementing these functions?",
+      "options": [
+        "Spatial functions are always faster than native Tableau functions",
+        "RAWSQL functions execute on the database server, requiring adequate database resources",
+        "Spatial calculations should always be performed in Tableau's engine",
+        "RAWSQL functions automatically cache results for better performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RAWSQL functions, including RAWSQL_SPATIAL(), execute directly on the database server rather than in Tableau's engine. This requires adequate database resources (CPU, memory) and spatial processing capabilities. Performance depends on the database's spatial processing power and the complexity of the spatial operations being performed.",
+      "difficulty": "Advanced",
+      "tags": ["pass-through-functions", "spatial-analysis", "performance", "database-resources"]
+    },
+    {
+      "id": "19",
+      "question": "In financial risk modeling, you need to calculate Value at Risk (VaR) using a custom SQL function specific to your database. Which RAWSQL approach would be most appropriate for this aggregate calculation?",
+      "options": [
+        "RAWSQL_REAL('SELECT VAR_CALCULATION(%1)', [Portfolio Values])",
+        "RAWSQLAGG_REAL('VAR_FUNCTION(%1)', [Portfolio Values])",
+        "Multiple RAWSQL_REAL functions combined",
+        "RAWSQL_STR with manual numeric conversion"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RAWSQLAGG_REAL() is designed for custom aggregate functions that need to be executed at the database level. VaR calculations typically require statistical analysis across multiple data points, making it an aggregate operation. The %1 placeholder passes the Portfolio Values field to the custom database function.",
+      "difficulty": "Advanced",
+      "tags": ["pass-through-functions", "financial-modeling", "value-at-risk", "aggregate-functions"]
+    },
+    {
+      "id": "20",
+      "question": "Your multinational company needs to standardize phone number formats from different countries. The data contains various formats like '+1-555-123-4567', '(555) 123-4567', and '555.123.4567'. Which String Function combination would be most effective?",
+      "options": [
+        "REPLACE() functions to remove all non-numeric characters",
+        "REGEX_REPLACE() to standardize format with pattern matching",
+        "SPLIT() function to separate area codes and numbers",
+        "SUBSTITUTE() function for character replacement"
+      ],
+      "correctAnswer": 1,
+      "explanation": "REGEX_REPLACE() is most effective for phone number standardization as it can handle complex pattern matching and replacement. You can use patterns like REGEX_REPLACE([Phone], '[^0-9+]', '') to remove unwanted characters while preserving country codes, then apply additional patterns to format consistently.",
+      "difficulty": "Intermediate",
+      "tags": ["string-functions", "regex", "phone-numbers", "data-standardization"]
+    },
+    {
+      "id": "21",
+      "question": "Your e-commerce platform tracks customer behavior across multiple touchpoints. You need to calculate the time elapsed between first visit and first purchase in business hours only. Which Date Function strategy would be most accurate?",
+      "options": [
+        "Simple DATEDIFF('hour', [First Visit], [First Purchase])",
+        "DATEDIFF('minute', [First Visit], [First Purchase]) with business hour filtering",
+        "Custom calculation using DATEPART and conditional logic for business hours",
+        "DATEADD functions to calculate business time intervals"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A custom calculation using DATEPART('hour') and DATEPART('weekday') with conditional logic allows you to accurately count only business hours (e.g., 9 AM to 5 PM, Monday to Friday). This approach excludes weekends and non-business hours, providing the most accurate measure of actual business time elapsed.",
+      "difficulty": "Advanced",
+      "tags": ["date-functions", "business-hours", "customer-behavior", "conditional-logic"]
+    },
+    {
+      "id": "22",
+      "question": "In supply chain analytics, you need to identify suppliers whose delivery performance varies significantly from their historical patterns. Which statistical function combination would be most appropriate for this outlier detection?",
+      "options": [
+        "STDEV() and AVG() to calculate z-scores",
+        "PERCENTILE() functions for quartile-based outlier detection",
+        "CORR() function to measure consistency patterns",
+        "Both STDEV()/AVG() and PERCENTILE() for comprehensive analysis"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Comprehensive outlier detection requires both approaches: STDEV()/AVG() for z-score calculations (typically >2 or >3 standard deviations) and PERCENTILE() functions for quartile-based detection (IQR method). Using both methods provides more robust outlier identification and reduces false positives in supplier performance analysis.",
+      "difficulty": "Advanced",
+      "tags": ["aggregate-functions", "outlier-detection", "supply-chain", "statistical-analysis"]
+    },
+    {
+      "id": "23",
+      "question": "Your organization implements dynamic row-level security where user access is determined by multiple attributes passed through JWT tokens. Which User Function combination would provide the most flexible security implementation?",
+      "options": [
+        "ISMEMBEROF() combined with multiple group checks",
+        "USERATTRIBUTE() and USERATTRIBUTEINCLUDES() for multi-value attributes",
+        "USERNAME() with complex string matching",
+        "FULLNAME() combined with CONTAINS() functions"
+      ],
+      "correctAnswer": 1,
+      "explanation": "USERATTRIBUTE() and USERATTRIBUTEINCLUDES() provide the most flexible security implementation for JWT-based authentication. USERATTRIBUTE() handles single-value attributes while USERATTRIBUTEINCLUDES() works with multi-value attributes (like multiple regions or departments), enabling sophisticated attribute-based access control patterns.",
+      "difficulty": "Advanced",
+      "tags": ["user-functions", "jwt-security", "dynamic-rls", "multi-value-attributes"]
+    },
+    {
+      "id": "24",
+      "question": "Your financial dashboard calculates moving correlations between asset prices over rolling 30-day windows. Which Table Calculation approach would be most computationally efficient?",
+      "options": [
+        "WINDOW_CORR() function with 30-day window specification",
+        "CORR() aggregate function recalculated for each window",
+        "Manual correlation calculation using WINDOW_SUM and WINDOW_COUNT",
+        "LOOKUP() functions to implement custom correlation logic"
+      ],
+      "correctAnswer": 0,
+      "explanation": "WINDOW_CORR() with proper window specification (e.g., LAST(-29) to LAST(0)) is most computationally efficient as it's optimized for rolling window calculations. This built-in function handles the correlation calculation efficiently without requiring manual implementation of the statistical formula.",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "financial-analysis", "moving-correlations", "performance"]
+    },
+    {
+      "id": "25",
+      "question": "Your manufacturing quality control system needs to detect when consecutive measurements exceed control limits. Which Table Calculation pattern would effectively identify these runs?",
+      "options": [
+        "Simple comparison of each value to control limits",
+        "RUNNING_COUNT with conditional reset logic",
+        "WINDOW functions to examine neighboring values",
+        "LOOKUP() functions with conditional accumulation"
+      ],
+      "correctAnswer": 3,
+      "explanation": "LOOKUP() functions with conditional accumulation can effectively track consecutive occurrences. For example, using LOOKUP(IF [Value] > [Control_Limit] THEN 1 ELSE 0 END, -1) to check previous values and accumulate consecutive violations, providing a robust method for detecting control limit runs.",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "quality-control", "consecutive-values", "manufacturing"]
+    },
+    {
+      "id": "26",
+      "question": "When implementing A/B testing analysis, you need to calculate statistical significance using a two-sample t-test. Which function approach would be most appropriate for the calculation?",
+      "options": [
+        "Built-in TTEST() function in Tableau",
+        "RAWSQL functions calling database statistical procedures",
+        "Manual calculation using AVG(), STDEV(), and COUNT() functions",
+        "PERCENTILE() functions for distribution comparison"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Manual calculation using AVG(), STDEV(), and COUNT() functions provides the most transparent and customizable approach for t-test calculations. You can calculate means, standard deviations, and sample sizes for both groups, then implement the t-statistic formula: (mean1-mean2)/SQRT((var1/n1)+(var2/n2)).",
+      "difficulty": "Advanced",
+      "tags": ["statistical-analysis", "a-b-testing", "t-test", "manual-calculation"]
+    },
+    {
+      "id": "27",
+      "question": "Your retail analytics requires calculating market basket analysis metrics like lift and confidence for product associations. Which calculation approach would be most efficient for large datasets?",
+      "options": [
+        "Nested table calculations for transaction analysis",
+        "LOD expressions with aggregate functions for association rules",
+        "RAWSQL functions for database-level association mining",
+        "Multiple passes using different aggregation levels"
+      ],
+      "correctAnswer": 1,
+      "explanation": "LOD expressions with aggregate functions provide the most efficient approach for market basket analysis. Using expressions like {FIXED [Product A], [Product B] : COUNT([Transaction])} / {FIXED [Product A] : COUNT([Transaction])} allows for efficient calculation of support, confidence, and lift metrics at the appropriate aggregation levels.",
+      "difficulty": "Advanced",
+      "tags": ["market-basket-analysis", "lod-expressions", "association-rules", "retail-analytics"]
+    },
+    {
+      "id": "28",
+      "question": "Your organization processes log data with timestamps in Unix epoch format (seconds since 1970). Which Date Function combination would convert these to readable dates most reliably?",
+      "options": [
+        "DATE() function with arithmetic conversion",
+        "DATEADD('second', [Unix Timestamp], DATE('1970-01-01'))",
+        "DATEPARSE() with epoch format specification",
+        "Custom calculation using DATEDIFF and reference dates"
+      ],
+      "correctAnswer": 1,
+      "explanation": "DATEADD('second', [Unix Timestamp], DATE('1970-01-01')) is the most reliable method for converting Unix timestamps. This approach adds the number of seconds since the Unix epoch (January 1, 1970) to the epoch start date, correctly handling timezone considerations and leap seconds.",
+      "difficulty": "Intermediate",
+      "tags": ["date-functions", "unix-timestamps", "epoch-conversion", "log-data"]
+    },
+    {
+      "id": "29",
+      "question": "Your enterprise needs to implement data masking for sensitive customer information in development environments. Which String Function approach would provide effective pseudonymization while maintaining data relationships?",
+      "options": [
+        "REPLACE() function with random character substitution",
+        "Hash-based approach using consistent string transformations",
+        "LEFT() and RIGHT() functions to show only partial data",
+        "REGEX_REPLACE() with pattern-based masking"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Hash-based approach using consistent string transformations maintains data relationships while providing effective pseudonymization. Using functions like STR(ABS(HASH([Customer ID]))) ensures the same input always produces the same masked output, preserving analytical relationships while protecting sensitive data.",
+      "difficulty": "Advanced",
+      "tags": ["string-functions", "data-masking", "pseudonymization", "enterprise-security"]
+    },
+    {
+      "id": "30",
+      "question": "Your real-time dashboard displays IoT sensor data and needs to calculate exponentially weighted moving averages for anomaly detection. Which calculation strategy would be most appropriate?",
+      "options": [
+        "WINDOW_AVG() with equal weights",
+        "Table calculations with exponential decay factors",
+        "RUNNING_AVG() for cumulative calculations",
+        "LOOKUP() functions with weight calculations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Table calculations with exponential decay factors allow for implementing EWMA where recent values have higher weights. Using formulas like: Previous_EWMA * (1-α) + Current_Value * α, where α is the smoothing factor, provides effective anomaly detection for time series IoT data.",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "iot-data", "ewma", "anomaly-detection"]
+    },
+    {
+      "id": "31",
+      "question": "When working with international financial data, your calculations need to handle different decimal separators (comma vs. period) and currency symbols. Which type conversion approach would be most robust?",
+      "options": [
+        "FLOAT() function with standard formatting",
+        "REGEX_REPLACE() to standardize format before FLOAT() conversion",
+        "STR() function to maintain text format",
+        "Custom RAWSQL functions for locale-specific parsing"
+      ],
+      "correctAnswer": 1,
+      "explanation": "REGEX_REPLACE() to standardize format before FLOAT() conversion provides the most robust approach. Using patterns like REGEX_REPLACE(REGEX_REPLACE([Amount], '[^0-9,.-]', ''), ',', '.') removes currency symbols and standardizes decimal separators before numeric conversion, handling international formatting variations effectively.",
+      "difficulty": "Advanced",
+      "tags": ["type-conversion", "international-data", "currency-formatting", "regex"]
+    },
+    {
+      "id": "32",
+      "question": "Your healthcare analytics dashboard processes patient data with varying date formats and needs to calculate age at specific treatment dates. Which approach would handle the complexity most reliably?",
+      "options": [
+        "DATEDIFF with standardized date parsing",
+        "DATEPARSE with multiple format attempts in conditional logic",
+        "Manual age calculation using YEAR() and MONTH() functions",
+        "RAWSQL functions for database-specific date handling"
+      ],
+      "correctAnswer": 1,
+      "explanation": "DATEPARSE with multiple format attempts in conditional logic provides the most reliable approach. Using IF ISDATE(DATEPARSE('format1', [Date])) THEN DATEPARSE('format1', [Date]) ELSEIF ISDATE(DATEPARSE('format2', [Date])) THEN DATEPARSE('format2', [Date]) allows handling multiple date formats systematically.",
+      "difficulty": "Advanced",
+      "tags": ["date-functions", "healthcare-data", "age-calculation", "multiple-formats"]
+    },
+    {
+      "id": "33",
+      "question": "Your predictive analytics model requires calculating rolling correlations between multiple variables with different lag periods. Which Table Calculation design would be most flexible for this analysis?",
+      "options": [
+        "Multiple WINDOW_CORR() functions with different window sizes",
+        "Parameterized calculations using WINDOW functions with dynamic offsets",
+        "Separate worksheets for each correlation calculation",
+        "LOOKUP() functions to manually implement correlation formulas"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Parameterized calculations using WINDOW functions with dynamic offsets provide the most flexibility. Using parameters for window size and lag periods in expressions like WINDOW_CORR([Var1], [Var2], LAST(-[Window_Param]), LAST(-[Lag_Param])) allows dynamic adjustment of analysis parameters without rebuilding calculations.",
+      "difficulty": "Advanced",
+      "tags": ["table-calculations", "predictive-analytics", "rolling-correlations", "parametrized-calculations"]
+    },
+    {
+      "id": "34",
+      "question": "Your organization's compliance dashboard needs to implement audit trails showing who viewed specific data and when. Which User Function strategy would provide the most comprehensive audit capability?",
+      "options": [
+        "USERNAME() function logged to external systems",
+        "Combination of USERNAME(), FULLNAME(), and NOW() with data source integration",
+        "ISMEMBEROF() for role-based audit logging",
+        "USERATTRIBUTE() for detailed user context capture"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Combination of USERNAME(), FULLNAME(), and NOW() with data source integration provides comprehensive audit capability. This approach captures user identity (USERNAME), display name (FULLNAME), and access timestamp (NOW()), which can be logged to audit tables for complete compliance tracking and forensic analysis.",
+      "difficulty": "Advanced",
+      "tags": ["user-functions", "audit-trails", "compliance", "data-governance"]
+    },
+    {
+      "id": "35",
+      "question": "Your advanced analytics team needs to implement custom statistical distributions not available in Tableau's standard functions. Which approach would provide the most accurate and maintainable solution?",
+      "options": [
+        "Complex manual calculations using basic math functions",
+        "RAWSQL functions calling database-specific statistical packages",
+        "Table calculations approximating statistical distributions",
+        "External R/Python scripts integrated through Tableau's analytics extensions"
+      ],
+      "correctAnswer": 3,
+      "explanation": "External R/Python scripts integrated through Tableau's analytics extensions provide the most accurate and maintainable solution for custom statistical distributions. This approach leverages specialized statistical libraries (like scipy in Python or base R distributions), ensuring mathematical accuracy while maintaining code reusability and documentation.",
+      "difficulty": "Advanced",
+      "tags": ["advanced-analytics", "statistical-distributions", "r-python-integration", "analytics-extensions"]
+    }
+  ]
+}

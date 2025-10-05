@@ -1,0 +1,153 @@
+{
+  "title": "Administrative Views",
+  "description": "Master using Tableau's built-in administrative views for monitoring server/site activity, user behavior, performance metrics, and content usage to optimize Tableau deployments.",
+  "metadata": {
+    "domain": "Domain 4: Establish Governance and Support Published Content",
+    "certification": "Tableau Consultant",
+    "totalQuestions": 10,
+    "estimatedTime": "15 minutes",
+    "difficulty": "intermediate-advanced"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "Starting with Tableau Server version 2023.1.0, what driver must be installed to use the built-in administrative views?",
+      "options": [
+        "Oracle JDBC driver",
+        "SQL Server ODBC driver",
+        "PostgreSQL driver",
+        "MySQL connector"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Beginning with version 2023.1.0, you must install the POSTGRESQL DRIVER to use built-in administrative views. The driver can be found on the Driver Download page. IMPORTANT: If upgrading in place, your existing driver will continue to work (no need to install new driver, but recommended for most up-to-date version). If installing a fresh Tableau Server instance, you MUST download and install the driver.",
+      "difficulty": "intermediate",
+      "tags": ["administrative-views", "postgresql-driver", "tableau-2023", "requirements"]
+    },
+    {
+      "id": 2,
+      "question": "Where can you access administrative views on Tableau Server?",
+      "options": [
+        "Only through the TSM (Tableau Services Manager) command line",
+        "Click the Status page; site administrators see views for their site, server administrators can see entire server or individual sites",
+        "Administrative views are only available via REST API",
+        "Through the Data Management Add-on interface only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "To see administrative views, click STATUS. SITE ADMINISTRATORS can see administrative views for THEIR SITE. On multi-site servers: SITE ADMINISTRATORS can see views for their current site. SERVER ADMINISTRATORS can see views for the ENTIRE SERVER (click site menu > 'Manage All Sites' to access server menus), OR views for INDIVIDUAL SITES (click site menu > select site name > 'Site Status').",
+      "difficulty": "intermediate",
+      "tags": ["navigation", "status-page", "site-administrators", "server-administrators"]
+    },
+    {
+      "id": 3,
+      "question": "What is the purpose of administrative views in Tableau Server?",
+      "options": [
+        "To create user-facing dashboards for business metrics",
+        "Powerful monitoring tools to optimize Tableau Server and understand how users interact with Tableau content",
+        "To manage user permissions and access control",
+        "To configure server hardware and network settings"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Administrative views are POWERFUL MONITORING TOOLS that help you: (1) OPTIMIZE TABLEAU SERVER performance and resource utilization, and (2) Better UNDERSTAND HOW USERS ARE INTERACTING with Tableau content. These embedded Tableau workbooks monitor different types of server or site activity, providing insights into usage patterns, performance bottlenecks, and operational health.",
+      "difficulty": "beginner",
+      "tags": ["administrative-views", "monitoring", "optimization", "purpose"]
+    },
+    {
+      "id": 4,
+      "question": "Which pre-built administrative views focus on PERFORMANCE monitoring?",
+      "options": [
+        "Only 'Server Disk Space' and 'Stats for Space Usage'",
+        "'Performance of Views', 'Performance of Flow Runs', and 'Stats for Load Times'",
+        "'Actions by All Users' and 'Actions by Specific User'",
+        "'Desktop License Usage' and 'Login-based License Usage'"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Performance-focused administrative views include: PERFORMANCE OF VIEWS—monitor view rendering performance, PERFORMANCE OF FLOW RUNS—track Tableau Prep flow execution, STATS FOR LOAD TIMES—analyze how quickly content loads. These views help identify slow-performing content and optimization opportunities for improving user experience.",
+      "difficulty": "intermediate",
+      "tags": ["performance-views", "monitoring", "load-times", "optimization"]
+    },
+    {
+      "id": 5,
+      "question": "Which administrative views help monitor USAGE PATTERNS and USER ACTIVITY?",
+      "options": [
+        "'Background Tasks for Extracts' and 'Background Task Delay'",
+        "'Traffic to Views', 'Traffic to Data Sources', 'Actions by All Users', 'Actions by Specific User', 'Actions by Recent Users'",
+        "'Server Disk Space' and 'Stats for Space Usage'",
+        "'Backgrounder Dashboard' and 'Stale Content'"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Usage pattern and user activity views include: TRAFFIC TO VIEWS—which views are most accessed, TRAFFIC TO DATA SOURCES—data source usage patterns, ACTIONS BY ALL USERS—server-wide user activity, ACTIONS BY SPECIFIC USER—individual user's activity tracking, ACTIONS BY RECENT USERS—activity from recent users. These help understand content popularity and user engagement.",
+      "difficulty": "intermediate",
+      "tags": ["usage-monitoring", "traffic-views", "user-activity", "engagement"]
+    },
+    {
+      "id": 6,
+      "question": "What administrative views help monitor BACKGROUND TASK execution?",
+      "options": [
+        "'Background Tasks for Extracts', 'Background Tasks for Non Extracts', 'Background Task Delay', 'Backgrounder Dashboard'",
+        "Only 'Background Tasks for Extracts'",
+        "'Performance of Flow Runs' and 'Traffic to Data Sources'",
+        "Background tasks cannot be monitored through administrative views"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Background task monitoring views include: BACKGROUND TASKS FOR EXTRACTS—monitor extract refresh jobs, BACKGROUND TASKS FOR NON EXTRACTS—track subscription emails and other non-extract jobs, BACKGROUND TASK DELAY—identify bottlenecks and delays in task execution, BACKGROUNDER DASHBOARD—comprehensive view of backgrounder process health. These are critical for ensuring scheduled tasks complete successfully.",
+      "difficulty": "advanced",
+      "tags": ["background-tasks", "extracts", "backgrounder", "task-monitoring"]
+    },
+    {
+      "id": 7,
+      "question": "Which administrative views help monitor RESOURCE UTILIZATION and capacity planning?",
+      "options": [
+        "'Traffic to Views' and 'Actions by All Users'",
+        "'Server Disk Space' and 'Stats for Space Usage'",
+        "'Performance of Views' and 'Traffic to Data Sources'",
+        "'Actions by Specific User' and 'Actions by Recent Users'"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Resource utilization views include: SERVER DISK SPACE—monitor disk usage across all server nodes for capacity planning, STATS FOR SPACE USAGE—analyze which content consumes the most space (workbooks, extracts, data sources). These views help administrators proactively manage storage capacity and identify opportunities for cleanup or expansion.",
+      "difficulty": "intermediate",
+      "tags": ["disk-space", "capacity-planning", "resource-utilization", "storage"]
+    },
+    {
+      "id": 8,
+      "question": "What administrative views help with LICENSE MANAGEMENT?",
+      "options": [
+        "'Login-based License Usage', 'Desktop License Usage', 'Desktop License Expiration'",
+        "Only 'Actions by All Users'",
+        "'Traffic to Views' and 'Performance of Views'",
+        "License management requires TSM commands, not administrative views"
+      ],
+      "correctAnswer": 0,
+      "explanation": "License management views include: LOGIN-BASED LICENSE USAGE—track consumption of login-based (user-based) licenses, DESKTOP LICENSE USAGE—monitor Tableau Desktop license utilization, DESKTOP LICENSE EXPIRATION—identify licenses approaching expiration. These views help optimize license allocation and plan for renewals or adjustments.",
+      "difficulty": "intermediate",
+      "tags": ["license-management", "license-usage", "desktop-licenses", "compliance"]
+    },
+    {
+      "id": 9,
+      "question": "Which administrative view helps identify content that hasn't been accessed recently?",
+      "options": [
+        "'Traffic to Views'",
+        "'Actions by Recent Users'",
+        "'Stale Content'",
+        "'Performance of Views'"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The STALE CONTENT administrative view helps identify content that hasn't been accessed recently. This is valuable for: (1) Content cleanup and archiving decisions, (2) Identifying unused workbooks/data sources consuming resources, (3) Governance and lifecycle management of published content. Stale content analysis helps optimize server resources and maintain a curated content library.",
+      "difficulty": "intermediate",
+      "tags": ["stale-content", "content-lifecycle", "governance", "cleanup"]
+    },
+    {
+      "id": 10,
+      "question": "Can administrators create custom administrative views beyond the pre-built ones?",
+      "options": [
+        "No—only pre-built administrative views are available",
+        "Yes—administrators can create custom administrative views by connecting to the PostgreSQL repository",
+        "Custom views require purchasing Data Management Add-on",
+        "Only Tableau Support can create custom administrative views"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Yes, administrators can CREATE CUSTOM ADMINISTRATIVE VIEWS by connecting to the PostgreSQL repository database that stores Tableau Server metadata. This allows creation of tailored monitoring solutions for specific organizational needs beyond the pre-built views. See 'Create Custom Administrative Views' documentation for guidance on querying the repository and building custom dashboards.",
+      "difficulty": "advanced",
+      "tags": ["custom-views", "postgresql-repository", "custom-monitoring", "advanced-administration"]
+    }
+  ]
+}

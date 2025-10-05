@@ -1,0 +1,154 @@
+{
+  "title": "Overview of Row-Level Security Options in Tableau - Practice Questions",
+  "description": "Practice questions for Overview of Row-Level Security Options covering all RLS methods, implementation approaches, and selection criteria",
+  "metadata": {
+    "topic": "Overview of Row-Level Security Options in Tableau",
+    "domain": "domain2",
+    "difficulty": "INTERMEDIATE",
+    "sourceUrl": "https://help.tableau.com/current/online/en-us/rls_options_overview.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "Which RLS method is specifically recommended by Tableau as the preferred approach for addressing shortcomings of other row-level security solutions?",
+      "options": [
+        "Manual User Filter with static user-to-data mapping",
+        "Dynamic User Filter using USERNAME() function",
+        "Data Policy through virtual connections",
+        "Database-Native RLS with live connections"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data Policy through virtual connections is explicitly recommended by Tableau as the preferred approach. According to the documentation, 'Row-level security through virtual connection data policies was developed to address shortcomings of other row-level security solutions.' This method provides centralized, server-level enforcement and requires Data Management licensing.",
+      "difficulty": "BEGINNER",
+      "tags": ["data-policy", "virtual-connections", "recommended-approach"]
+    },
+    {
+      "id": "2",
+      "question": "A small organization with 50 users needs to implement RLS for a proof-of-concept dashboard with static data that rarely changes. Which RLS method is most appropriate for this scenario?",
+      "options": [
+        "Data Policy with virtual connections for enterprise-grade security",
+        "Manual User Filter for simplicity and ease of understanding",
+        "Database-Native RLS for maximum security",
+        "Dynamic User Filter with calculated fields"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Manual User Filter is most appropriate for proof-of-concept scenarios with small user bases and static data. The documentation specifically states that Manual User Filter is 'Best for: Proof of concept or static workbooks' and notes it's 'Simple, easy to understand.' While it has limitations for production use, it's ideal for small-scale demonstrations.",
+      "difficulty": "BEGINNER",
+      "tags": ["manual-user-filter", "proof-of-concept", "small-scale"]
+    },
+    {
+      "id": "3",
+      "question": "Your organization has pre-built database security mechanisms and wants to leverage them across multiple applications, not just Tableau. Which RLS method should be prioritized?",
+      "options": [
+        "Dynamic User Filter to replicate database logic in Tableau",
+        "Data Policy to centralize security management in Tableau",
+        "Database-Native RLS to leverage existing infrastructure",
+        "Manual User Filter to maintain simplicity"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Database-Native RLS is optimal when organizations have pre-built database security mechanisms that need to work across multiple applications. The documentation states this approach is 'Best when organization has pre-built database security' and notes that 'Policies can apply across database clients,' ensuring consistent security beyond just Tableau.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["database-native", "existing-infrastructure", "multi-application"]
+    },
+    {
+      "id": "4",
+      "question": "Which licensing requirement is necessary to implement Data Policy RLS method in Tableau Cloud or Server?",
+      "options": [
+        "Explorer license for all users accessing secured content",
+        "Creator license and Data Management add-on",
+        "Viewer license with administrative privileges",
+        "Server Management add-on for enterprise features"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Data Policy RLS requires both a Creator license and the Data Management add-on. The documentation specifically states that Data Policy 'Requires Creator license and Data Management' for implementation. This is a significant licensing consideration when choosing between RLS methods.",
+      "difficulty": "BEGINNER",
+      "tags": ["licensing", "data-management", "creator-license"]
+    },
+    {
+      "id": "5",
+      "question": "When using Dynamic User Filter RLS method, what is the primary requirement for the underlying data structure?",
+      "options": [
+        "Data must be stored in extracts only for security",
+        "Security information must be included in the underlying data",
+        "All data must be pre-aggregated at user level",
+        "Database views must be created for each user group"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Dynamic User Filter requires that 'security information [be included] in underlying data.' This method automates user-to-data mapping by embedding security context directly in the data structure, allowing the USERNAME() function and calculated fields to determine appropriate access levels dynamically.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["dynamic-user-filter", "data-structure", "security-information"]
+    },
+    {
+      "id": "6",
+      "question": "Which RLS method provides enforcement at the server level for every query, ensuring consistent security regardless of how content is accessed?",
+      "options": [
+        "Manual User Filter with workbook-level permissions",
+        "Dynamic User Filter with calculated field security",
+        "Data Policy with virtual connection enforcement",
+        "Database-Native RLS with live connections only"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data Policy with virtual connections provides 'server level [enforcement] for every query' according to the documentation. This ensures that security policies are consistently applied regardless of how users access the data - whether through published workbooks, ad-hoc analysis, or API access.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["server-level-enforcement", "data-policy", "consistent-security"]
+    },
+    {
+      "id": "7",
+      "question": "For embedding workflows where Tableau content is embedded in external applications, which RLS method specifically supports JSON Web Token (JWT) integration?",
+      "options": [
+        "Manual User Filter with custom authentication",
+        "User Attributes with JWT for embedding workflows",
+        "Data Policy with virtual connection integration",
+        "Database-Native RLS with external authentication"
+      ],
+      "correctAnswer": 1,
+      "explanation": "User Attributes specifically supports 'JSON Web Token (JWT) for embedding workflows' according to the documentation. This method is designed for scenarios where Tableau content is embedded in external applications and user context needs to be passed securely through JWT tokens.",
+      "difficulty": "ADVANCED",
+      "tags": ["user-attributes", "JWT", "embedding", "external-applications"]
+    },
+    {
+      "id": "8",
+      "question": "What is the primary disadvantage of Manual User Filter that makes it unsuitable for large-scale production deployments?",
+      "options": [
+        "Requires expensive licensing for each user",
+        "Only works with extract-based data sources",
+        "High-maintenance overhead and security risks if permissions are misconfigured",
+        "Cannot integrate with existing authentication systems"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The primary disadvantage of Manual User Filter is that it's 'High-maintenance, security risks if permissions misconfigured' according to the documentation. Manual mapping becomes impractical as user bases grow and creates significant risk of human error in permission configuration, making it unsuitable for production environments.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["manual-user-filter", "scalability-limitations", "maintenance-overhead"]
+    },
+    {
+      "id": "9",
+      "question": "Which RLS method is available starting from Tableau version 2021.4 and represents the modern approach to row-level security?",
+      "options": [
+        "Dynamic User Filter with enhanced calculated fields",
+        "Database-Native RLS with improved database integration",
+        "Data Policy with virtual connections",
+        "User Attributes with enhanced JWT support"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Data Policy with virtual connections is 'Available in Tableau 2021.4+ with Data Management' according to the documentation. This represents Tableau's modern approach to RLS, developed to address limitations of earlier methods and provide enterprise-grade security management.",
+      "difficulty": "BEGINNER",
+      "tags": ["2021.4", "modern-approach", "data-policy"]
+    },
+    {
+      "id": "10",
+      "question": "When implementing RLS, which factor should be the PRIMARY consideration when choosing between the available methods?",
+      "options": [
+        "The total number of visualizations in the workbook",
+        "Organizational needs, infrastructure, and scalability requirements",
+        "The preferred data visualization chart types",
+        "The geographic distribution of users"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The documentation emphasizes choosing RLS methods 'based on organizational needs and infrastructure.' This includes factors such as existing security infrastructure, user scale, maintenance capabilities, licensing constraints, and integration requirements with other systems. Technical implementation details should align with broader organizational strategy.",
+      "difficulty": "INTERMEDIATE",
+      "tags": ["selection-criteria", "organizational-needs", "infrastructure"]
+    }
+  ]
+}

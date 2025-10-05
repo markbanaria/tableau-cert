@@ -1,0 +1,126 @@
+{
+  "title": "Refresh Extracts - Practice Questions",
+  "description": "Practice questions for refreshing extracts in Tableau covering full refresh, incremental refresh, subrange refresh, scheduling, command-line automation, and best practices",
+  "metadata": {
+    "topic": "Refresh Extracts",
+    "domain": "Plan and Prepare Data Connections",
+    "difficulty": "Intermediate",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/extracting_refresh.htm",
+    "generatedDate": "2025-10-05",
+    "questionCount": 8
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "What is the difference between a full extract refresh and an incremental extract refresh?",
+      "options": [
+        "Full refresh replaces all rows with current data from the original source; incremental refresh only adds new rows since the last refresh",
+        "Full refresh only updates changed rows; incremental refresh adds new rows and updates changed rows",
+        "Full refresh is only available in Tableau Desktop; incremental refresh is only available on Tableau Server",
+        "There is no difference; they are two names for the same operation"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A full refresh replaces all the data in the extract with the latest information from the original data source, ensuring an exact copy but potentially taking a long time and being expensive on the database. An incremental refresh has two variations: only add new rows since the last refresh, or define a time period from the refresh date to refresh (subrange). Incremental refreshes are more efficient but require proper configuration.",
+      "difficulty": "beginner",
+      "tags": ["refresh-extracts", "full-refresh", "incremental-refresh"]
+    },
+    {
+      "id": "2",
+      "question": "What happens to a .tde extract file when you perform a refresh using Tableau version 2022.4 or newer?",
+      "options": [
+        "The extract is automatically upgraded to a .hyper extract, but will be unable to open with previous versions of Tableau Desktop",
+        "The extract remains as .tde format to maintain backward compatibility",
+        "The refresh fails and requires manual conversion first",
+        "The extract is converted to .csv format for better compatibility"
+      ],
+      "correctAnswer": 0,
+      "explanation": "If you perform a refresh on a .tde extract using version 2022.4 or newer, the extract is automatically upgraded to a .hyper extract. While there are many benefits of upgrading to .hyper format (better performance, larger data capacity), you'll be unable to open the extract with previous versions of Tableau Desktop. Note that .tde files are no longer supported in any form after version 2024.2 and must be upgraded to .hyper format.",
+      "difficulty": "intermediate",
+      "tags": ["refresh-extracts", "extract-formats", "hyper", "tde"]
+    },
+    {
+      "id": "3",
+      "question": "What is required to configure an incremental extract refresh?",
+      "options": [
+        "Extract all rows (not a sample), and specify a column to identify new rows such as a Date field or monotonically increasing ID column",
+        "Extract only a sample of rows and specify any column from the data source",
+        "Aggregation must be enabled for incremental refresh to work",
+        "Only datetime columns can be used; ID columns are not supported"
+      ],
+      "correctAnswer": 0,
+      "explanation": "To configure incremental refresh: (1) You must extract all rows in the database - incremental refresh cannot be defined on sample extracts; (2) You must specify a column in the database to identify new rows, such as a Date/Datetime field or an ID column that monotonically increases as rows are added. Note that incremental refresh is not available if you enable Aggregation, and you cannot increment a sample extract.",
+      "difficulty": "intermediate",
+      "tags": ["refresh-extracts", "incremental-refresh", "configuration"]
+    },
+    {
+      "id": "4",
+      "question": "What is the purpose of the subrange refresh feature introduced in Tableau 2024.2 for incremental extracts?",
+      "options": [
+        "To re-extract previously extracted data from a specified time period and capture any retroactive changes that may have occurred in the data source",
+        "To limit the total size of the extract by only keeping recent data",
+        "To automatically convert incremental refreshes to full refreshes after a certain time period",
+        "To compress older data in the extract to save storage space"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Subrange refresh (available in Tableau 2024.2 and newer) allows you to specify an additional time period to re-extract previously extracted data and capture any changes that may have occurred. This is useful when the data source allows for inserts and retroactive modifications within a defined time period. Once configured, the incremental extract will pull any new data, plus previously extracted data from a set time range. Without a time range, it only pulls content newer than what exists in the extract.",
+      "difficulty": "intermediate",
+      "tags": ["refresh-extracts", "incremental-refresh", "subrange-refresh"]
+    },
+    {
+      "id": "5",
+      "question": "A data source is updated daily with new sales transactions. Instead of rebuilding the entire extract each day, what refresh strategy should be implemented?",
+      "options": [
+        "Configure incremental refresh to add only new transactions daily, and perform a full refresh weekly to ensure data accuracy",
+        "Always use full refresh daily to guarantee data consistency",
+        "Use incremental refresh exclusively and never perform full refreshes",
+        "Configure subrange refresh only; incremental refresh is deprecated"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The best practice for daily updated data is to configure incremental refresh to add only the new transactions each day (more efficient), and then perform a full refresh periodically (e.g., weekly) to ensure you have the most up-to-date data and catch any retroactive changes. This balances efficiency with data accuracy. The frequency of full refreshes depends on your data source characteristics and business requirements.",
+      "difficulty": "intermediate",
+      "tags": ["refresh-extracts", "best-practices", "incremental-refresh", "strategy"]
+    },
+    {
+      "id": "6",
+      "question": "When configuring subrange refresh with a time period of \"3 months\" and the current date is April 1st, what data will be refreshed?",
+      "options": [
+        "All data from April (1 day) plus all data from January, February, and March (approximately 91 days total)",
+        "Exactly 90 days of data counting backward from April 1st",
+        "Only the data from the previous 3 complete months (January, February, March)",
+        "All data from the current year to date"
+      ],
+      "correctAnswer": 0,
+      "explanation": "When a number of time units are entered, Tableau interprets it as pulling all data from the existing time unit plus an additional X units worth of data. With 3 months on April 1st, it pulls all data from April (1 day in this case) plus all data from January, February, and March (approximately 91 days). Running the same refresh on April 28th would pull 28 days of April plus the preceding 3 months (approximately 118 days). For more granular control and consistency, best practice is to use the smallest applicable unit of time (such as Days).",
+      "difficulty": "advanced",
+      "tags": ["refresh-extracts", "subrange-refresh", "configuration", "time-periods"]
+    },
+    {
+      "id": "7",
+      "question": "What issue can occur when using a datetime or timestamp column for incremental refresh if the database uses higher precision than Tableau's data engine?",
+      "options": [
+        "Duplicate rows can appear after an incremental refresh because Tableau stores time values with precision up to 3 decimal places",
+        "The refresh will fail with an error message",
+        "Data will be automatically rounded to the nearest second",
+        "The extract will convert to use full refresh only"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The data engine stores time values with precision up to 3 decimal places. If you specify a datetime or timestamp column for 'Identify new rows using column' and your database uses higher precision than Tableau, you can end up with duplicate rows after an incremental refresh. For example, two database rows with datetime values of 2015-03-13 17:30:56.502352 and 2015-03-13 17:30:56.502852 will both be stored by Tableau as 2015-03-13 17:30:56.502, creating duplicate rows.",
+      "difficulty": "advanced",
+      "tags": ["refresh-extracts", "incremental-refresh", "datetime", "precision", "troubleshooting"]
+    },
+    {
+      "id": "8",
+      "question": "A consultant needs to automate extract refreshes and avoid unnecessary scheduled refreshes. What combination of approaches should they implement?",
+      "options": [
+        "Use the Tableau Data Extract Command-Line Utility for automation, and give users permission to refresh published extracts on demand",
+        "Only use scheduled refreshes; on-demand refresh should never be allowed for users",
+        "Command-line utilities are deprecated; only use Tableau Server scheduling",
+        "Manual refresh only; automation introduces too many security risks"
+      ],
+      "correctAnswer": 0,
+      "explanation": "To optimize extract refresh management: (1) Use the Tableau Data Extract Command-Line Utility to automate extract refreshes programmatically, and (2) Give users the permission capability to refresh published extracts on demand to avoid unnecessary scheduled refreshes. This combination provides flexibility and efficiency. Users with appropriate permissions can refresh when they need current data, rather than relying solely on fixed schedules that may not align with actual data update patterns.",
+      "difficulty": "advanced",
+      "tags": ["refresh-extracts", "automation", "command-line", "permissions", "best-practices"]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function Home() {
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-4">Tableau Certification Hub</h1>
+        <p className="text-xl text-muted-foreground">
+          Practice and prepare for your Tableau certification
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Practice Quiz</CardTitle>
+            <CardDescription>
+              Test your knowledge with full practice exams and domain-focused tests
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/quiz">
+              <Button className="w-full">
+                Start Full Quiz
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Review</CardTitle>
+            <CardDescription>
+              Random sampling or targeted review by domain and topic
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/review">
+              <Button className="w-full" variant="outline">
+                Quick Review
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mt-12 text-center">
+        <p className="text-sm text-muted-foreground">
+          Built with Next.js and shadcn/ui
+        </p>
+      </div>
+    </div>
+  );
+}

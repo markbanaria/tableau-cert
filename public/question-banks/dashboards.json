@@ -1,0 +1,154 @@
+{
+  "title": "Dashboards - Practice Questions",
+  "description": "Practice questions covering Tableau dashboard creation, design best practices, interactivity, layout containers, dashboard objects, and optimization techniques",
+  "metadata": {
+    "topic": "Dashboards",
+    "domain": "domain1",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://help.tableau.com/current/pro/desktop/en-us/dashboards.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 10
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "According to dashboard design best practices, where should you place the most important view in a Tableau dashboard?",
+      "options": [
+        "At the bottom center for emphasis",
+        "Spanning or occupying the upper-left corner",
+        "In the exact center of the dashboard",
+        "At the top right where the eye naturally ends"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Most viewers scan web content starting at the top left of a web page. Once you know your dashboard's main purpose, you should place your most important view so that it occupies or spans the upper-left corner of your dashboard. This leverages natural reading patterns to ensure your key message gets maximum attention.",
+      "difficulty": "intermediate",
+      "tags": ["dashboard-design", "best-practices", "layout", "visual-hierarchy"]
+    },
+    {
+      "id": "2",
+      "question": "What is the recommended limit for the number of views to include in a single Tableau dashboard to maintain clarity and performance?",
+      "options": [
+        "One view maximum for simplicity",
+        "Two or three views",
+        "Five to seven views",
+        "As many views as needed—there is no recommended limit"
+      ],
+      "correctAnswer": 1,
+      "explanation": "It's recommended to limit the number of views in your dashboard to two or three. Too many views can cause visual clarity and the big picture to get lost in the details. Additionally, too many views can interfere with dashboard performance after it's published. If the scope of your story needs to grow beyond two or three views, you can create additional dashboards.",
+      "difficulty": "beginner",
+      "tags": ["dashboard-design", "best-practices", "performance", "simplicity"]
+    },
+    {
+      "id": "3",
+      "question": "When creating a dashboard at a fixed size of 1300 x 700 pixels, what potential issue should a consultant warn their client about?",
+      "options": [
+        "The dashboard will not display on any screen sizes",
+        "Tableau will automatically adapt dimensions for smaller displays, which may result in scrunched views or scrollbars",
+        "The dashboard cannot be published to Tableau Server",
+        "Fixed-size dashboards cannot include interactive elements"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When using fixed sizing, if you design a dashboard at 1300 x 700 pixels, Tableau will resize it for smaller displays—and sometimes this results in scrunched views or scrollbars. The Range sizing feature is helpful for avoiding this. Best practice is to author at your final display size or use Automatic sizing, and consider device-specific layouts for optimal viewing across screen sizes.",
+      "difficulty": "intermediate",
+      "tags": ["dashboard-sizing", "responsive-design", "display-optimization", "troubleshooting"]
+    },
+    {
+      "id": "4",
+      "question": "A client wants to add interactivity to allow users to filter other sheets by selecting marks in one view. What is the simplest way to enable this in a dashboard?",
+      "options": [
+        "Create complex calculated fields for each interaction",
+        "Enable the 'Use as Filter' option in the upper corner of the sheet",
+        "Write custom JavaScript for the dashboard",
+        "Publish to Server first before this functionality becomes available"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The simplest way to add filtering interactivity is to enable the 'Use as Filter' option in the upper corner of a sheet. This allows selected marks in that sheet to act as filters for other sheets in the dashboard. For more complex interactions like navigation or displaying web pages, you can use actions, but 'Use as Filter' is the quickest method for basic cross-filtering.",
+      "difficulty": "beginner",
+      "tags": ["interactivity", "filters", "dashboard-actions", "use-as-filter"]
+    },
+    {
+      "id": "5",
+      "question": "What is the difference between how hidden objects behave when they are floating versus tiled in a dashboard layout?",
+      "options": [
+        "There is no difference—hidden objects behave identically regardless of layout type",
+        "Floating objects reveal objects beneath them when hidden; tiled objects in a container have their space filled by other objects, but at the top level leave blank space",
+        "Tiled objects completely disappear; floating objects remain partially visible",
+        "Floating objects leave blank space; tiled objects always reorganize automatically"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When a floating object is hidden, it simply reveals any objects beneath it. When a tiled object is hidden, the results depend on its level in the layout hierarchy: in a Horizontal or Vertical layout container, hidden objects have their space filled in by other objects in the container. However, in the Tiled layout container at the very top of the layout hierarchy, a hidden object leaves blank space behind. This is why it's recommended to place objects you plan to hide in Horizontal or Vertical containers.",
+      "difficulty": "advanced",
+      "tags": ["layout", "show-hide", "containers", "dashboard-objects", "floating-tiled"]
+    },
+    {
+      "id": "6",
+      "question": "When adding a Web Page object to a dashboard, which protocol should be used as a best practice for security?",
+      "options": [
+        "HTTP (http://) for compatibility",
+        "FTP for faster loading",
+        "HTTPS (https://) for encrypted connections",
+        "Any protocol works equally well"
+      ],
+      "correctAnswer": 2,
+      "explanation": "As a best practice, use HTTPS (https://) in your URLs to ensure that the connection from your dashboard to the web page is encrypted. Additionally, if Tableau Server is running HTTPS and you use HTTP in the URL, users' browsers won't be able to display the web page. If you don't specify a protocol, HTTP will be assumed, which is less secure.",
+      "difficulty": "intermediate",
+      "tags": ["security", "web-page-object", "https", "best-practices", "encryption"]
+    },
+    {
+      "id": "7",
+      "question": "What is the purpose of layout containers (Horizontal and Vertical objects) in Tableau dashboards?",
+      "options": [
+        "They add decorative borders to dashboard sections",
+        "They group related objects together and fine-tune how the dashboard resizes when users interact with it",
+        "They are required for all dashboard objects",
+        "They improve query performance for dashboard sheets"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Horizontal and Vertical layout containers allow you to group related objects together and fine-tune how your dashboard resizes when users interact with them. They provide structural organization and control over responsive behavior. They're particularly useful when implementing Show/Hide functionality, as objects in containers can have their space dynamically filled by other objects when hidden.",
+      "difficulty": "intermediate",
+      "tags": ["layout-containers", "dashboard-organization", "responsive-design", "containers"]
+    },
+    {
+      "id": "8",
+      "question": "A consultant is designing a dashboard that will be viewed on tablets and phones. What Tableau feature should they use to optimize the experience for different device types?",
+      "options": [
+        "Create separate workbooks for each device type",
+        "Use device-specific layouts within the same dashboard",
+        "Require users to zoom in and out manually",
+        "Only use Automatic sizing without device considerations"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Desktop allows you to create device-specific layouts within the same dashboard, so that on tablets your dashboard contains one set of views and objects, and on phones it displays another. This provides an optimized experience for each device type without requiring separate workbooks. This is documented in 'Create Dashboard Layouts for Different Device Types.'",
+      "difficulty": "intermediate",
+      "tags": ["device-layouts", "responsive-design", "mobile", "tablets", "optimization"]
+    },
+    {
+      "id": "9",
+      "question": "When configuring a Show/Hide button for a dashboard object, what is unique about how the button works during authoring versus viewing a published dashboard?",
+      "options": [
+        "There is no difference in functionality",
+        "During authoring, you must Alt-click (Windows) or Option-click (macOS); when viewing published dashboards, simply clicking toggles visibility",
+        "Show/Hide buttons don't work during authoring at all",
+        "During authoring, the button requires double-clicking; when published, it requires single-clicking"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When viewing a published dashboard, simply clicking a Show/Hide button toggles object visibility. However, when authoring a dashboard, you need to Alt-click (Windows) or Option-click (macOS) to activate the button. This prevents accidental activation during dashboard design. The same applies to Navigation and Download buttons.",
+      "difficulty": "intermediate",
+      "tags": ["show-hide", "buttons", "authoring", "interactivity", "keyboard-shortcuts"]
+    },
+    {
+      "id": "10",
+      "question": "Which dashboard objects can NOT be copied between dashboards or workbooks?",
+      "options": [
+        "Text objects and images",
+        "Web page objects and blank objects",
+        "Sheets, filters, parameters, legends, layout containers with sheets inside, objects on device layouts, and dashboard titles",
+        "All objects can be copied without restrictions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "You cannot copy: sheets in a dashboard, items that rely on a specific sheet (such as filters, parameters, and legends), layout containers with something you can't copy inside them (like a sheet or filter), objects on a device layout, or dashboard titles. However, you can copy text, images, web page objects, blank objects, and standalone layout containers between dashboards, workbooks, and even between Tableau Desktop and Tableau in your browser.",
+      "difficulty": "advanced",
+      "tags": ["dashboard-objects", "copying", "limitations", "workflow", "object-management"]
+    }
+  ]
+}

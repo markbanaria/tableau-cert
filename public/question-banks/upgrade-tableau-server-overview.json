@@ -1,0 +1,182 @@
+{
+  "title": "Upgrade Tableau Server Overview - Practice Questions",
+  "description": "Practice questions covering Tableau Server upgrade planning, testing, backup strategies, version compatibility, and best practices for enterprise deployments",
+  "metadata": {
+    "topic": "Upgrade Tableau Server Overview",
+    "domain": "domain1",
+    "difficulty": "intermediate",
+    "sourceUrl": "https://help.tableau.com/current/server/en-us/sug_plan.htm",
+    "generatedDate": "2025-01-05",
+    "questionCount": 12
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "Before performing a Tableau Server upgrade, what is the MOST critical preparatory step that provides both testing capability and disaster recovery options?",
+      "options": [
+        "Disable all scheduled tasks and subscriptions permanently",
+        "Create a full backup using tsm maintenance backup command",
+        "Upgrade all Tableau Desktop clients first",
+        "Uninstall the current version completely"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Creating a full backup using 'tsm maintenance backup' is the most critical step because it provides data needed to set up a test version of the upgraded environment AND gives you the ability to recover if the upgrade process fails. Tableau strongly recommends making a backup before beginning the upgrade process. Disabling tasks should be temporary (only during backup), Desktop upgrades come after Server, and uninstalling is not part of the standard upgrade process.",
+      "difficulty": "intermediate",
+      "tags": ["backup", "upgrade-preparation", "tsm", "disaster-recovery"]
+    },
+    {
+      "id": "2",
+      "question": "A consultant is setting up a test environment to validate a Tableau Server upgrade. After installing the same version as production and restoring the backup, what critical step is still required?",
+      "options": [
+        "All configuration is automatically restored from the backup",
+        "Manually replicate configuration details and customizations not included in the backup",
+        "Immediately upgrade to the target version without further configuration",
+        "Run tsm maintenance validate to auto-configure the system"
+      ],
+      "correctAnswer": 1,
+      "explanation": "When you restore the Tableau database, it doesn't include configuration details and customizations, so you must manually replicate your existing Tableau Server configuration including SMTP, SSL certificates, SAML configuration, Kerberos, and other customizations. The backup contains data but not all configuration settings. This is a critical step mentioned in the test environment preparation process.",
+      "difficulty": "advanced",
+      "tags": ["testing", "upgrade-preparation", "configuration", "backup-restore"]
+    },
+    {
+      "id": "3",
+      "question": "According to Tableau upgrade best practices, when should scheduled tasks and subscriptions be disabled during the upgrade process?",
+      "options": [
+        "Permanently before starting any upgrade planning",
+        "Only in the test environment, never in production",
+        "Immediately before taking the backup, then re-enabled after backup is complete",
+        "After the upgrade is finished and verified"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau recommends disabling subscriptions and scheduling in your production environment immediately before taking the backup, and re-enabling them after the backup is complete. This helps avoid users receiving duplicate subscriptions and email messages when you restore your backup in your test environment. They should be disabled again during the actual production upgrade and re-enabled after verification.",
+      "difficulty": "intermediate",
+      "tags": ["subscriptions", "upgrade-preparation", "best-practices", "scheduling"]
+    },
+    {
+      "id": "4",
+      "question": "A Tableau consultant discovers that their client's production environment is running Tableau Server 2021.2 while users have Tableau Desktop 2022.1. What version compatibility issue will they encounter when users try to publish workbooks?",
+      "options": [
+        "No issue - users can publish from newer Desktop versions to older Server versions",
+        "Publishing will fail - users can only publish to Server versions equal to or newer than Desktop",
+        "Publishing works but all new features will be automatically removed",
+        "Users must downgrade Desktop before any publishing can occur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "You can only publish workbooks and data sources to Tableau Server if the version of Tableau Server is the same or newer than the version of Tableau Desktop. Users with Desktop 2022.1 cannot publish to Server 2021.2. However, users can downgrade their workbook during publishing to make it compatible, though this will remove features not available in the older version. The Server should be upgraded to maintain compatibility.",
+      "difficulty": "intermediate",
+      "tags": ["version-compatibility", "desktop-server", "publishing", "troubleshooting"]
+    },
+    {
+      "id": "5",
+      "question": "During the upgrade verification process, what command should administrators use to verify the status of all Tableau Server processes?",
+      "options": [
+        "tabadmin status --verbose",
+        "tsm status -v",
+        "tableau-server status --all",
+        "systemctl status tableau"
+      ],
+      "correctAnswer": 1,
+      "explanation": "'tsm status -v' is the correct TSM (Tableau Services Manager) command to view the status of all Tableau Server processes with verbose output. Starting with version 2018.2, Tableau Server uses TSM, which replaced the older tabadmin utility. This is one of the first verification steps after an upgrade to confirm all services and processes are running as expected.",
+      "difficulty": "beginner",
+      "tags": ["tsm", "verification", "post-upgrade", "server-administration"]
+    },
+    {
+      "id": "6",
+      "question": "An organization's Tableau Server upgrade test plan includes performance testing. Which tools does Tableau recommend for performance and user acceptance testing?",
+      "options": [
+        "Only built-in Tableau administrative views",
+        "Third-party load testing tools exclusively",
+        "Tabjolt, Replayer, and Scout",
+        "Manual user testing without automated tools"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Tableau specifically recommends using tools like Tabjolt, Replayer, and Scout for performance and user acceptance testing in the test environment. These specialized tools are designed for Tableau performance testing and help validate that the upgraded environment will perform as expected under load. While administrative views and manual testing are useful, these tools provide comprehensive performance validation.",
+      "difficulty": "intermediate",
+      "tags": ["performance-testing", "testing", "tabjolt", "best-practices"]
+    },
+    {
+      "id": "7",
+      "question": "What critical areas should be tested after completing a Tableau Server upgrade in the test environment before proceeding to production?",
+      "options": [
+        "Only verify that the server starts successfully",
+        "Test server processes, user access, publishing, viewing workbooks, subscriptions, extract refreshes, permissions, and APIs",
+        "Only test new features introduced in the upgrade",
+        "Skip testing if the upgrade completed without errors"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Comprehensive testing must include: server processes status, user access and authentication, publishing workbooks and data sources, viewing published workbooks (including embedded views), subscriptions and extract refreshes, permissions validation, and command-line utilities/APIs. Testing only new features or skipping testing because the upgrade completed is insufficient—you must verify all existing functionality works as expected in the upgraded environment.",
+      "difficulty": "advanced",
+      "tags": ["testing", "verification", "post-upgrade", "best-practices", "validation"]
+    },
+    {
+      "id": "8",
+      "question": "According to Tableau Blueprint upgrade guidelines, what should be evaluated as part of understanding upgrade impact on the organization?",
+      "options": [
+        "Only the new features being added in the upgrade",
+        "Current deployment topology, content, users, data sources, configuration changes, capacity, software versions, and programmatic dependencies",
+        "Just the server hardware specifications",
+        "Only the time required for the upgrade process"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau Blueprint recommends a comprehensive evaluation including: how Tableau is used and how upgrade affects use cases, current deployment assessment (topology, content, users), comparison with future state (data sources, configuration, capacity vs. planned user onboarding), inventory of existing software versions (clients, drivers, mobile), and programmatic dependencies (embedded analytics, APIs, multi-instance deployments, client compatibility). This holistic approach ensures upgrade success.",
+      "difficulty": "advanced",
+      "tags": ["blueprint", "upgrade-planning", "enterprise", "impact-analysis", "best-practices"]
+    },
+    {
+      "id": "9",
+      "question": "A consultant is planning a Tableau Server upgrade from 2018.2 to the latest version during a weekend maintenance window. What timing consideration is MOST critical for minimizing business impact?",
+      "options": [
+        "Upgrade must be completed within 2 hours regardless of complexity",
+        "Plan upgrade during periods of lowest user activity and allow sufficient time for testing and rollback if needed",
+        "Upgrade timing is irrelevant since users won't be affected",
+        "Always schedule upgrades during peak business hours for immediate issue identification"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For upgrades from 2018.2 and later, Tableau recommends performing upgrades during low-usage periods (such as weekends) and allowing adequate time for both the upgrade process and post-upgrade verification testing. You must also account for potential rollback time if issues are discovered. The upgrade window should be planned based on your environment's complexity, not arbitrary time limits.",
+      "difficulty": "intermediate",
+      "tags": ["upgrade-planning", "timing", "business-impact", "2018.2-plus"]
+    },
+    {
+      "id": "10",
+      "question": "When planning a Tableau Server upgrade from 2018.2+ to new hardware simultaneously, what approach should a consultant recommend to the client?",
+      "options": [
+        "Perform the upgrade and hardware migration in a single step",
+        "First upgrade the software on existing hardware, then migrate to new hardware",
+        "Follow the 'Migrate to New Hardware' guide instead of the standard upgrade flowchart",
+        "Hardware migration is not possible with 2018.2+ versions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "When upgrading Tableau Server 2018.2+ to new hardware, you should follow the 'Migrate to New Hardware' guide rather than the standard in-place upgrade flowchart. This approach is specifically designed for scenarios where both software upgrade and hardware change are required, providing a more reliable path than attempting to combine upgrade and migration processes.",
+      "difficulty": "advanced",
+      "tags": ["hardware-migration", "upgrade-planning", "migration", "2018.2-plus"]
+    },
+    {
+      "id": "11",
+      "question": "A large enterprise client is concerned about their Tableau Server 2019.1 upgrade complexity and wants professional assistance. What support options should a consultant recommend based on Tableau's upgrade guidance?",
+      "options": [
+        "Only community forums are available for upgrade support",
+        "Tableau Technical Support and Tableau Global Services consulting are available based on support service level",
+        "Professional services are only available for new installations, not upgrades",
+        "All upgrades must be performed without vendor assistance"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tableau offers both Technical Support and Global Services consulting for server upgrades from 2018.2+. Support availability depends on the client's support service level, and Tableau Global Services can provide specialized assistance with upgrade planning and implementation for complex environments. This is particularly valuable for enterprise deployments with custom configurations or critical business requirements.",
+      "difficulty": "intermediate",
+      "tags": ["support-services", "professional-services", "enterprise", "upgrade-assistance"]
+    },
+    {
+      "id": "12",
+      "question": "During a Tableau Server 2018.2+ upgrade planning session, a consultant discovers the client has heavily customized authentication, multiple external data connections, and complex deployment topology. What is the BEST recommendation for upgrade approach?",
+      "options": [
+        "Proceed with standard upgrade process immediately",
+        "Use the upgrade flowchart and consider engaging Tableau Global Services for complex deployment guidance",
+        "Postpone upgrade indefinitely due to complexity",
+        "Perform a clean installation instead of upgrade"
+      ],
+      "correctAnswer": 1,
+      "explanation": "For complex deployments with customized authentication, multiple external connections, and complex topology, following the documented upgrade flowchart while considering Tableau Global Services assistance is the best approach. The upgrade process from 2018.2+ can handle complex configurations, but professional services can help ensure proper planning, testing, and execution. Clean installation would lose valuable configuration and content.",
+      "difficulty": "advanced",
+      "tags": ["complex-deployment", "professional-services", "authentication", "topology", "upgrade-planning"]
+    }
+  ]
+}
