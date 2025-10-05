@@ -159,7 +159,7 @@ export default function QuickReviewPage() {
 
   if (showQuiz && quizData) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 py-8">
         <div className="mb-4">
           <Button onClick={handleBackToSetup} variant="outline">
             ← Back to Review Setup
@@ -171,7 +171,7 @@ export default function QuickReviewPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-6 py-8">
       <div className="mb-4">
         <Link href="/">
           <Button variant="ghost" size="sm">
@@ -216,8 +216,15 @@ export default function QuickReviewPage() {
                   type="number"
                   min="1"
                   max={maxRandomQuestions}
-                  value={randomCount}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRandomCount(Math.min(parseInt(e.target.value) || 10, maxRandomQuestions))}
+                  value={randomCount === 0 ? '' : randomCount}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const val = e.target.value;
+                    if (val === '') {
+                      setRandomCount(0);
+                    } else {
+                      setRandomCount(Math.min(parseInt(val) || 0, maxRandomQuestions));
+                    }
+                  }}
                   className="max-w-xs"
                 />
                 <p className="text-sm text-muted-foreground">
@@ -227,7 +234,7 @@ export default function QuickReviewPage() {
 
               <Button 
                 onClick={generateRandomQuiz} 
-                disabled={loading || !samplerReady}
+                disabled={loading || !samplerReady || randomCount === 0 || randomCount > maxRandomQuestions}
                 size="lg"
                 className="w-full sm:w-auto"
               >
@@ -296,8 +303,15 @@ export default function QuickReviewPage() {
                   type="number"
                   min="1"
                   max={maxTargetedQuestions}
-                  value={targetedCount}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTargetedCount(Math.min(parseInt(e.target.value) || 10, maxTargetedQuestions))}
+                  value={targetedCount === 0 ? '' : targetedCount}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const val = e.target.value;
+                    if (val === '') {
+                      setTargetedCount(0);
+                    } else {
+                      setTargetedCount(Math.min(parseInt(val) || 0, maxTargetedQuestions));
+                    }
+                  }}
                   className="max-w-xs"
                 />
                 <p className="text-sm text-muted-foreground">
@@ -307,11 +321,11 @@ export default function QuickReviewPage() {
 
               <Button 
                 onClick={generateTargetedQuiz} 
-                disabled={loading || !samplerReady || !selectedDomain}
+                disabled={loading || !samplerReady || !selectedDomain || targetedCount === 0 || targetedCount > maxTargetedQuestions}
                 size="lg"
                 className="w-full sm:w-auto"
               >
-                {loading ? 'Generating...' : `Generate ${targetedCount} Questions`}
+                {loading ? 'Generating...' : `Generate ${targetedCount > 0 ? targetedCount : '0'} Questions`}
               </Button>
             </CardContent>
           </Card>

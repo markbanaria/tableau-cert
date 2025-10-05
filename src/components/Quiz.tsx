@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { QuizData, QuizAnswer, QuizResult } from '@/types/quiz';
+import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
 import { HelpCircle, ExternalLink } from 'lucide-react';
 
 interface QuizProps {
@@ -22,12 +22,107 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
   const [isComplete, setIsComplete] = useState(false);
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showHint, setShowHint] = useState(false);
+  const [reviewAnswers, setReviewAnswers] = useState<Map<string, string>>(new Map());
 
   const currentQuestion = quizData.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quizData.questions.length - 1;
 
+  // Restore selected option when navigating in review mode
+  useState(() => {
+    if (reviewMode && reviewAnswers.has(currentQuestion.id)) {
+      setSelectedOption(reviewAnswers.get(currentQuestion.id) || '');
+    }
+  });
+
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
+    // Save answer in review mode for navigation
+    if (reviewMode) {
+      setReviewAnswers(prev => new Map(prev).set(currentQuestion.id, value));
+    }
+  };
+
+  const calculateDomainScores = (answers: QuizAnswer[]): DomainScore[] => {
+    // Group questions by domain
+    const domainMap = new Map<string, { 
+      domainId: string;
+      domainName: string;
+      questions: QuizQuestion[];
+      correctCount: number;
+    }>();
+
+    quizData.questions.forEach(question => {
+      const domainId = question.metadata?.domain || 'unknown';
+      const domainName = question.metadata?.domainName || 'Unknown Domain';
+      
+      if (!domainMap.has(domainId)) {
+        domainMap.set(domainId, {
+          domainId,
+          domainName,
+          questions: [],
+          correctCount: 0
+        });
+      }
+      
+      domainMap.get(domainId)!.questions.push(question);
+    });
+
+    // Calculate scores for each domain
+    answers.forEach(answer => {
+      const question = quizData.questions.find(q => q.id === answer.questionId);
+      if (question) {
+        const domainId = question.metadata?.domain || 'unknown';
+        const domainData = domainMap.get(domainId);
+        
+        if (domainData && question.correctAnswer === answer.selectedOption) {
+          domainData.correctCount++;
+        }
+      }
+    });
+
+    // Convert to DomainScore array
+    return Array.from(domainMap.values()).map(domain => ({
+      domainId: domain.domainId,
+      domainName: domain.domainName,
+      score: domain.correctCount,
+      totalQuestions: domain.questions.length,
+      percentage: domain.questions.length > 0 
+        ? Math.round((domain.correctCount / domain.questions.length) * 100)
+        : 0
+    }));
+  };
+
+  const calculateDomainBreakdownForReview = (): DomainScore[] => {
+    // Group questions by domain for review mode (no scoring)
+    const domainMap = new Map<string, { 
+      domainId: string;
+      domainName: string;
+      count: number;
+    }>();
+
+    quizData.questions.forEach(question => {
+      const domainId = question.metadata?.domain || 'unknown';
+      const domainName = question.metadata?.domainName || 'Unknown Domain';
+      
+      if (!domainMap.has(domainId)) {
+        domainMap.set(domainId, {
+          domainId,
+          domainName,
+          count: 0
+        });
+      }
+      
+      domainMap.get(domainId)!.count++;
+    });
+
+    // Convert to DomainScore array (no actual scores in review mode)
+    return Array.from(domainMap.values()).map(domain => ({
+      domainId: domain.domainId,
+      domainName: domain.domainName,
+      score: 0,
+      totalQuestions: domain.count,
+      percentage: 0
+    }));
   };
 
   const handleNext = () => {
@@ -48,11 +143,19 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           return question && question.correctAnswer === answer.selectedOption ? acc + 1 : acc;
         }, 0);
 
+        const domainScores = calculateDomainScores(updatedAnswers);
+        
+        // Calculate weighted score (out of 1000) based on domain performance
+        // This assumes the quiz follows official domain weightings
+        const weightedScore = Math.round((score / quizData.questions.length) * 1000);
+
         const quizResult: QuizResult = {
           score,
           totalQuestions: quizData.questions.length,
           answers: updatedAnswers,
-          passed: score >= Math.ceil(quizData.questions.length * 0.7) // 70% pass rate
+          passed: score >= Math.ceil(quizData.questions.length * 0.7), // 70% pass rate
+          domainScores,
+          weightedScore
         };
 
         setResult(quizResult);
@@ -62,18 +165,52 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
       }
     }
 
+    // In review mode, when reaching the last question, show completion
+    if (reviewMode && isLastQuestion) {
+      const domainScores = calculateDomainBreakdownForReview();
+      
+      const quizResult: QuizResult = {
+        score: 0, // No scoring in review mode
+        totalQuestions: quizData.questions.length,
+        answers: [], // No tracked answers in review mode
+        passed: true, // Always "passed" in review mode since it's just for learning
+        domainScores
+      };
+
+      setResult(quizResult);
+      setIsComplete(true);
+      onComplete?.(quizResult);
+      return;
+    }
+
     // Move to next question (both quiz and review mode)
     if (currentQuestionIndex < quizData.questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setSelectedOption('');
+      const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
+      
+      // Restore answer in review mode, clear in quiz mode
+      if (reviewMode) {
+        const nextQuestionId = quizData.questions[nextIndex].id;
+        setSelectedOption(reviewAnswers.get(nextQuestionId) || '');
+      } else {
+        setSelectedOption('');
+      }
       setShowHint(false);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-      setSelectedOption('');
+      const prevIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(prevIndex);
+      
+      // Restore answer in review mode, clear in quiz mode
+      if (reviewMode) {
+        const prevQuestionId = quizData.questions[prevIndex].id;
+        setSelectedOption(reviewAnswers.get(prevQuestionId) || '');
+      } else {
+        setSelectedOption('');
+      }
       setShowHint(false);
     }
   };
@@ -88,30 +225,128 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
 
   if (isComplete && result) {
     return (
-      <Card className="w-full max-w-2xl mx-auto">
+      <Card className="w-full max-w-4xl mx-auto">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Quiz Complete!</CardTitle>
+          <CardTitle className="text-2xl">
+            {reviewMode ? 'Review Complete!' : 'Quiz Complete!'}
+          </CardTitle>
           <CardDescription>{quizData.title}</CardDescription>
         </CardHeader>
-        <CardContent className="text-center space-y-4">
-          <div className="text-4xl font-bold">
-            {result.score}/{result.totalQuestions}
-          </div>
-          <div className="text-lg">
-            Score: {Math.round((result.score / result.totalQuestions) * 100)}%
-          </div>
-          <div className={`text-lg font-semibold ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
-            {result.passed ? '✅ Passed!' : '❌ Failed'}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {result.passed
-              ? 'Congratulations! You passed the quiz.'
-              : 'You need 70% to pass. Try again!'}
-          </p>
+        <CardContent className="space-y-6">
+          {reviewMode ? (
+            <>
+              {/* Review Mode Summary */}
+              <div className="text-center space-y-4">
+                <div className="text-4xl font-bold text-blue-600">✓</div>
+                <div className="text-lg">
+                  You reviewed {result.totalQuestions} questions
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Great job! You've completed the review session.
+                </p>
+              </div>
+
+              {/* Domain Breakdown for Review */}
+              {result.domainScores && result.domainScores.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-center">Domain Coverage</h3>
+                  <div className="grid gap-3">
+                    {result.domainScores.map((domain) => (
+                      <div key={domain.domainId} className="border rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-medium text-sm">{domain.domainName}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {domain.totalQuestions} question{domain.totalQuestions !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-500 h-2 rounded-full"
+                            style={{ 
+                              width: `${(domain.totalQuestions / result.totalQuestions) * 100}%` 
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Quiz Mode Summary */}
+              <div className="text-center space-y-4 pb-6 border-b">
+                <div className="text-5xl font-bold">
+                  {result.score}/{result.totalQuestions}
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-semibold">
+                    {Math.round((result.score / result.totalQuestions) * 100)}%
+                  </div>
+                  {result.weightedScore && (
+                    <div className="text-lg text-muted-foreground">
+                      Weighted Score: {result.weightedScore}/1000
+                    </div>
+                  )}
+                </div>
+                <div className={`text-xl font-semibold ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
+                  {result.passed ? '✅ Passed!' : '❌ Failed'}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {result.passed
+                    ? 'Congratulations! You passed the quiz.'
+                    : 'You need 70% to pass. Try again!'}
+                </p>
+              </div>
+
+              {/* Domain Breakdown for Quiz */}
+              {result.domainScores && result.domainScores.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-center">Performance by Domain</h3>
+                  <div className="grid gap-4">
+                    {result.domainScores
+                      .sort((a, b) => a.domainName.localeCompare(b.domainName))
+                      .map((domain) => (
+                        <div key={domain.domainId} className="border rounded-lg p-4 space-y-2">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h4 className="font-medium text-sm mb-1">{domain.domainName}</h4>
+                              <div className="text-xs text-muted-foreground">
+                                {domain.score}/{domain.totalQuestions} correct
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className={`text-lg font-bold ${
+                                domain.percentage >= 70 ? 'text-green-600' : 
+                                domain.percentage >= 50 ? 'text-yellow-600' : 
+                                'text-red-600'
+                              }`}>
+                                {domain.percentage}%
+                              </div>
+                            </div>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3">
+                            <div
+                              className={`h-3 rounded-full transition-all ${
+                                domain.percentage >= 70 ? 'bg-green-500' : 
+                                domain.percentage >= 50 ? 'bg-yellow-500' : 
+                                'bg-red-500'
+                              }`}
+                              style={{ width: `${domain.percentage}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </CardContent>
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center gap-2">
           <Button onClick={handleRestart}>
-            Take Quiz Again
+            {reviewMode ? 'Review Again' : 'Take Quiz Again'}
           </Button>
         </CardFooter>
       </Card>
@@ -122,18 +357,40 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
     <TooltipProvider>
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
-          <div className="flex justify-between items-start gap-4">
-            <CardTitle className="text-xl flex-1 min-w-0">{quizData.title}</CardTitle>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {reviewMode && (
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded whitespace-nowrap">
-                  Review Mode
+          <div className="space-y-3">
+            {/* Top row: Review Mode badge, counter, and Show Answer button */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                {reviewMode && (
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded whitespace-nowrap">
+                    Review Mode
+                  </span>
+                )}
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
+                  {currentQuestionIndex + 1} of {quizData.questions.length}
                 </span>
+              </div>
+              {/* Show Answer button */}
+              {reviewMode && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={showHint ? "default" : "outline"}
+                      size="sm"
+                      className="h-8"
+                      onClick={() => setShowHint(!showHint)}
+                    >
+                      {showHint ? "Hide Answer" : "Show Answer"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Show answer and explanation</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
-              <span className="text-sm text-muted-foreground whitespace-nowrap">
-                {currentQuestionIndex + 1} of {quizData.questions.length}
-              </span>
             </div>
+            {/* Second row: Title spanning full width */}
+            <CardTitle className="text-xl">{quizData.title}</CardTitle>
           </div>
           {quizData.description && (
             <CardDescription>{quizData.description}</CardDescription>
@@ -141,30 +398,10 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <div className="flex items-start gap-2 mb-4">
-              <h3 className="text-lg font-medium flex-1">
+            <div className="mb-4">
+              <h3 className="text-lg font-medium">
                 {currentQuestion.question}
               </h3>
-              <div className="flex gap-2">
-                {/* Hint Button */}
-                {reviewMode && currentQuestion.explanation && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => setShowHint(!showHint)}
-                      >
-                        <HelpCircle className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Show answer and explanation</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </div>
             </div>
 
             <RadioGroup

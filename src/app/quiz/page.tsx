@@ -88,7 +88,7 @@ export default function MockExamPage() {
 
   if (showQuiz && quizData) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 py-8">
         <div className="mb-4">
           <Button
             variant="outline"
@@ -103,7 +103,7 @@ export default function MockExamPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-6 py-8">
       <div className="mb-4">
         <Link href="/">
           <Button variant="ghost" size="sm">
@@ -126,14 +126,14 @@ export default function MockExamPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
             <CardTitle>Full Practice Exam</CardTitle>
             <CardDescription>
               60 questions with official domain weightings
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="flex flex-col flex-grow space-y-4">
             <div className="text-sm space-y-2">
               {TABLEAU_CONSULTANT_COMPOSITION.domains.map(domain => (
                 <div key={domain.id} className="flex justify-between">
@@ -149,12 +149,14 @@ export default function MockExamPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="5">5 Questions (Test)</SelectItem>
                   <SelectItem value="30">30 Questions</SelectItem>
                   <SelectItem value="45">45 Questions</SelectItem>
                   <SelectItem value="60">60 Questions (Full)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex-grow"></div>
             <Button
               onClick={() => {
                 setCompositionType('full_practice');
@@ -168,14 +170,14 @@ export default function MockExamPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
             <CardTitle>Domain Focus Exam</CardTitle>
             <CardDescription>
               Focus on specific exam domains
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="flex flex-col flex-grow space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Select Domains:</label>
               {TABLEAU_CONSULTANT_COMPOSITION.domains.map(domain => (
@@ -201,6 +203,7 @@ export default function MockExamPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="5">5 Questions (Test)</SelectItem>
                   <SelectItem value="15">15 Questions</SelectItem>
                   <SelectItem value="20">20 Questions</SelectItem>
                   <SelectItem value="30">30 Questions</SelectItem>
@@ -208,6 +211,7 @@ export default function MockExamPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex-grow"></div>
             <Button
               onClick={() => {
                 setCompositionType('domain_focus');

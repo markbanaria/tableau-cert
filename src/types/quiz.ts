@@ -8,6 +8,8 @@ export interface QuizQuestion {
     sourceUrl?: string;
     difficulty?: string;
     tags?: string[];
+    domain?: string;
+    domainName?: string;
   };
 }
 
@@ -22,9 +24,20 @@ export interface QuizAnswer {
   selectedOption: number;
 }
 
+export interface DomainScore {
+  domainId: string;
+  domainName: string;
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+  weight?: number; // Optional weight percentage for the domain
+}
+
 export interface QuizResult {
   score: number;
   totalQuestions: number;
   answers: QuizAnswer[];
   passed: boolean;
+  domainScores?: DomainScore[]; // Optional domain breakdown
+  weightedScore?: number; // Optional weighted score (e.g., out of 1000)
 }

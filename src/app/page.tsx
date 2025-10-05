@@ -32,8 +32,15 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-6 py-8">
       <div className="mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <img 
+            src="/tableau-logo.png" 
+            alt="Tableau Logo" 
+            className="h-8 w-auto mb-4"
+          />
+        </div>
         <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
         <p className="text-muted-foreground">
           Practice and prepare for your Tableau certification
@@ -43,6 +50,20 @@ export default function Home() {
             <span className="font-medium">{availableQuestions}</span> questions available
           </p>
         )}
+      </div>
+
+      {/* Mobile Quick Action Buttons - Hidden on Desktop */}
+      <div className="grid grid-cols-2 gap-3 mb-6 md:hidden">
+        <Link href="/quiz" className="w-full">
+          <Button className="w-full" size="lg">
+            Mock Exam
+          </Button>
+        </Link>
+        <Link href="/review" className="w-full">
+          <Button className="w-full" variant="outline" size="lg">
+            Quick Review
+          </Button>
+        </Link>
       </div>
 
       {/* Question Bank Coverage */}
@@ -58,8 +79,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-4">
               {Object.entries(domainCoverage).map(([domainName, data]: [string, any]) => (
                 <div key={domainName} className="border rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-sm">{domainName}</h4>
+                  <div className="mb-2">
                     <span className={`text-xs px-2 py-1 rounded ${
                       data.coveragePercentage >= 80 ? 'bg-green-100 text-green-800' :
                       data.coveragePercentage >= 50 ? 'bg-yellow-100 text-yellow-800' :
@@ -67,6 +87,9 @@ export default function Home() {
                     }`}>
                       {data.coveragePercentage}% coverage
                     </span>
+                  </div>
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="font-medium text-sm">{domainName}</h4>
                   </div>
                   <div className="text-sm space-y-1 text-muted-foreground">
                     <div className="flex justify-between">

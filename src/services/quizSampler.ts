@@ -236,7 +236,14 @@ export class QuizSampler {
         // Only add questions that haven't been sampled yet
         const uniqueQuestions = questionBank.questions.filter(
           q => !this.sampledQuestionIds.has(q.id)
-        );
+        ).map(q => ({
+          ...q,
+          metadata: {
+            ...q.metadata,
+            domain: domainId,
+            domainName: domain.name
+          }
+        }));
         allDomainQuestions.push(...uniqueQuestions);
       }
     }
@@ -451,10 +458,25 @@ export class QuizSampler {
       await this.loadQuestionBanks();
     }
 
-    // Collect all available questions
+    // Collect all available questions with domain metadata
     const allQuestions: QuizQuestion[] = [];
-    for (const bank of this.questionBanks.values()) {
-      allQuestions.push(...bank.questions);
+    
+    // Map each question bank to its domain
+    for (const domain of TABLEAU_CONSULTANT_COMPOSITION.domains) {
+      for (const bankFileName of domain.questionBanks) {
+        const bank = this.questionBanks.get(bankFileName);
+        if (bank) {
+          const questionsWithMetadata = bank.questions.map(q => ({
+            ...q,
+            metadata: {
+              ...q.metadata,
+              domain: domain.id,
+              domainName: domain.name
+            }
+          }));
+          allQuestions.push(...questionsWithMetadata);
+        }
+      }
     }
 
     if (allQuestions.length === 0) {
@@ -495,13 +517,28 @@ export class QuizSampler {
       if (!bank) {
         throw new Error(`Topic not found: ${topicName}`);
       }
-      questions = [...bank.questions];
+      questions = bank.questions.map(q => ({
+        ...q,
+        metadata: {
+          ...q.metadata,
+          domain: domain.id,
+          domainName: domain.name
+        }
+      }));
     } else {
       // Get questions from all topics in the domain
       for (const bankFileName of domain.questionBanks) {
         const bank = this.questionBanks.get(bankFileName);
         if (bank) {
-          questions.push(...bank.questions);
+          const questionsWithMetadata = bank.questions.map(q => ({
+            ...q,
+            metadata: {
+              ...q.metadata,
+              domain: domain.id,
+              domainName: domain.name
+            }
+          }));
+          questions.push(...questionsWithMetadata);
         }
       }
     }
