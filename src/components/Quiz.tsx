@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
-import { HelpCircle, ExternalLink } from 'lucide-react';
+import { HelpCircle, ExternalLink, CheckCircle2, XCircle } from 'lucide-react';
 
 interface QuizProps {
   quizData: QuizData;
@@ -304,41 +305,99 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
               {result.domainScores && result.domainScores.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-center">Performance by Domain</h3>
-                  <div className="grid gap-4">
+                  <Accordion type="multiple" className="w-full">
                     {result.domainScores
                       .sort((a, b) => a.domainName.localeCompare(b.domainName))
-                      .map((domain) => (
-                        <div key={domain.domainId} className="border rounded-lg p-4 space-y-2">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <h4 className="font-medium text-sm mb-1">{domain.domainName}</h4>
-                              <div className="text-xs text-muted-foreground">
-                                {domain.score}/{domain.totalQuestions} correct
+                      .map((domain) => {
+                        // Get all questions for this domain
+                        const domainQuestions = quizData.questions.filter(
+                          q => (q.metadata?.domain || 'unknown') === domain.domainId
+                        );
+                        
+                        return (
+                          <AccordionItem key={domain.domainId} value={domain.domainId} className="border rounded-lg mb-3 px-4">
+                            <AccordionTrigger className="hover:no-underline">
+                              <div className="flex items-start justify-between w-full pr-4">
+                                <div className="flex-1 text-left">
+                                  <h4 className="font-medium text-sm mb-1">{domain.domainName}</h4>
+                                  <div className="text-xs text-muted-foreground">
+                                    {domain.score}/{domain.totalQuestions} correct
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <div className={`text-lg font-bold ${
+                                    domain.percentage >= 70 ? 'text-green-600' : 
+                                    domain.percentage >= 50 ? 'text-yellow-600' : 
+                                    'text-red-600'
+                                  }`}>
+                                    {domain.percentage}%
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            <div className="text-right">
-                              <div className={`text-lg font-bold ${
-                                domain.percentage >= 70 ? 'text-green-600' : 
-                                domain.percentage >= 50 ? 'text-yellow-600' : 
-                                'text-red-600'
-                              }`}>
-                                {domain.percentage}%
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="space-y-3 pt-2">
+                                <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+                                  <div
+                                    className={`h-3 rounded-full transition-all ${
+                                      domain.percentage >= 70 ? 'bg-green-500' : 
+                                      domain.percentage >= 50 ? 'bg-yellow-500' : 
+                                      'bg-red-500'
+                                    }`}
+                                    style={{ width: `${domain.percentage}%` }}
+                                  />
+                                </div>
+                                
+                                {/* Individual question results */}
+                                <div className="space-y-2">
+                                  {domainQuestions.map((question, idx) => {
+                                    const answer = result.answers.find(a => a.questionId === question.id);
+                                    const isCorrect = answer && answer.selectedOption === question.correctAnswer;
+                                    
+                                    return (
+                                      <div 
+                                        key={question.id} 
+                                        className={`p-3 rounded-md border ${
+                                          isCorrect 
+                                            ? 'bg-green-50 border-green-200' 
+                                            : 'bg-red-50 border-red-200'
+                                        }`}
+                                      >
+                                        <div className="flex items-start gap-2">
+                                          {isCorrect ? (
+                                            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                                          ) : (
+                                            <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                                          )}
+                                          <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-medium mb-1">
+                                              Question {idx + 1}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground line-clamp-2">
+                                              {question.question}
+                                            </p>
+                                            {!isCorrect && answer && (
+                                              <div className="mt-2 text-xs">
+                                                <p className="text-red-700">
+                                                  Your answer: {question.options[answer.selectedOption]}
+                                                </p>
+                                                <p className="text-green-700 mt-1">
+                                                  Correct answer: {question.options[question.correctAnswer]}
+                                                </p>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-3">
-                            <div
-                              className={`h-3 rounded-full transition-all ${
-                                domain.percentage >= 70 ? 'bg-green-500' : 
-                                domain.percentage >= 50 ? 'bg-yellow-500' : 
-                                'bg-red-500'
-                              }`}
-                              style={{ width: `${domain.percentage}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                  </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
                 </div>
               )}
             </>
