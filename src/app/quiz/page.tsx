@@ -47,7 +47,7 @@ export default function MockExamPage() {
     console.log('Mock Exam completed:', result);
   };
 
-  const generateQuiz = async () => {
+  const generateQuiz = async (type: 'full_practice' | 'domain_focus') => {
     if (!samplerReady) {
       alert('Question banks are still loading. Please wait.');
       return;
@@ -60,11 +60,11 @@ export default function MockExamPage() {
 
     setLoading(true);
     try {
-      const questionCount = compositionType === 'full_practice' ? fullPracticeQuestionCount : domainFocusQuestionCount;
+      const questionCount = type === 'full_practice' ? fullPracticeQuestionCount : domainFocusQuestionCount;
       const options: SamplingOptions = {
         totalQuestions: Math.min(questionCount, availableQuestions),
-        compositionType,
-        selectedDomains: compositionType === 'domain_focus' ? selectedDomains : undefined,
+        compositionType: type,
+        selectedDomains: type === 'domain_focus' ? selectedDomains : undefined,
       };
 
       const generatedQuiz = await quizSampler.generateQuiz(options);
@@ -160,7 +160,7 @@ export default function MockExamPage() {
             <Button
               onClick={() => {
                 setCompositionType('full_practice');
-                generateQuiz();
+                generateQuiz('full_practice');
               }}
               disabled={loading || !samplerReady}
               className="w-full"
@@ -215,7 +215,7 @@ export default function MockExamPage() {
             <Button
               onClick={() => {
                 setCompositionType('domain_focus');
-                generateQuiz();
+                generateQuiz('domain_focus');
               }}
               disabled={loading || !samplerReady || selectedDomains.length === 0}
               className="w-full"
