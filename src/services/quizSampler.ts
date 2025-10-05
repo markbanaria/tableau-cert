@@ -6,6 +6,8 @@ import {
   getQuestionDistribution,
   getQuestionBanksForDomain
 } from '@/config/testComposition';
+import { questionBankCache, CachedBundle } from '@/lib/questionBankCache';
+
 export interface QuestionBank {
   topic: string;
   domain: string;
@@ -30,61 +32,149 @@ export interface SamplingOptions {
   seed?: number; // For reproducible sampling
 }
 
+export type LoadingProgressCallback = (loaded: number, total: number, message: string) => void;
+
 export class QuizSampler {
   private questionBanks: Map<string, QuestionBank> = new Map();
   private loaded = false;
+  private loading = false;
+  private loadPromise: Promise<void> | null = null;
   private sampledQuestionIds: Set<string> = new Set(); // Track sampled questions to avoid duplicates
 
-  async loadQuestionBanks(): Promise<void> {
+  /**
+   * Optimized loading with bundled file, caching, and progress reporting
+   */
+  async loadQuestionBanks(onProgress?: LoadingProgressCallback): Promise<void> {
+    // If already loaded, return immediately
+    if (this.loaded) {
+      return;
+    }
+
+    // If currently loading, wait for existing load to complete
+    if (this.loading && this.loadPromise) {
+      return this.loadPromise;
+    }
+
+    this.loading = true;
+    this.loadPromise = this._loadQuestionBanks(onProgress);
+    
     try {
-      const questionBankFiles = new Set<string>();
-      
-      for (const domain of TABLEAU_CONSULTANT_COMPOSITION.domains) {
-        domain.questionBanks.forEach(filename => questionBankFiles.add(filename));
-      }
-
-      console.log(`Loading ${questionBankFiles.size} question banks from test composition`);
-
-      for (const fileName of questionBankFiles) {
-        try {
-          const bankData = await this.loadQuestionBank(fileName);
-          if (bankData) {
-            const questionsWithMetadata = (bankData.questions || []).map((question: any) => ({
-              ...question,
-              metadata: {
-                ...question.metadata,
-                sourceUrl: bankData.metadata?.sourceUrl || '',
-                difficulty: question.difficulty || bankData.metadata?.difficulty || 'intermediate',
-                tags: question.tags || []
-              }
-            }));
-
-            const questionBank: QuestionBank = {
-              topic: bankData.title || fileName,
-              domain: bankData.metadata?.domain || '',
-              questions: questionsWithMetadata,
-              metadata: bankData.metadata || {
-                difficulty: 'intermediate',
-                sourceUrl: '',
-                generatedDate: new Date().toISOString()
-              }
-            };
-
-            this.questionBanks.set(fileName, questionBank);
-          }
-        } catch (error) {
-          console.warn(`Failed to load question bank "${fileName}":`, error);
-        }
-      }
-
-      this.loaded = true;
-      console.log(`Successfully loaded ${this.questionBanks.size} of ${questionBankFiles.size} question banks`);
-    } catch (error) {
-      console.error('Failed to load question banks:', error);
-      this.loaded = true;
+      await this.loadPromise;
+    } finally {
+      this.loading = false;
     }
   }
 
+  private async _loadQuestionBanks(onProgress?: LoadingProgressCallback): Promise<void> {
+    const startTime = performance.now();
+
+    try {
+      onProgress?.(0, 100, 'Checking cache...');
+
+      // Try to load from IndexedDB cache first
+      const cached = await questionBankCache.get();
+      
+      if (cached && await questionBankCache.isValid()) {
+        onProgress?.(50, 100, 'Loading from cache...');
+        console.log('📦 Loading question banks from cache');
+        await this.loadFromBundle(cached);
+        onProgress?.(100, 100, 'Loaded from cache!');
+        
+        const loadTime = performance.now() - startTime;
+        console.log(`✅ Loaded ${this.questionBanks.size} question banks from cache in ${loadTime.toFixed(0)}ms`);
+        return;
+      }
+
+      // Cache miss or invalid - fetch the bundled file
+      onProgress?.(20, 100, 'Downloading question banks...');
+      console.log('📥 Fetching bundled question banks...');
+      
+      const response = await fetch('/question-banks-bundle.json');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch bundled question banks: ${response.statusText}`);
+      }
+
+      onProgress?.(60, 100, 'Processing data...');
+      const bundle: CachedBundle = await response.json();
+      
+      onProgress?.(80, 100, 'Caching for next time...');
+      // Load the data
+      await this.loadFromBundle(bundle);
+      
+      // Cache for next time (non-blocking)
+      questionBankCache.set(bundle).catch(err => 
+        console.warn('Failed to cache question banks:', err)
+      );
+
+      onProgress?.(100, 100, 'Ready!');
+      
+      const loadTime = performance.now() - startTime;
+      console.log(`✅ Loaded ${this.questionBanks.size} question banks from bundle in ${loadTime.toFixed(0)}ms`);
+
+    } catch (error) {
+      console.error('Failed to load question banks:', error);
+      onProgress?.(0, 100, 'Failed to load');
+      this.loaded = true; // Set to true to prevent infinite retry loops
+      throw error;
+    }
+  }
+
+  /**
+   * Load question banks from a pre-bundled data structure
+   */
+  private async loadFromBundle(bundle: CachedBundle): Promise<void> {
+    this.questionBanks.clear();
+
+    for (const [fileName, bankData] of Object.entries(bundle.questionBanks)) {
+      try {
+        if (bankData && bankData.questions) {
+          const questionsWithMetadata = (bankData.questions || []).map((question: any) => ({
+            ...question,
+            metadata: {
+              ...question.metadata,
+              sourceUrl: bankData.metadata?.sourceUrl || '',
+              difficulty: question.difficulty || bankData.metadata?.difficulty || 'intermediate',
+              tags: question.tags || []
+            }
+          }));
+
+          const questionBank: QuestionBank = {
+            topic: bankData.title || fileName,
+            domain: bankData.metadata?.domain || '',
+            questions: questionsWithMetadata,
+            metadata: bankData.metadata || {
+              difficulty: 'intermediate',
+              sourceUrl: '',
+              generatedDate: new Date().toISOString()
+            }
+          };
+
+          this.questionBanks.set(fileName, questionBank);
+        }
+      } catch (error) {
+        console.warn(`Failed to process question bank "${fileName}":`, error);
+      }
+    }
+
+    this.loaded = true;
+  }
+
+  /**
+   * Clear cache and force reload (useful for updates)
+   */
+  async clearCacheAndReload(onProgress?: LoadingProgressCallback): Promise<void> {
+    await questionBankCache.clear();
+    this.loaded = false;
+    this.loading = false;
+    this.loadPromise = null;
+    this.questionBanks.clear();
+    await this.loadQuestionBanks(onProgress);
+  }
+
+  /**
+   * Legacy method for backwards compatibility - loads individual files
+   * @deprecated Use loadQuestionBanks() instead (now uses bundled file)
+   */
   private async loadQuestionBank(fileName: string): Promise<any> {
     try {
       // Fetch the question bank file from the public assets
@@ -603,4 +693,31 @@ export class QuizSampler {
     return total;
   }
 
+  /**
+   * Check if the sampler is currently loaded
+   */
+  isLoaded(): boolean {
+    return this.loaded;
+  }
+
+  /**
+   * Check if the sampler is currently loading
+   */
+  isLoading(): boolean {
+    return this.loading;
+  }
+}
+
+// Singleton instance for global use
+let quizSamplerInstance: QuizSampler | null = null;
+
+/**
+ * Get the singleton QuizSampler instance
+ * This ensures question banks are only loaded once across the entire app
+ */
+export function getQuizSampler(): QuizSampler {
+  if (!quizSamplerInstance) {
+    quizSamplerInstance = new QuizSampler();
+  }
+  return quizSamplerInstance;
 }

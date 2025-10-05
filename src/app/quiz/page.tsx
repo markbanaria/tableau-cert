@@ -8,17 +8,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { QuizSampler, SamplingOptions } from '@/services/quizSampler';
+import { getQuizSampler, SamplingOptions } from '@/services/quizSampler';
 import { TABLEAU_CONSULTANT_COMPOSITION } from '@/config/testComposition';
 import { ArrowLeft } from 'lucide-react';
+import { LoadingState } from '@/components/QuestionBankLoader';
 
 export default function MockExamPage() {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [showQuiz, setShowQuiz] = useState(false);
-  const [quizSampler] = useState(() => new QuizSampler());
   const [loading, setLoading] = useState(false);
   const [samplerReady, setSamplerReady] = useState(false);
   const [availableQuestions, setAvailableQuestions] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState('Initializing...');
 
   // Mock Exam configuration state
   const [compositionType, setCompositionType] = useState<'full_practice' | 'domain_focus'>('full_practice');
@@ -32,7 +33,12 @@ export default function MockExamPage() {
 
   const initializeSampler = async () => {
     try {
-      await quizSampler.loadQuestionBanks();
+      const quizSampler = getQuizSampler();
+      
+      await quizSampler.loadQuestionBanks((loaded, total, message) => {
+        setLoadingMessage(message);
+      });
+      
       const stats = quizSampler.getQuestionBankStats();
       const totalQuestions = Object.values(stats).reduce((sum, stat) => sum + stat.questionCount, 0);
       setAvailableQuestions(totalQuestions);
@@ -60,6 +66,7 @@ export default function MockExamPage() {
 
     setLoading(true);
     try {
+      const quizSampler = getQuizSampler();
       const questionCount = type === 'full_practice' ? fullPracticeQuestionCount : domainFocusQuestionCount;
       const options: SamplingOptions = {
         totalQuestions: Math.min(questionCount, availableQuestions),
@@ -85,6 +92,22 @@ export default function MockExamPage() {
         : [...prev, domainId]
     );
   };
+
+  if (!samplerReady) {
+    return (
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-4">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+        <LoadingState message={loadingMessage} />
+      </div>
+    );
+  }
 
   if (showQuiz && quizData) {
     return (

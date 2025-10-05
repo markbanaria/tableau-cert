@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start"
+    "build": "npm run bundle:questions && next build --turbopack",
+    "start": "next start",
+    "bundle:questions": "node scripts/bundle-question-banks.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",

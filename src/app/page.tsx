@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { QuizSampler } from '@/services/quizSampler';
+import { getQuizSampler } from '@/services/quizSampler';
+import { LoadingState } from '@/components/QuestionBankLoader';
 
 export default function Home() {
-  const [quizSampler] = useState(() => new QuizSampler());
   const [samplerReady, setSamplerReady] = useState(false);
   const [availableQuestions, setAvailableQuestions] = useState(0);
   const [domainCoverage, setDomainCoverage] = useState<Record<string, any>>({});
+  const [loadingMessage, setLoadingMessage] = useState('Initializing...');
 
   useEffect(() => {
     initializeSampler();
@@ -18,7 +19,13 @@ export default function Home() {
 
   const initializeSampler = async () => {
     try {
-      await quizSampler.loadQuestionBanks();
+      const quizSampler = getQuizSampler();
+      
+      // Load with progress callback
+      await quizSampler.loadQuestionBanks((loaded, total, message) => {
+        setLoadingMessage(message);
+      });
+      
       const stats = quizSampler.getQuestionBankStats();
       const coverage = quizSampler.getDomainCoverage();
       const totalQuestions = Object.values(stats).reduce((sum, stat) => sum + stat.questionCount, 0);
@@ -30,6 +37,24 @@ export default function Home() {
       setSamplerReady(true);
     }
   };
+
+  if (!samplerReady) {
+    return (
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <img 
+              src="/tableau-logo.png" 
+              alt="Tableau Logo" 
+              className="h-8 w-auto mb-4"
+            />
+          </div>
+          <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
+        </div>
+        <LoadingState message={loadingMessage} />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -45,11 +70,9 @@ export default function Home() {
         <p className="text-muted-foreground">
           Practice and prepare for your Tableau certification
         </p>
-        {samplerReady && (
-          <p className="text-sm text-muted-foreground mt-2">
-            <span className="font-medium">{availableQuestions}</span> questions available
-          </p>
-        )}
+        <p className="text-sm text-muted-foreground mt-2">
+          <span className="font-medium">{availableQuestions}</span> questions available
+        </p>
       </div>
 
       {/* Mobile Quick Action Buttons - Hidden on Desktop */}

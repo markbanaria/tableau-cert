@@ -10,15 +10,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { QuizSampler } from '@/services/quizSampler';
+import { getQuizSampler } from '@/services/quizSampler';
 import { Shuffle, Target, ArrowLeft } from 'lucide-react';
+import { LoadingState } from '@/components/QuestionBankLoader';
 
 export default function QuickReviewPage() {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [showQuiz, setShowQuiz] = useState(false);
-  const [quizSampler] = useState(() => new QuizSampler());
   const [loading, setLoading] = useState(false);
   const [samplerReady, setSamplerReady] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Initializing...');
 
   // Random sampling state
   const [randomCount, setRandomCount] = useState(10);
@@ -38,6 +39,7 @@ export default function QuickReviewPage() {
 
   useEffect(() => {
     if (selectedDomain && samplerReady) {
+      const quizSampler = getQuizSampler();
       const domainTopics = quizSampler.getTopicsForDomain(selectedDomain);
       setTopics(domainTopics);
       setSelectedTopic('__all__'); // Reset topic selection when domain changes
@@ -55,6 +57,7 @@ export default function QuickReviewPage() {
 
   useEffect(() => {
     if (selectedDomain && selectedTopic && samplerReady) {
+      const quizSampler = getQuizSampler();
       const topicName = selectedTopic === '__all__' ? undefined : selectedTopic;
       const availableCount = quizSampler.getAvailableQuestionCount(selectedDomain, topicName);
       setMaxTargetedQuestions(availableCount);
@@ -64,7 +67,12 @@ export default function QuickReviewPage() {
 
   const initializeSampler = async () => {
     try {
-      await quizSampler.loadQuestionBanks();
+      const quizSampler = getQuizSampler();
+      
+      await quizSampler.loadQuestionBanks((loaded, total, message) => {
+        setLoadingMessage(message);
+      });
+      
       const availableDomains = quizSampler.getDomains();
       setDomains(availableDomains);
       
@@ -87,6 +95,7 @@ export default function QuickReviewPage() {
 
     setLoading(true);
     try {
+      const quizSampler = getQuizSampler();
       const questions = await quizSampler.getRandomQuestions(randomCount);
       
       const quizData: QuizData = {
@@ -118,6 +127,7 @@ export default function QuickReviewPage() {
 
     setLoading(true);
     try {
+      const quizSampler = getQuizSampler();
       const questions = await quizSampler.getQuestionsByDomainAndTopic(
         selectedDomain,
         selectedTopic === '__all__' ? undefined : selectedTopic,
@@ -156,6 +166,22 @@ export default function QuickReviewPage() {
     setShowQuiz(false);
     setQuizData(null);
   };
+
+  if (!samplerReady) {
+    return (
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-4">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+        <LoadingState message={loadingMessage} />
+      </div>
+    );
+  }
 
   if (showQuiz && quizData) {
     return (
