@@ -24,14 +24,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
     )
   }
 
-  // Logged out state - simple layout with XM logo in top-left and auth buttons in top-right
+  // Logged out state - simple layout with AYX logo in top-left and auth buttons in top-right
   if (!session) {
     return (
       <div className="flex flex-col h-screen bg-gray-50">
         <div className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
           <Link href="/">
-            <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
-              <span className="text-white font-bold text-base">XM</span>
+            <div className="w-16 h-11 bg-gray-900 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
+              <span className="text-white font-bold text-lg">AYX</span>
             </div>
           </Link>
           <div className="flex items-center space-x-2">

@@ -3,7 +3,7 @@ import "./globals.css";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "Agent Foundry",
+  title: "AYX",
   description: "Authentication and management platform",
 };
 
