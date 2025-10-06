@@ -8,15 +8,17 @@ import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
-import { HelpCircle, ExternalLink, CheckCircle2, XCircle, CheckCircle } from 'lucide-react';
+import { QuestionMarkCircleIcon, ArrowTopRightOnSquareIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 interface QuizProps {
   quizData: QuizData;
   onComplete?: (result: QuizResult) => void;
   reviewMode?: boolean;
+  onBack?: () => void;
+  backLabel?: string;
 }
 
-export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizProps) {
+export default function Quiz({ quizData, onComplete, reviewMode = false, onBack, backLabel }: QuizProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('');
@@ -24,22 +26,28 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [reviewAnswers, setReviewAnswers] = useState<Map<string, string>>(new Map());
+  // Track answers in mock exam mode for navigation
+  const [examAnswers, setExamAnswers] = useState<Map<string, string>>(new Map());
 
   const currentQuestion = quizData.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quizData.questions.length - 1;
 
-  // Restore selected option when navigating in review mode
+  // Restore selected option when navigating
   useState(() => {
     if (reviewMode && reviewAnswers.has(currentQuestion.id)) {
       setSelectedOption(reviewAnswers.get(currentQuestion.id) || '');
+    } else if (!reviewMode && examAnswers.has(currentQuestion.id)) {
+      setSelectedOption(examAnswers.get(currentQuestion.id) || '');
     }
   });
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
-    // Save answer in review mode for navigation
+    // Save answer for navigation (both review and exam mode)
     if (reviewMode) {
       setReviewAnswers(prev => new Map(prev).set(currentQuestion.id, value));
+    } else {
+      setExamAnswers(prev => new Map(prev).set(currentQuestion.id, value));
     }
   };
 
@@ -135,7 +143,9 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
         selectedOption: parseInt(selectedOption)
       };
 
-      const updatedAnswers = [...answers, newAnswer];
+      // Update or add answer (supports going back and changing answers)
+      const updatedAnswers = answers.filter(a => a.questionId !== currentQuestion.id);
+      updatedAnswers.push(newAnswer);
       setAnswers(updatedAnswers);
 
       if (isLastQuestion) {
@@ -189,12 +199,12 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       
-      // Restore answer in review mode, clear in quiz mode
+      // Restore answer when navigating (both review and exam mode)
+      const nextQuestionId = quizData.questions[nextIndex].id;
       if (reviewMode) {
-        const nextQuestionId = quizData.questions[nextIndex].id;
         setSelectedOption(reviewAnswers.get(nextQuestionId) || '');
       } else {
-        setSelectedOption('');
+        setSelectedOption(examAnswers.get(nextQuestionId) || '');
       }
       setShowHint(false);
     }
@@ -205,12 +215,12 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
       const prevIndex = currentQuestionIndex - 1;
       setCurrentQuestionIndex(prevIndex);
       
-      // Restore answer in review mode, clear in quiz mode
+      // Restore answer when navigating back (both review and exam mode)
+      const prevQuestionId = quizData.questions[prevIndex].id;
       if (reviewMode) {
-        const prevQuestionId = quizData.questions[prevIndex].id;
         setSelectedOption(reviewAnswers.get(prevQuestionId) || '');
       } else {
-        setSelectedOption('');
+        setSelectedOption(examAnswers.get(prevQuestionId) || '');
       }
       setShowHint(false);
     }
@@ -222,6 +232,8 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
     setSelectedOption('');
     setIsComplete(false);
     setResult(null);
+    setExamAnswers(new Map());
+    setReviewAnswers(new Map());
   };
 
   if (isComplete && result) {
@@ -239,7 +251,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
               {/* Review Mode Summary */}
               <div className="text-center space-y-4">
                 <div className="flex justify-center">
-                  <CheckCircle className="w-16 h-16 text-[#E39A12]" />
+                  <CheckCircleIcon className="w-16 h-16 text-review" />
                 </div>
                 <div className="text-lg font-semibold">
                   You reviewed {result.totalQuestions} questions
@@ -264,7 +276,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-[#E39A12] h-2 rounded-full"
+                            className="bg-review h-2 rounded-full"
                             style={{ 
                               width: `${(domain.totalQuestions / result.totalQuestions) * 100}%` 
                             }}
@@ -351,7 +363,13 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                                 </div>
                                 
                                 {/* Individual question results */}
-                                <div className="space-y-2">
+                                <div 
+                                  className="space-y-2 no-select no-context-menu"
+                                  onCopy={(e) => e.preventDefault()}
+                                  onCut={(e) => e.preventDefault()}
+                                  onPaste={(e) => e.preventDefault()}
+                                  onContextMenu={(e) => e.preventDefault()}
+                                >
                                   {domainQuestions.map((question, idx) => {
                                     const answer = result.answers.find(a => a.questionId === question.id);
                                     const isCorrect = answer && answer.selectedOption === question.correctAnswer;
@@ -367,9 +385,9 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                                       >
                                         <div className="flex items-start gap-2">
                                           {isCorrect ? (
-                                            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                                            <CheckCircleIcon className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
                                           ) : (
-                                            <XCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                                            <XCircleIcon className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                                           )}
                                           <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium mb-1">
@@ -408,7 +426,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
         <CardFooter className="justify-center gap-2">
           <Button 
             onClick={handleRestart}
-            className={reviewMode ? 'bg-[#E39A12] hover:bg-[#E39A12]/90 text-white' : ''}
+            className={reviewMode ? 'bg-review hover:bg-review/90 text-white' : ''}
           >
             {reviewMode ? 'Review Again' : 'Take Quiz Again'}
           </Button>
@@ -420,9 +438,23 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
   return (
     <TooltipProvider>
       <div className="w-full max-w-2xl mx-auto space-y-4">
+        {/* Back button */}
+        {onBack && (
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBack}
+            >
+              <ArrowLeftIcon className="w-4 h-4 mr-2" />
+              {backLabel || 'Back'}
+            </Button>
+          </div>
+        )}
+        
         {/* Title and description outside card */}
         <div>
-          <h2 className="text-xl font-semibold">{quizData.title}</h2>
+          <h2 className="text-xl font-semibold mb-6">{quizData.title}</h2>
           {quizData.description && (
             <p className="text-sm text-muted-foreground mt-1">{quizData.description}</p>
           )}
@@ -435,7 +467,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   {reviewMode && (
-                    <span className="text-xs bg-[#E39A12]/10 text-[#E39A12] px-2 py-1 rounded whitespace-nowrap font-medium">
+                    <span className="text-xs bg-review-light text-review px-2 py-1 rounded whitespace-nowrap font-medium">
                       Review Mode
                     </span>
                   )}
@@ -464,9 +496,15 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
               </div>
             </div>
           </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <div className="mb-4">
+        <CardContent 
+          className="space-y-6"
+          onCopy={(e) => e.preventDefault()}
+          onCut={(e) => e.preventDefault()}
+          onPaste={(e) => e.preventDefault()}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          <div className="no-select no-context-menu">
+            <div className="mb-10">
               <h3 className="text-lg font-medium">
                 {currentQuestion.question}
               </h3>
@@ -475,6 +513,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
             <RadioGroup
               value={selectedOption}
               onValueChange={handleOptionSelect}
+              className="mb-6"
             >
               {currentQuestion.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
@@ -482,8 +521,12 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                     value={index.toString()}
                     id={`option-${index}`}
                     className={
-                      reviewMode && showHint && index === currentQuestion.correctAnswer
-                        ? "border-green-500 text-green-500"
+                      reviewMode
+                        ? showHint && index === currentQuestion.correctAnswer
+                          ? "border-green-500 text-green-500"
+                          : selectedOption === index.toString()
+                          ? "border-review text-review"
+                          : ""
                         : ""
                     }
                   />
@@ -497,7 +540,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                   >
                     {option}
                     {reviewMode && showHint && index === currentQuestion.correctAnswer && (
-                      <CheckCircle className="ml-2 w-4 h-4 text-green-600" />
+                      <CheckCircleIcon className="ml-2 min-w-4 w-4 h-4 text-green-600" />
                     )}
                   </Label>
                 </div>
@@ -506,18 +549,18 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
 
             {/* Answer explanation */}
             {reviewMode && showHint && currentQuestion.explanation && (
-              <div className="mt-4 p-4 bg-[#E39A12]/10 border border-[#E39A12]/30 rounded-lg">
-                <h4 className="font-medium text-[#E39A12] mb-2">Explanation:</h4>
+              <div className="mt-4 p-4 bg-review-light border border-review-border rounded-lg no-select no-context-menu">
+                <h4 className="font-medium text-review mb-2">Explanation:</h4>
                 <p className="text-sm text-gray-700">{currentQuestion.explanation}</p>
                 {currentQuestion.metadata?.sourceUrl && (
-                  <div className="mt-3 pt-3 border-t border-[#E39A12]/30">
+                  <div className="mt-3 pt-3 border-t border-review-border">
                     <a
                       href={currentQuestion.metadata.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-[#E39A12] hover:text-[#E39A12]/80 underline"
+                      className="inline-flex items-center gap-1 text-sm text-review hover:text-review/80 underline pointer-events-auto"
                     >
-                      <ExternalLink className="h-3 w-3" />
+                      <ArrowTopRightOnSquareIcon className="h-3 w-3" />
                       View source documentation
                     </a>
                   </div>
@@ -528,7 +571,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
         </CardContent>
         <CardFooter className="flex justify-between">
           <div className="flex gap-2">
-            {reviewMode && currentQuestionIndex > 0 && (
+            {currentQuestionIndex > 0 && (
               <Button
                 variant="outline"
                 onClick={handlePrevious}
@@ -541,7 +584,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           <div className="flex-1 mx-4">
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className={`h-2 rounded-full transition-all duration-300 ${reviewMode ? 'bg-[#E39A12]' : 'bg-primary'}`}
+                className={`h-2 rounded-full transition-all duration-300 ${reviewMode ? 'bg-review' : 'bg-primary'}`}
                 style={{ width: `${((currentQuestionIndex + 1) / quizData.questions.length) * 100}%` }}
               />
             </div>
@@ -550,7 +593,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           <Button
             onClick={handleNext}
             disabled={!reviewMode && selectedOption === ''}
-            className={reviewMode ? 'bg-[#E39A12] hover:bg-[#E39A12]/90 text-white' : ''}
+            className={reviewMode ? 'bg-review hover:bg-review/90 text-white' : ''}
           >
             {currentQuestionIndex === quizData.questions.length - 1
               ? reviewMode ? 'Finish Review' : 'Finish'

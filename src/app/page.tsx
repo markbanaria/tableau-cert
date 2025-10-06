@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { getQuizSampler } from '@/services/quizSampler';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
@@ -42,7 +43,7 @@ export default function Home() {
   if (!samplerReady) {
     return (
       <MainLayout>
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <img 
@@ -61,7 +62,7 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
           <p className="text-muted-foreground">
@@ -80,57 +81,80 @@ export default function Home() {
             </Button>
           </Link>
           <Link href="/review" className="w-full">
-            <Button className="w-full bg-[#E39A12] hover:bg-[#E39A12]/90 text-white" size="lg">
+            <Button className="w-full bg-review hover:bg-review/90 text-white" size="lg">
               Quick Review
             </Button>
           </Link>
         </div>
 
         {/* Question Bank Coverage */}
-        {samplerReady && Object.keys(domainCoverage).length > 0 && (
-          <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg">Question Bank Coverage</CardTitle>
-            <CardDescription>
-              Available questions by domain (including subtopics)
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-4">
-              {Object.entries(domainCoverage).map(([domainName, data]: [string, any]) => (
-                <div key={domainName} className="border rounded-lg p-4">
-                  <div className="mb-2">
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      data.coveragePercentage >= 80 ? 'bg-green-100 text-green-800' :
-                      data.coveragePercentage >= 50 ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {data.coveragePercentage}% coverage
-                    </span>
+        {samplerReady && Object.keys(domainCoverage).length > 0 && (() => {
+          // Calculate total aggregated coverage
+          const totalCoverage = Object.values(domainCoverage).reduce((sum, data: any) => sum + data.coveragePercentage, 0);
+          const avgCoverage = Math.round(totalCoverage / Object.keys(domainCoverage).length);
+          
+          return (
+            <Card className="mb-8">
+              <Accordion type="single" collapsible>
+                <AccordionItem value="coverage" className="border-none">
+                  <div className="px-6">
+                    <AccordionTrigger className="p-0 hover:no-underline">
+                      <div className="flex items-center justify-between w-full pr-2">
+                        <div className="flex flex-col items-start text-left">
+                          <CardTitle className="text-lg">Question Bank Coverage</CardTitle>
+                          <CardDescription className="mt-1">
+                            Available questions by domain (including subtopics)
+                          </CardDescription>
+                        </div>
+                        <span className={`text-sm font-semibold px-3 py-1 rounded whitespace-nowrap ml-4 ${
+                          avgCoverage >= 80 ? 'bg-green-100 text-green-800' :
+                          avgCoverage >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {avgCoverage}% total
+                        </span>
+                      </div>
+                    </AccordionTrigger>
                   </div>
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-medium text-sm">{domainName}</h4>
-                  </div>
-                  <div className="text-sm space-y-1 text-muted-foreground">
-                    <div className="flex justify-between">
-                      <span>Questions:</span>
-                      <span className="font-medium text-foreground">
-                        {data.totalQuestions} / {data.requiredQuestions} needed
-                      </span>
+                  <AccordionContent className="px-6 pb-6 pt-2">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {Object.entries(domainCoverage).map(([domainName, data]: [string, any]) => (
+                        <div key={domainName} className="border rounded-lg p-4">
+                          <div className="mb-2">
+                            <span className={`text-xs px-2 py-1 rounded ${
+                              data.coveragePercentage >= 80 ? 'bg-green-100 text-green-800' :
+                              data.coveragePercentage >= 50 ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {data.coveragePercentage}% coverage
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-start mb-4">
+                            <h4 className="font-medium text-sm">{domainName}</h4>
+                          </div>
+                          <div className="text-sm space-y-1 text-muted-foreground">
+                            <div className="flex justify-between">
+                              <span>Questions:</span>
+                              <span className="font-medium text-foreground">
+                                {data.totalQuestions} / {data.requiredQuestions} needed
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Topics:</span>
+                              <span className="font-medium text-foreground">
+                                {data.topicsLoaded} / {data.topicsTotal} loaded
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex justify-between">
-                      <span>Topics:</span>
-                      <span className="font-medium text-foreground">
-                        {data.topicsLoaded} / {data.topicsTotal} loaded
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </Card>
+          );
+        })()}
 
         <div className="grid md:grid-cols-2 gap-6">
           <Card>
@@ -158,7 +182,7 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Link href="/review">
-                <Button className="w-full bg-[#E39A12] hover:bg-[#E39A12]/90 text-white">
+                <Button className="w-full bg-review hover:bg-review/90 text-white">
                   Quick Review
                 </Button>
               </Link>

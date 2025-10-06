@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getQuizSampler } from '@/services/quizSampler';
-import { Shuffle, Target, ArrowLeft } from 'lucide-react';
+import { ArrowPathIcon, AdjustmentsHorizontalIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
 
@@ -167,11 +167,11 @@ export default function QuickReviewPage() {
   if (!samplerReady) {
     return (
       <MainLayout>
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
           <div className="mb-4">
             <Link href="/">
               <Button variant="ghost" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeftIcon className="w-4 h-4 mr-2" />
                 Back to Home
               </Button>
             </Link>
@@ -185,13 +185,13 @@ export default function QuickReviewPage() {
   if (showQuiz && quizData) {
     return (
       <MainLayout>
-        <div className="container mx-auto px-6 py-8">
-          <div className="mb-4">
-            <Button onClick={handleBackToSetup} variant="outline">
-              ← Back to Review Setup
-            </Button>
-          </div>
-          <Quiz quizData={quizData} reviewMode={true} />
+        <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
+          <Quiz 
+            quizData={quizData} 
+            reviewMode={true}
+            onBack={handleBackToSetup}
+            backLabel="Back to Review Setup"
+          />
         </div>
       </MainLayout>
     );
@@ -199,11 +199,11 @@ export default function QuickReviewPage() {
 
   return (
     <MainLayout>
-    <div className="container mx-auto px-6 py-8">
+    <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
       <div className="mb-4">
         <Link href="/">
           <Button variant="ghost" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
         </Link>
@@ -219,11 +219,11 @@ export default function QuickReviewPage() {
       <Tabs defaultValue="random" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-8">
           <TabsTrigger value="random" className="flex items-center gap-2">
-            <Shuffle className="w-4 h-4" />
+            <ArrowPathIcon className="w-4 h-4" />
             Random Sample
           </TabsTrigger>
           <TabsTrigger value="targeted" className="flex items-center gap-2">
-            <Target className="w-4 h-4" />
+            <AdjustmentsHorizontalIcon className="w-4 h-4" />
             By Domain & Topic
           </TabsTrigger>
         </TabsList>
@@ -264,7 +264,7 @@ export default function QuickReviewPage() {
                 onClick={generateRandomQuiz} 
                 disabled={loading || !samplerReady || randomCount === 0 || randomCount > maxRandomQuestions}
                 size="lg"
-                className="w-full sm:w-auto bg-[#E39A12] hover:bg-[#E39A12]/90 text-white"
+                className="w-full sm:w-auto bg-review hover:bg-review/90 text-white"
               >
                 {loading ? 'Generating...' : `Generate ${randomCount} Random Questions`}
               </Button>
@@ -351,7 +351,7 @@ export default function QuickReviewPage() {
                 onClick={generateTargetedQuiz} 
                 disabled={loading || !samplerReady || !selectedDomain || targetedCount === 0 || targetedCount > maxTargetedQuestions}
                 size="lg"
-                className="w-full sm:w-auto bg-[#E39A12] hover:bg-[#E39A12]/90 text-white"
+                className="w-full sm:w-auto bg-review hover:bg-review/90 text-white"
               >
                 {loading ? 'Generating...' : `Generate ${targetedCount > 0 ? targetedCount : '0'} Questions`}
               </Button>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, Home, Settings, FileText, BarChart } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, HomeIcon, Cog6ToothIcon, DocumentTextIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
 import AYXLogo from '@/components/ui/ayx-logo'
 
@@ -17,25 +17,25 @@ export default function Sidebar({ isMobileOpen = false, onMobileClose }: Sidebar
   const menuItems = [
     {
       title: 'Home',
-      icon: Home,
+      icon: HomeIcon,
       href: '/',
       children: []
     },
     {
       title: 'Mock Exam',
-      icon: FileText,
+      icon: DocumentTextIcon,
       href: '/quiz',
       children: []
     },
     {
       title: 'Quick Review',
-      icon: BarChart,
+      icon: ChartBarIcon,
       href: '/review',
       children: []
     },
     {
       title: 'Settings',
-      icon: Settings,
+      icon: Cog6ToothIcon,
       href: '/settings',
       children: []
     }
@@ -67,20 +67,14 @@ export default function Sidebar({ isMobileOpen = false, onMobileClose }: Sidebar
           )}
           <Button
             variant="ghost"
-            size="icon"
-            onClick={() => {
-              if (window.innerWidth < 768 && onMobileClose) {
-                onMobileClose()
-              } else {
-                setIsCollapsed(!isCollapsed)
-              }
-            }}
-            className="ml-auto"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            size="sm"
+            className="w-8 h-8 p-0 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
           >
             {isCollapsed ? (
-              <ChevronRight className="h-4 w-4 text-gray-900" />
+              <ChevronRightIcon className="h-4 w-4 text-gray-900" />
             ) : (
-              <ChevronLeft className="h-4 w-4 text-gray-900" />
+              <ChevronLeftIcon className="h-4 w-4 text-gray-900" />
             )}
           </Button>
         </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import { getQuizSampler } from '@/services/quizSampler';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 interface QuestionBankLoaderProps {
   onLoadComplete?: () => void;
@@ -31,7 +32,7 @@ export function QuestionBankLoader({ onLoadComplete, showDetails = true }: Quest
   if (!showDetails) {
     return (
       <div className="flex items-center justify-center gap-2">
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <ArrowPathIcon className="h-4 w-4 animate-spin" />
         <span className="text-sm text-muted-foreground">Loading questions...</span>
       </div>
     );
@@ -41,7 +42,7 @@ export function QuestionBankLoader({ onLoadComplete, showDetails = true }: Quest
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Loader2 className="h-5 w-5 animate-spin" />
+          <ArrowPathIcon className="h-5 w-5 animate-spin" />
           Loading Question Banks
         </CardTitle>
         <CardDescription>
@@ -72,7 +73,7 @@ interface LoadingStateProps {
 export function LoadingState({ message = 'Loading...' }: LoadingStateProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <ArrowPathIcon className="h-8 w-8 animate-spin text-primary" />
       <p className="text-muted-foreground">{message}</p>
     </div>
   );

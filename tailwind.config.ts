@@ -56,6 +56,11 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        review: {
+          DEFAULT: "var(--review)",
+          light: "var(--review-light)",
+          border: "var(--review-border)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

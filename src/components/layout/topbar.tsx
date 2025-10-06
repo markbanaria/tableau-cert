@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { User, Settings, LogOut, ChevronRight } from 'lucide-react'
+import { UserIcon, Cog6ToothIcon, ArrowRightOnRectangleIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
 interface TopBarProps {
@@ -34,7 +34,7 @@ export default function TopBar({ onMobileMenuOpen }: TopBarProps) {
         onClick={onMobileMenuOpen}
         className="md:hidden"
       >
-        <ChevronRight className="h-5 w-5 text-gray-900" />
+        <ChevronRightIcon className="h-5 w-5 text-gray-900" />
       </Button>
       
       <div className="flex items-center space-x-4 ml-auto">
@@ -60,19 +60,19 @@ export default function TopBar({ onMobileMenuOpen }: TopBarProps) {
               <DropdownMenuSeparator className="bg-gray-200" />
               <DropdownMenuItem asChild>
                 <Link href="/profile" className="cursor-pointer">
-                  <User className="mr-2 h-4 w-4 text-gray-600" />
+                  <UserIcon className="mr-2 h-4 w-4 text-gray-600" />
                   <span className="text-gray-900">Profile</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/settings" className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4 text-gray-600" />
+                  <Cog6ToothIcon className="mr-2 h-4 w-4 text-gray-600" />
                   <span className="text-gray-900">Settings</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-gray-200" />
               <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                <LogOut className="mr-2 h-4 w-4 text-gray-600" />
+                <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4 text-gray-600" />
                 <span className="text-gray-900">Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>

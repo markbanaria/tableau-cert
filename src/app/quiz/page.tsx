@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { getQuizSampler, SamplingOptions } from '@/services/quizSampler';
 import { TABLEAU_CONSULTANT_COMPOSITION } from '@/config/testComposition';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
 
@@ -97,11 +97,11 @@ export default function MockExamPage() {
   if (!samplerReady) {
     return (
       <MainLayout>
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
           <div className="mb-4">
             <Link href="/">
               <Button variant="ghost" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeftIcon className="w-4 h-4 mr-2" />
                 Back to Home
               </Button>
             </Link>
@@ -115,28 +115,25 @@ export default function MockExamPage() {
   if (showQuiz && quizData) {
     return (
       <MainLayout>
-        <div className="container mx-auto px-6 py-8">
-          <div className="mb-4">
-            <Button
-              variant="outline"
-              onClick={() => setShowQuiz(false)}
-            >
-            ← Back to Mock Exam Setup
-          </Button>
+        <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
+          <Quiz 
+            quizData={quizData} 
+            onComplete={handleQuizComplete}
+            onBack={() => setShowQuiz(false)}
+            backLabel="Back to Mock Exam Setup"
+          />
         </div>
-        <Quiz quizData={quizData} onComplete={handleQuizComplete} />
-      </div>
       </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
       <div className="mb-4">
         <Link href="/">
           <Button variant="ghost" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
         </Link>
