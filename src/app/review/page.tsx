@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getQuizSampler } from '@/services/quizSampler';
 import { Shuffle, Target, ArrowLeft } from 'lucide-react';
 import { LoadingState } from '@/components/QuestionBankLoader';
+import MainLayout from '@/components/layout/main-layout';
 
 export default function QuickReviewPage() {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
@@ -169,34 +170,39 @@ export default function QuickReviewPage() {
 
   if (!samplerReady) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
+      <MainLayout>
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-4">
+            <Link href="/">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+          <LoadingState message={loadingMessage} />
         </div>
-        <LoadingState message={loadingMessage} />
-      </div>
+      </MainLayout>
     );
   }
 
   if (showQuiz && quizData) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-4">
-          <Button onClick={handleBackToSetup} variant="outline">
-            ← Back to Review Setup
-          </Button>
+      <MainLayout>
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-4">
+            <Button onClick={handleBackToSetup} variant="outline">
+              ← Back to Review Setup
+            </Button>
+          </div>
+          <Quiz quizData={quizData} reviewMode={true} />
         </div>
-        <Quiz quizData={quizData} reviewMode={true} />
-      </div>
+      </MainLayout>
     );
   }
 
   return (
+    <MainLayout>
     <div className="container mx-auto px-6 py-8">
       <div className="mb-4">
         <Link href="/">
@@ -366,5 +372,6 @@ export default function QuickReviewPage() {
         </Card>
       )}
     </div>
+    </MainLayout>
   );
 }

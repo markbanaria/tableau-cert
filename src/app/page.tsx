@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getQuizSampler } from '@/services/quizSampler';
 import { LoadingState } from '@/components/QuestionBankLoader';
+import MainLayout from '@/components/layout/main-layout';
 
 export default function Home() {
   const [samplerReady, setSamplerReady] = useState(false);
@@ -40,58 +41,54 @@ export default function Home() {
 
   if (!samplerReady) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <img 
-              src="/tableau-logo.png" 
-              alt="Tableau Logo" 
-              className="h-8 w-auto mb-4"
-            />
+      <MainLayout>
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/tableau-logo.png" 
+                alt="Tableau Logo" 
+                className="h-8 w-auto mb-4"
+              />
+            </div>
+            <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
           </div>
-          <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
+          <LoadingState message={loadingMessage} />
         </div>
-        <LoadingState message={loadingMessage} />
-      </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 py-8">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <img 
-            src="/tableau-logo.png" 
-            alt="Tableau Logo" 
-            className="h-8 w-auto mb-4"
-          />
+    <MainLayout>
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
+          <p className="text-muted-foreground">
+            Practice and prepare for your Tableau certification
+          </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            <span className="font-medium">{availableQuestions}</span> questions available
+          </p>
         </div>
-        <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
-        <p className="text-muted-foreground">
-          Practice and prepare for your Tableau certification
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          <span className="font-medium">{availableQuestions}</span> questions available
-        </p>
-      </div>
 
-      {/* Mobile Quick Action Buttons - Hidden on Desktop */}
-      <div className="grid grid-cols-2 gap-3 mb-6 md:hidden">
-        <Link href="/quiz" className="w-full">
-          <Button className="w-full" size="lg">
-            Mock Exam
-          </Button>
-        </Link>
-        <Link href="/review" className="w-full">
-          <Button className="w-full" variant="outline" size="lg">
-            Quick Review
-          </Button>
-        </Link>
-      </div>
+        {/* Mobile Quick Action Buttons - Hidden on Desktop */}
+        <div className="grid grid-cols-2 gap-3 mb-6 md:hidden">
+          <Link href="/quiz" className="w-full">
+            <Button className="w-full" size="lg">
+              Mock Exam
+            </Button>
+          </Link>
+          <Link href="/review" className="w-full">
+            <Button className="w-full" variant="outline" size="lg">
+              Quick Review
+            </Button>
+          </Link>
+        </div>
 
-      {/* Question Bank Coverage */}
-      {samplerReady && Object.keys(domainCoverage).length > 0 && (
-        <Card className="mb-8">
+        {/* Question Bank Coverage */}
+        {samplerReady && Object.keys(domainCoverage).length > 0 && (
+          <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-lg">Question Bank Coverage</CardTitle>
             <CardDescription>
@@ -135,39 +132,40 @@ export default function Home() {
         </Card>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Mock Exam</CardTitle>
-            <CardDescription>
-              Full practice exams with official domain weightings
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/quiz">
-              <Button className="w-full">
-                Start Mock Exam
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Mock Exam</CardTitle>
+              <CardDescription>
+                Full practice exams with official domain weightings
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/quiz">
+                <Button className="w-full">
+                  Start Mock Exam
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Review</CardTitle>
-            <CardDescription>
-              Random sampling or targeted review by domain and topic
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/review">
-              <Button className="w-full" variant="outline">
-                Quick Review
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Review</CardTitle>
+              <CardDescription>
+                Random sampling or targeted review by domain and topic
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/review">
+                <Button className="w-full" variant="outline">
+                  Quick Review
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </MainLayout>
   );
 }

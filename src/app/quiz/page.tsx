@@ -12,6 +12,7 @@ import { getQuizSampler, SamplingOptions } from '@/services/quizSampler';
 import { TABLEAU_CONSULTANT_COMPOSITION } from '@/config/testComposition';
 import { ArrowLeft } from 'lucide-react';
 import { LoadingState } from '@/components/QuestionBankLoader';
+import MainLayout from '@/components/layout/main-layout';
 
 export default function MockExamPage() {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
@@ -95,38 +96,43 @@ export default function MockExamPage() {
 
   if (!samplerReady) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
+      <MainLayout>
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-4">
+            <Link href="/">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+          <LoadingState message={loadingMessage} />
         </div>
-        <LoadingState message={loadingMessage} />
-      </div>
+      </MainLayout>
     );
   }
 
   if (showQuiz && quizData) {
     return (
-      <div className="container mx-auto px-6 py-8">
-        <div className="mb-4">
-          <Button
-            variant="outline"
-            onClick={() => setShowQuiz(false)}
-          >
+      <MainLayout>
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowQuiz(false)}
+            >
             ← Back to Mock Exam Setup
           </Button>
         </div>
         <Quiz quizData={quizData} onComplete={handleQuizComplete} />
       </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 py-8">
+    <MainLayout>
+      <div className="container mx-auto px-6 py-8">
       <div className="mb-4">
         <Link href="/">
           <Button variant="ghost" size="sm">
@@ -286,5 +292,6 @@ export default function MockExamPage() {
         </Card>
       )}
     </div>
+    </MainLayout>
   );
 }
