@@ -106,24 +106,24 @@ function SignInForm() {
             <div className="mt-6">
               <Button
                 type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-900/90 text-white"
+                className="w-full"
                 disabled={isLoading}
               >
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </Button>
             </div>
           </CardContent>
-          <CardFooter className="pt-6">
-            <div className="text-sm text-gray-600 text-center space-y-2">
+          <CardFooter className="pt-6 flex-col items-start space-y-2">
+            <div className="text-sm text-gray-600 text-left w-full">
+              <Link href="/auth/reset-password" className="text-primary hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="text-sm text-gray-600 text-left w-full">
               <p>
                 Don't have an account?{' '}
-                <Link href="/auth/register" className="text-gray-900 font-bold hover:underline">
+                <Link href="/auth/register" className="text-primary hover:underline">
                   Register
-                </Link>
-              </p>
-              <p>
-                <Link href="/auth/reset-password" className="text-gray-900 font-bold hover:underline">
-                  Forgot password?
                 </Link>
               </p>
             </div>

@@ -45,7 +45,7 @@ export default function ResetPasswordPage() {
           </CardHeader>
           <CardFooter>
             <Link href="/auth/signin" className="w-full">
-              <Button className="w-full bg-gray-900 hover:bg-gray-900/90 text-white">
+              <Button className="w-full">
                 Back to Sign In
               </Button>
             </Link>
@@ -81,15 +81,15 @@ export default function ResetPasswordPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button
               type="submit"
-              className="w-full bg-gray-900 hover:bg-gray-900/90 text-white"
+              className="w-full"
               disabled={isLoading}
             >
               {isLoading ? 'Sending reset link...' : 'Send Reset Link'}
             </Button>
-            <div className="text-sm text-gray-600 text-center">
+            <div className="text-sm text-gray-600 text-center w-full">
               <p>
                 Remember your password?{' '}
-                <Link href="/auth/signin" className="text-gray-900 font-bold hover:underline">
+                <Link href="/auth/signin" className="text-primary hover:underline">
                   Sign In
                 </Link>
               </p>

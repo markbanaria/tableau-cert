@@ -207,7 +207,6 @@ export class QuizSampler {
 
     return {
       title: this.generateQuizTitle(options),
-      description: this.generateQuizDescription(options, questions.length),
       questions: this.shuffleArray(questions)
     };
   }

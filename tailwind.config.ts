@@ -63,14 +63,19 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+        sans: ["var(--font-plus-jakarta-sans)", "system-ui", "sans-serif"],
       },
       fontSize: {
         'body': '14px',
       },
       fontWeight: {
+        'extralight': '200',
+        'light': '300',
         'regular': '400',
+        'medium': '500',
+        'semibold': '600',
         'bold': '700',
+        'extrabold': '800',
       },
     },
   },

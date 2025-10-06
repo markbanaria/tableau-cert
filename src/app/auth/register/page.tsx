@@ -141,7 +141,7 @@ export default function RegisterPage() {
             <div className="mt-6">
               <Button
                 type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-900/90 text-white"
+                className="w-full"
                 disabled={isLoading}
               >
                 {isLoading ? 'Creating account...' : 'Create Account'}
@@ -149,10 +149,10 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="pt-6">
-            <div className="text-sm text-gray-600 text-center">
+            <div className="text-sm text-gray-600 text-center w-full">
               <p>
                 Already have an account?{' '}
-                <Link href="/auth/signin" className="text-gray-900 font-bold hover:underline">
+                <Link href="/auth/signin" className="text-primary hover:underline">
                   Sign In
                 </Link>
               </p>

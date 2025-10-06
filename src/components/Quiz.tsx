@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
-import { HelpCircle, ExternalLink, CheckCircle2, XCircle } from 'lucide-react';
+import { HelpCircle, ExternalLink, CheckCircle2, XCircle, CheckCircle } from 'lucide-react';
 
 interface QuizProps {
   quizData: QuizData;
@@ -238,8 +238,10 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
             <>
               {/* Review Mode Summary */}
               <div className="text-center space-y-4">
-                <div className="text-4xl font-bold text-blue-600">✓</div>
-                <div className="text-lg">
+                <div className="flex justify-center">
+                  <CheckCircle className="w-16 h-16 text-[#E39A12]" />
+                </div>
+                <div className="text-lg font-semibold">
                   You reviewed {result.totalQuestions} questions
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -262,7 +264,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-blue-500 h-2 rounded-full"
+                            className="bg-[#E39A12] h-2 rounded-full"
                             style={{ 
                               width: `${(domain.totalQuestions / result.totalQuestions) * 100}%` 
                             }}
@@ -404,7 +406,10 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           )}
         </CardContent>
         <CardFooter className="justify-center gap-2">
-          <Button onClick={handleRestart}>
+          <Button 
+            onClick={handleRestart}
+            className={reviewMode ? 'bg-[#E39A12] hover:bg-[#E39A12]/90 text-white' : ''}
+          >
             {reviewMode ? 'Review Again' : 'Take Quiz Again'}
           </Button>
         </CardFooter>
@@ -414,47 +419,51 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
 
   return (
     <TooltipProvider>
-      <Card className="w-full max-w-2xl mx-auto">
-        <CardHeader>
-          <div className="space-y-3">
-            {/* Top row: Review Mode badge, counter, and Show Answer button */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                {reviewMode && (
-                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded whitespace-nowrap">
-                    Review Mode
-                  </span>
-                )}
-                <span className="text-sm text-muted-foreground whitespace-nowrap">
-                  {currentQuestionIndex + 1} of {quizData.questions.length}
-                </span>
-              </div>
-              {/* Show Answer button */}
-              {reviewMode && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant={showHint ? "default" : "outline"}
-                      size="sm"
-                      className="h-8"
-                      onClick={() => setShowHint(!showHint)}
-                    >
-                      {showHint ? "Hide Answer" : "Show Answer"}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Show answer and explanation</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-            {/* Second row: Title spanning full width */}
-            <CardTitle className="text-xl">{quizData.title}</CardTitle>
-          </div>
+      <div className="w-full max-w-2xl mx-auto space-y-4">
+        {/* Title and description outside card */}
+        <div>
+          <h2 className="text-xl font-semibold">{quizData.title}</h2>
           {quizData.description && (
-            <CardDescription>{quizData.description}</CardDescription>
+            <p className="text-sm text-muted-foreground mt-1">{quizData.description}</p>
           )}
-        </CardHeader>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="space-y-3">
+              {/* Top row: Review Mode badge, counter, and Show Answer button */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  {reviewMode && (
+                    <span className="text-xs bg-[#E39A12]/10 text-[#E39A12] px-2 py-1 rounded whitespace-nowrap font-medium">
+                      Review Mode
+                    </span>
+                  )}
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">
+                    {currentQuestionIndex + 1} of {quizData.questions.length}
+                  </span>
+                </div>
+                {/* Show Answer button */}
+                {reviewMode && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`h-8 ${showHint ? 'bg-gray-100 hover:bg-gray-200' : ''}`}
+                        onClick={() => setShowHint(!showHint)}
+                      >
+                        {showHint ? "Hide Answer" : "Show Answer"}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Show answer and explanation</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </div>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div>
             <div className="mb-4">
@@ -473,26 +482,22 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
                     value={index.toString()}
                     id={`option-${index}`}
                     className={
-                      reviewMode && showHint
-                        ? index === currentQuestion.correctAnswer
-                          ? "border-green-500 text-green-500"
-                          : "border-red-300"
+                      reviewMode && showHint && index === currentQuestion.correctAnswer
+                        ? "border-green-500 text-green-500"
                         : ""
                     }
                   />
                   <Label
                     htmlFor={`option-${index}`}
-                    className={`text-sm font-normal cursor-pointer flex-1 ${
-                      reviewMode && showHint
-                        ? index === currentQuestion.correctAnswer
-                          ? "text-green-700 font-medium"
-                          : "text-gray-500"
+                    className={`text-sm font-normal cursor-pointer flex-1 flex items-center ${
+                      reviewMode && showHint && index === currentQuestion.correctAnswer
+                        ? "text-green-700 font-medium"
                         : ""
                     }`}
                   >
                     {option}
                     {reviewMode && showHint && index === currentQuestion.correctAnswer && (
-                      <span className="ml-2 text-green-600">✓ Correct</span>
+                      <CheckCircle className="ml-2 w-4 h-4 text-green-600" />
                     )}
                   </Label>
                 </div>
@@ -501,16 +506,16 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
 
             {/* Answer explanation */}
             {reviewMode && showHint && currentQuestion.explanation && (
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Explanation:</h4>
-                <p className="text-sm text-blue-800">{currentQuestion.explanation}</p>
+              <div className="mt-4 p-4 bg-[#E39A12]/10 border border-[#E39A12]/30 rounded-lg">
+                <h4 className="font-medium text-[#E39A12] mb-2">Explanation:</h4>
+                <p className="text-sm text-gray-700">{currentQuestion.explanation}</p>
                 {currentQuestion.metadata?.sourceUrl && (
-                  <div className="mt-3 pt-3 border-t border-blue-200">
+                  <div className="mt-3 pt-3 border-t border-[#E39A12]/30">
                     <a
                       href={currentQuestion.metadata.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-blue-700 hover:text-blue-900 underline"
+                      className="inline-flex items-center gap-1 text-sm text-[#E39A12] hover:text-[#E39A12]/80 underline"
                     >
                       <ExternalLink className="h-3 w-3" />
                       View source documentation
@@ -536,7 +541,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           <div className="flex-1 mx-4">
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
+                className={`h-2 rounded-full transition-all duration-300 ${reviewMode ? 'bg-[#E39A12]' : 'bg-primary'}`}
                 style={{ width: `${((currentQuestionIndex + 1) / quizData.questions.length) * 100}%` }}
               />
             </div>
@@ -545,6 +550,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           <Button
             onClick={handleNext}
             disabled={!reviewMode && selectedOption === ''}
+            className={reviewMode ? 'bg-[#E39A12] hover:bg-[#E39A12]/90 text-white' : ''}
           >
             {currentQuestionIndex === quizData.questions.length - 1
               ? reviewMode ? 'Finish Review' : 'Finish'
@@ -553,6 +559,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false }: QuizP
           </Button>
         </CardFooter>
       </Card>
+      </div>
     </TooltipProvider>
   );
 }

@@ -80,7 +80,7 @@ export default function Home() {
             </Button>
           </Link>
           <Link href="/review" className="w-full">
-            <Button className="w-full" variant="outline" size="lg">
+            <Button className="w-full bg-[#E39A12] hover:bg-[#E39A12]/90 text-white" size="lg">
               Quick Review
             </Button>
           </Link>
@@ -158,7 +158,7 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Link href="/review">
-                <Button className="w-full" variant="outline">
+                <Button className="w-full bg-[#E39A12] hover:bg-[#E39A12]/90 text-white">
                   Quick Review
                 </Button>
               </Link>

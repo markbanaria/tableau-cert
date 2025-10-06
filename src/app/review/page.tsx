@@ -101,7 +101,6 @@ export default function QuickReviewPage() {
       
       const quizData: QuizData = {
         title: `Quick Review: Random ${randomCount} Questions`,
-        description: 'Randomly sampled questions from all domains',
         questions: questions
       };
 
@@ -140,9 +139,6 @@ export default function QuickReviewPage() {
       
       const quizData: QuizData = {
         title: `Quick Review: ${domainName}${topicName}`,
-        description: selectedTopic !== '__all__'
-          ? `Questions from ${formatTopicName(selectedTopic)}`
-          : `Questions from ${domainName}`,
         questions: questions
       };
 
@@ -268,7 +264,7 @@ export default function QuickReviewPage() {
                 onClick={generateRandomQuiz} 
                 disabled={loading || !samplerReady || randomCount === 0 || randomCount > maxRandomQuestions}
                 size="lg"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-[#E39A12] hover:bg-[#E39A12]/90 text-white"
               >
                 {loading ? 'Generating...' : `Generate ${randomCount} Random Questions`}
               </Button>
@@ -355,7 +351,7 @@ export default function QuickReviewPage() {
                 onClick={generateTargetedQuiz} 
                 disabled={loading || !samplerReady || !selectedDomain || targetedCount === 0 || targetedCount > maxTargetedQuestions}
                 size="lg"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-[#E39A12] hover:bg-[#E39A12]/90 text-white"
               >
                 {loading ? 'Generating...' : `Generate ${targetedCount > 0 ? targetedCount : '0'} Questions`}
               </Button>

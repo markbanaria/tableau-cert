@@ -6,6 +6,7 @@ import Sidebar from './sidebar'
 import TopBar from './topbar'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import AYXLogo from '@/components/ui/ayx-logo'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -29,17 +30,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
     return (
       <div className="flex flex-col h-screen bg-gray-50">
         <div className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
-          <Link href="/">
-            <div className="w-16 h-11 bg-gray-900 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
-              <span className="text-white font-bold text-lg">AYX</span>
-            </div>
+          <Link href="/" className="cursor-pointer hover:opacity-80 transition-opacity">
+            <AYXLogo />
           </Link>
           <div className="flex items-center space-x-2">
             <Link href="/auth/signin">
-              <Button variant="ghost" className="text-gray-900">Sign In</Button>
+              <Button variant="ghost">Sign In</Button>
             </Link>
             <Link href="/auth/register">
-              <Button className="bg-gray-900 hover:bg-gray-900/90 text-white">Register</Button>
+              <Button>Register</Button>
             </Link>
           </div>
         </div>

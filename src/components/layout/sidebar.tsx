@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight, Home, Settings, FileText, BarChart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import AYXLogo from '@/components/ui/ayx-logo'
 
 interface SidebarProps {
   isMobileOpen?: boolean
@@ -61,10 +62,7 @@ export default function Sidebar({ isMobileOpen = false, onMobileClose }: Sidebar
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              {/* AYX Logo */}
-              <div className="w-14 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-base">AYX</span>
-              </div>
+              <AYXLogo />
             </div>
           )}
           <Button
