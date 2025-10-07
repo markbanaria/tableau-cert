@@ -25,7 +25,7 @@ export function generateResultsPDF(
     fontStyle: string = 'normal'
   ): number => {
     doc.setFontSize(fontSize);
-    doc.setFont(undefined, fontStyle as any);
+    doc.setFont('helvetica', fontStyle as any);
     doc.setTextColor(0, 0, 0);
 
     const words = text.split(' ');
@@ -79,9 +79,9 @@ export function generateResultsPDF(
   // Score summary (only for quiz mode)
   if (!reviewMode) {
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.text('Score Summary', margin, 55);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
 
     doc.setFontSize(12);
     doc.text(`Score: ${result.score}/${result.totalQuestions} (${Math.round((result.score / result.totalQuestions) * 100)}%)`, margin, 65);
@@ -91,9 +91,9 @@ export function generateResultsPDF(
     }
   } else {
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.text('Review Summary', margin, 55);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
     doc.text(`Total Questions Reviewed: ${result.totalQuestions}`, margin, 65);
   }
@@ -102,9 +102,9 @@ export function generateResultsPDF(
   if (result.domainScores && result.domainScores.length > 0) {
     let yPos = reviewMode ? 80 : 95;
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.text(reviewMode ? 'Domain Coverage' : 'Performance by Domain', margin, yPos);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
 
     const domainData = result.domainScores.map(domain => {
       if (reviewMode) {
