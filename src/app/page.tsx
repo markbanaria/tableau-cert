@@ -52,7 +52,7 @@ export default function Home() {
                 className="h-8 w-auto mb-4"
               />
             </div>
-            <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
+            <h1 className="text-3xl font-bold mb-2">Tableau Consultant Certification</h1>
           </div>
           <LoadingState message={loadingMessage} />
         </div>
@@ -64,7 +64,7 @@ export default function Home() {
     <MainLayout>
       <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Tableau Certification Hub</h1>
+          <h1 className="text-3xl font-bold mb-2">Tableau Consultant Certification</h1>
           <p className="text-muted-foreground">
             Practice and prepare for your Tableau certification
           </p>

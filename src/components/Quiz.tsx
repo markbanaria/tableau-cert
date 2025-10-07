@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -8,7 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
-import { QuestionMarkCircleIcon, ArrowTopRightOnSquareIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowTopRightOnSquareIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon, HomeIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
+import { generateResultsPDF } from '@/utils/generateResultsPDF';
 
 interface QuizProps {
   quizData: QuizData;
@@ -19,36 +21,34 @@ interface QuizProps {
 }
 
 export default function Quiz({ quizData, onComplete, reviewMode = false, onBack, backLabel }: QuizProps) {
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isComplete, setIsComplete] = useState(false);
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showHint, setShowHint] = useState(false);
-  const [reviewAnswers, setReviewAnswers] = useState<Map<string, string>>(new Map());
-  // Track answers in mock exam mode for navigation
-  const [examAnswers, setExamAnswers] = useState<Map<string, string>>(new Map());
+  const [showFullDetails, setShowFullDetails] = useState(false);
+
+  // Unified answer tracking system - single source of truth
+  const [answerMap, setAnswerMap] = useState<Map<string, string>>(new Map());
 
   const currentQuestion = quizData.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quizData.questions.length - 1;
 
-  // Restore selected option when navigating
-  useState(() => {
-    if (reviewMode && reviewAnswers.has(currentQuestion.id)) {
-      setSelectedOption(reviewAnswers.get(currentQuestion.id) || '');
-    } else if (!reviewMode && examAnswers.has(currentQuestion.id)) {
-      setSelectedOption(examAnswers.get(currentQuestion.id) || '');
-    }
-  });
+  // Restore selected option when question changes
+  useEffect(() => {
+    const savedAnswer = answerMap.get(currentQuestion.id);
+    setSelectedOption(savedAnswer || '');
+  }, [currentQuestionIndex, currentQuestion.id, answerMap]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
-    // Save answer for navigation (both review and exam mode)
-    if (reviewMode) {
-      setReviewAnswers(prev => new Map(prev).set(currentQuestion.id, value));
-    } else {
-      setExamAnswers(prev => new Map(prev).set(currentQuestion.id, value));
-    }
+    // Save answer immediately to unified map
+    setAnswerMap(prev => {
+      const newMap = new Map(prev);
+      newMap.set(currentQuestion.id, value);
+      return newMap;
+    });
   };
 
   const calculateDomainScores = (answers: QuizAnswer[]): DomainScore[] => {
@@ -137,49 +137,46 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
   const handleNext = () => {
     if (!reviewMode && selectedOption === '') return;
 
-    if (!reviewMode) {
-      const newAnswer: QuizAnswer = {
-        questionId: currentQuestion.id,
-        selectedOption: parseInt(selectedOption)
+    if (!reviewMode && isLastQuestion) {
+      // Generate final answers array from the answer map
+      const finalAnswers: QuizAnswer[] = [];
+      for (const [questionId, answer] of answerMap.entries()) {
+        finalAnswers.push({
+          questionId,
+          selectedOption: parseInt(answer)
+        });
+      }
+
+      const score = finalAnswers.reduce((acc, answer) => {
+        const question = quizData.questions.find(q => q.id === answer.questionId);
+        return question && question.correctAnswer === answer.selectedOption ? acc + 1 : acc;
+      }, 0);
+
+      const domainScores = calculateDomainScores(finalAnswers);
+
+      // Calculate weighted score (out of 1000) based on domain performance
+      // This assumes the quiz follows official domain weightings
+      const weightedScore = Math.round((score / quizData.questions.length) * 1000);
+
+      const quizResult: QuizResult = {
+        score,
+        totalQuestions: quizData.questions.length,
+        answers: finalAnswers,
+        passed: score >= Math.ceil(quizData.questions.length * 0.7), // 70% pass rate
+        domainScores,
+        weightedScore
       };
 
-      // Update or add answer (supports going back and changing answers)
-      const updatedAnswers = answers.filter(a => a.questionId !== currentQuestion.id);
-      updatedAnswers.push(newAnswer);
-      setAnswers(updatedAnswers);
-
-      if (isLastQuestion) {
-        const score = updatedAnswers.reduce((acc, answer) => {
-          const question = quizData.questions.find(q => q.id === answer.questionId);
-          return question && question.correctAnswer === answer.selectedOption ? acc + 1 : acc;
-        }, 0);
-
-        const domainScores = calculateDomainScores(updatedAnswers);
-        
-        // Calculate weighted score (out of 1000) based on domain performance
-        // This assumes the quiz follows official domain weightings
-        const weightedScore = Math.round((score / quizData.questions.length) * 1000);
-
-        const quizResult: QuizResult = {
-          score,
-          totalQuestions: quizData.questions.length,
-          answers: updatedAnswers,
-          passed: score >= Math.ceil(quizData.questions.length * 0.7), // 70% pass rate
-          domainScores,
-          weightedScore
-        };
-
-        setResult(quizResult);
-        setIsComplete(true);
-        onComplete?.(quizResult);
-        return;
-      }
+      setResult(quizResult);
+      setIsComplete(true);
+      onComplete?.(quizResult);
+      return;
     }
 
     // In review mode, when reaching the last question, show completion
     if (reviewMode && isLastQuestion) {
       const domainScores = calculateDomainBreakdownForReview();
-      
+
       const quizResult: QuizResult = {
         score: 0, // No scoring in review mode
         totalQuestions: quizData.questions.length,
@@ -196,44 +193,35 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
 
     // Move to next question (both quiz and review mode)
     if (currentQuestionIndex < quizData.questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
-      
-      // Restore answer when navigating (both review and exam mode)
-      const nextQuestionId = quizData.questions[nextIndex].id;
-      if (reviewMode) {
-        setSelectedOption(reviewAnswers.get(nextQuestionId) || '');
-      } else {
-        setSelectedOption(examAnswers.get(nextQuestionId) || '');
-      }
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
       setShowHint(false);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      const prevIndex = currentQuestionIndex - 1;
-      setCurrentQuestionIndex(prevIndex);
-      
-      // Restore answer when navigating back (both review and exam mode)
-      const prevQuestionId = quizData.questions[prevIndex].id;
-      if (reviewMode) {
-        setSelectedOption(reviewAnswers.get(prevQuestionId) || '');
-      } else {
-        setSelectedOption(examAnswers.get(prevQuestionId) || '');
-      }
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
       setShowHint(false);
     }
   };
 
   const handleRestart = () => {
     setCurrentQuestionIndex(0);
-    setAnswers([]);
     setSelectedOption('');
     setIsComplete(false);
     setResult(null);
-    setExamAnswers(new Map());
-    setReviewAnswers(new Map());
+    setAnswerMap(new Map());
+    setShowFullDetails(false);
+  };
+
+  const handleDownloadPDF = () => {
+    if (result) {
+      generateResultsPDF(quizData, result, reviewMode);
+    }
+  };
+
+  const handleGoHome = () => {
+    router.push('/');
   };
 
   if (isComplete && result) {
@@ -363,7 +351,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
                                 </div>
                                 
                                 {/* Individual question results */}
-                                <div 
+                                <div
                                   className="space-y-2 no-select no-context-menu"
                                   onCopy={(e) => e.preventDefault()}
                                   onCut={(e) => e.preventDefault()}
@@ -373,13 +361,13 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
                                   {domainQuestions.map((question, idx) => {
                                     const answer = result.answers.find(a => a.questionId === question.id);
                                     const isCorrect = answer && answer.selectedOption === question.correctAnswer;
-                                    
+
                                     return (
-                                      <div 
-                                        key={question.id} 
+                                      <div
+                                        key={question.id}
                                         className={`p-3 rounded-md border ${
-                                          isCorrect 
-                                            ? 'bg-green-50 border-green-200' 
+                                          isCorrect
+                                            ? 'bg-green-50 border-green-200'
                                             : 'bg-red-50 border-red-200'
                                         }`}
                                       >
@@ -422,13 +410,111 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
               )}
             </>
           )}
+
+          {/* Full Details Section */}
+          {showFullDetails && (
+            <div className="mt-6 space-y-4">
+              <h3 className="text-lg font-semibold text-center">Complete Question Review</h3>
+              <div className="space-y-6">
+                {quizData.questions.map((question, index) => {
+                  const answer = !reviewMode && result.answers ?
+                    result.answers.find(a => a.questionId === question.id) : null;
+                  const isCorrect = answer && answer.selectedOption === question.correctAnswer;
+
+                  return (
+                    <div key={question.id} className="border rounded-lg p-4">
+                      <div className="mb-3">
+                        <h4 className="font-medium text-sm mb-2">
+                          Q{index + 1}. {question.question}
+                        </h4>
+                      </div>
+
+                      <div className="space-y-2 mb-3">
+                        {question.options.map((option, optIndex) => {
+                          const isThisCorrect = optIndex === question.correctAnswer;
+                          const isUserAnswer = answer?.selectedOption === optIndex;
+
+                          return (
+                            <div
+                              key={optIndex}
+                              className={`p-2 rounded text-sm ${
+                                isThisCorrect ? 'bg-green-50 border border-green-200' :
+                                isUserAnswer && !isThisCorrect ? 'bg-red-50 border border-red-200' :
+                                'bg-gray-50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                {isThisCorrect && (
+                                  <CheckCircleIcon className="w-4 h-4 text-green-600" />
+                                )}
+                                {isUserAnswer && !isThisCorrect && (
+                                  <XCircleIcon className="w-4 h-4 text-red-600" />
+                                )}
+                                <span className={`${
+                                  isThisCorrect ? 'font-medium text-green-700' :
+                                  isUserAnswer && !isThisCorrect ? 'text-red-700' :
+                                  ''
+                                }`}>
+                                  {String.fromCharCode(65 + optIndex)}. {option}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {question.explanation && (
+                        <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                          <p className="text-sm font-medium text-blue-900 mb-1">Explanation:</p>
+                          <p className="text-sm text-blue-800">{question.explanation}</p>
+                        </div>
+                      )}
+
+                      {!reviewMode && answer && (
+                        <div className="mt-2 text-xs">
+                          {isCorrect ? (
+                            <span className="text-green-600 font-medium">✓ Correct</span>
+                          ) : (
+                            <span className="text-red-600 font-medium">✗ Incorrect</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </CardContent>
-        <CardFooter className="justify-center gap-2">
-          <Button 
-            onClick={handleRestart}
-            className={reviewMode ? 'bg-review hover:bg-review/90 text-white' : ''}
+        <CardFooter className="flex flex-col gap-4">
+          <div className="flex justify-center gap-2">
+            <Button
+              onClick={handleRestart}
+              className={reviewMode ? 'bg-review hover:bg-review/90 text-white' : ''}
+            >
+              {reviewMode ? 'Review Again' : 'Take Quiz Again'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowFullDetails(!showFullDetails)}
+            >
+              {showFullDetails ? 'Hide Details' : 'Show Full Details'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleDownloadPDF}
+            >
+              <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
+              Download PDF
+            </Button>
+          </div>
+          <Button
+            variant="ghost"
+            onClick={handleGoHome}
+            className="w-full"
           >
-            {reviewMode ? 'Review Again' : 'Take Quiz Again'}
+            <HomeIcon className="w-4 h-4 mr-2" />
+            Back to Home
           </Button>
         </CardFooter>
       </Card>
