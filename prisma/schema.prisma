@@ -1,0 +1,289 @@
+// Prisma schema for Tableau Certification Platform
+// Supports quiz sessions, questions, answers, topics, sections, tests, and certifications
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public", "auth"]
+}
+
+// =====================================================
+// AUTHENTICATION TABLES (NextAuth.js - Existing)
+// =====================================================
+
+model User {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  accounts Account[]
+  sessions Session[]
+
+  // Quiz relationships
+  quizzes Quiz[]
+
+  @@map("users")
+  @@schema("public")
+}
+
+model Account {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String  @map("user_id") @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refreshToken      String? @map("refresh_token") @db.Text
+  accessToken       String? @map("access_token") @db.Text
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
+  scope             String?
+  idToken           String? @map("id_token") @db.Text
+  sessionState      String? @map("session_state")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+  @@schema("public")
+}
+
+model Session {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id") @db.Uuid
+  expires      DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sessionToken])
+  @@map("sessions")
+  @@schema("public")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@id([identifier, token])
+  @@index([identifier])
+  @@index([token])
+  @@map("verification_tokens")
+  @@schema("public")
+}
+
+// =====================================================
+// CORE CONTENT TABLES
+// =====================================================
+
+model Question {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content        String
+  questionType   String   @map("question_type") // 'multiple_choice', 'true_false', 'short_answer'
+  difficultyLevel Int?    @map("difficulty_level") // 1-5 scale
+  explanation    String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  answers       Answer[]
+  topicQuestions TopicQuestion[]
+  quizResponses QuizResponse[]
+
+  @@index([questionType])
+  @@index([difficultyLevel])
+  @@map("questions")
+  @@schema("public")
+}
+
+model Answer {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId  String   @map("question_id") @db.Uuid
+  content     String
+  isCorrect   Boolean  @default(false) @map("is_correct")
+  explanation String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  quizResponses QuizResponse[]
+
+  @@index([questionId])
+  @@index([isCorrect])
+  @@map("answers")
+  @@schema("public")
+}
+
+model Topic {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  topicQuestions TopicQuestion[]
+  sectionTopics  SectionTopic[]
+
+  @@index([name])
+  @@map("topics")
+  @@schema("public")
+}
+
+model TopicQuestion {
+  topicId    String @map("topic_id") @db.Uuid
+  questionId String @map("question_id") @db.Uuid
+
+  topic    Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([topicId, questionId])
+  @@map("topic_questions")
+  @@schema("public")
+}
+
+model Section {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  sectionTopics SectionTopic[]
+  testSections  TestSection[]
+
+  @@index([name])
+  @@map("sections")
+  @@schema("public")
+}
+
+model SectionTopic {
+  sectionId String @map("section_id") @db.Uuid
+  topicId   String @map("topic_id") @db.Uuid
+
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  topic   Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([sectionId, topicId])
+  @@map("section_topics")
+  @@schema("public")
+}
+
+model Test {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  description  String?
+  timeLimit    Int?     @map("time_limit") // in minutes
+  passingScore Int?     @map("passing_score")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  testSections       TestSection[]
+  certificationTests CertificationTest[]
+  quizzes           Quiz[]
+
+  @@index([name])
+  @@map("tests")
+  @@schema("public")
+}
+
+model TestSection {
+  testId    String @map("test_id") @db.Uuid
+  sectionId String @map("section_id") @db.Uuid
+
+  test    Test    @relation(fields: [testId], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@id([testId, sectionId])
+  @@map("test_sections")
+  @@schema("public")
+}
+
+model Certification {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  tracks      String?  // e.g., 'Data Analyst', 'Server Administrator'
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  certificationTests CertificationTest[]
+
+  @@index([name])
+  @@index([tracks])
+  @@map("certifications")
+  @@schema("public")
+}
+
+model CertificationTest {
+  certificationId String  @map("certification_id") @db.Uuid
+  testId         String  @map("test_id") @db.Uuid
+  isRequired     Boolean @default(true) @map("is_required")
+
+  certification Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  test          Test          @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  @@id([certificationId, testId])
+  @@map("certification_tests")
+  @@schema("public")
+}
+
+// =====================================================
+// QUIZ SESSION TABLES
+// =====================================================
+
+model Quiz {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  testId      String?   @map("test_id") @db.Uuid // Optional - for practice vs. formal tests
+  status      String    @default("in_progress") // 'in_progress', 'completed', 'abandoned'
+  score       Int?
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  timeTaken   Int?      @map("time_taken") // in seconds
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test          Test?          @relation(fields: [testId], references: [id], onDelete: SetNull)
+  quizResponses QuizResponse[]
+
+  @@index([userId])
+  @@index([testId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("quizzes")
+  @@schema("public")
+}
+
+model QuizResponse {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quizId     String   @map("quiz_id") @db.Uuid
+  questionId String   @map("question_id") @db.Uuid
+  answerId   String?  @map("answer_id") @db.Uuid // NULL for short answer questions
+  userAnswer String?  @map("user_answer") // For short answer questions
+  isCorrect  Boolean? @map("is_correct")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  quiz     Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answer   Answer?  @relation(fields: [answerId], references: [id], onDelete: SetNull)
+
+  @@index([quizId])
+  @@index([questionId])
+  @@index([isCorrect])
+  @@map("quiz_responses")
+  @@schema("public")
+}
