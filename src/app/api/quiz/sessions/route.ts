@@ -217,10 +217,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user's quiz history
+    // Get user's quiz history (only completed quizzes)
     const quizzes = await prisma.quiz.findMany({
       where: {
         userId: user.id,
+        status: 'completed', // Only show completed quizzes in history
         ...(certificationSlug ? {
           // Filter by certification if specified
           // Note: This is a simplified approach - in a real system you might want
@@ -258,6 +259,9 @@ export async function GET(request: NextRequest) {
         const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
         const passed = percentage >= 70;
 
+        // Log quiz data for debugging
+        console.log(`Quiz ${quiz.id}: totalQuestions=${totalQuestions}, correctAnswers=${correctAnswers}, status=${quiz.status}, responses=${quiz.quizResponses.length}`);
+
         return {
           id: quiz.id,
           status: quiz.status,
@@ -276,7 +280,10 @@ export async function GET(request: NextRequest) {
         limit,
         offset,
         total: await prisma.quiz.count({
-          where: { userId: user.id }
+          where: {
+            userId: user.id,
+            status: 'completed' // Only count completed quizzes
+          }
         })
       }
     });
