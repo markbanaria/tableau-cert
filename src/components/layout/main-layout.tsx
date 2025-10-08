@@ -60,26 +60,26 @@ export default function MainLayout({ children }: MainLayoutProps) {
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
       <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-60' : 'md:ml-0'}`}>
-        {/* Desktop: Sticky topbar */}
-        <div className="hidden md:flex md:flex-col md:h-screen">
+        {/* Desktop: Scrollable layout */}
+        <div className="hidden md:block md:h-screen md:overflow-auto">
           <TopBar
             onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
             isSidebarOpen={isSidebarOpen}
             onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
           />
-          <main className="flex-1 overflow-auto p-6">
+          <main className="p-6">
             {children}
           </main>
         </div>
 
-        {/* Mobile: Scrollable topbar */}
-        <div className="md:hidden overflow-auto h-screen">
+        {/* Mobile: Scrollable layout */}
+        <div className="md:hidden h-screen overflow-auto">
           <TopBar
             onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
             isSidebarOpen={isSidebarOpen}
             onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
           />
-          <main className="p-0">
+          <main className="p-6">
             {children}
           </main>
         </div>
