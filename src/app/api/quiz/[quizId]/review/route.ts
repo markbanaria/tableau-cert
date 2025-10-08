@@ -117,10 +117,8 @@ export async function GET(
     const correctAnswers = quiz.quizResponses.filter(r => r.isCorrect).length;
     const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
-    // Convert percentage to score out of 1000 and check against test's passing score
-    const scoreOutOf1000 = Math.round((correctAnswers / totalQuestions) * 1000);
-    const passingScore = quiz.test?.passingScore || 750; // Default to 750 if not set
-    const passed = scoreOutOf1000 >= passingScore;
+    // Check pass/fail status using 70% threshold (consistent with other parts of the app)
+    const passed = percentage >= 70;
 
     // Calculate section-wise scores
     const sectionScores = new Map<string, { name: string; correct: number; total: number; percentage: number }>();
