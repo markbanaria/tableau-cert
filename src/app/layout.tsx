@@ -20,6 +20,23 @@ const plusJakartaSans = localFont({
   display: 'swap',
 });
 
+const ibmPlexMono = localFont({
+  src: [
+    {
+      path: './fonts/IBMPlexMono-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/IBMPlexMono-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-ibm-plex-mono',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: "AYX",
   description: "Authentication and management platform",
@@ -35,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} ${plusJakartaSans.className} antialiased`}>
+      <body className={`${plusJakartaSans.variable} ${ibmPlexMono.variable} ${plusJakartaSans.className} antialiased`}>
         <Providers>
           {children}
         </Providers>

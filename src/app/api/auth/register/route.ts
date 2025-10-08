@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { hash } from 'bcryptjs'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,14 +21,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
-
     // Check if user already exists
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single()
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true }
+    })
 
     if (existingUser) {
       return NextResponse.json(
@@ -44,24 +38,19 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await hash(password, 12)
 
     // Create the user
-    const { data: newUser, error } = await supabase
-      .from('users')
-      .insert({
+    const newUser = await prisma.user.create({
+      data: {
         email,
         name: name || null,
-        password_hash: hashedPassword,
-        email_verified: null, // Will be set after email verification
-      })
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Error creating user:', error)
-      return NextResponse.json(
-        { error: 'Failed to create user' },
-        { status: 500 }
-      )
-    }
+        passwordHash: hashedPassword,
+        emailVerified: null, // Will be set after email verification
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      }
+    })
 
     return NextResponse.json(
       {

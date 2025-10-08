@@ -31,7 +31,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="border-gray-200">
+          <Card className="border-gray-200 shadow-none">
             <CardHeader>
               <CardTitle className="text-gray-900">Total Users</CardTitle>
               <CardDescription className="text-gray-600">Active users in the system</CardDescription>
@@ -42,7 +42,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-gray-200">
+          <Card className="border-gray-200 shadow-none">
             <CardHeader>
               <CardTitle className="text-gray-900">Active Sessions</CardTitle>
               <CardDescription className="text-gray-600">Currently active sessions</CardDescription>
@@ -53,7 +53,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-gray-200">
+          <Card className="border-gray-200 shadow-none">
             <CardHeader>
               <CardTitle className="text-gray-900">API Calls</CardTitle>
               <CardDescription className="text-gray-600">Total API calls today</CardDescription>
@@ -65,7 +65,7 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        <Card className="border-gray-200">
+        <Card className="border-gray-200 shadow-none">
           <CardHeader>
             <CardTitle className="text-gray-900">Recent Activity</CardTitle>
             <CardDescription className="text-gray-600">Latest system events</CardDescription>

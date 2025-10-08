@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import LogoReverse from '@/components/ui/logo-reverse'
 
 function SignInForm() {
   const [email, setEmail] = useState('')
@@ -18,6 +19,7 @@ function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get('registered')
+  const mockExam = searchParams.get('mockExam')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,9 +58,25 @@ function SignInForm() {
             </Button>
           </Link>
         </div>
-        <Card className="w-full border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-2xl text-gray-900">Sign In</CardTitle>
+        <Card className="w-full border-gray-200 overflow-hidden pt-0">
+        <div className="bg-review border-b border-gray-200 h-30 relative">
+          <div className="flex items-center h-full">
+            <div className="pl-8">
+              <Link href="/" className="block">
+                <LogoReverse />
+              </Link>
+            </div>
+            <div className="absolute left-1/3 top-0 w-2/3 h-full opacity-20">
+              <img
+                src="/pattern.png"
+                alt=""
+                className="w-full h-full object-cover object-left"
+              />
+            </div>
+          </div>
+        </div>
+        <CardHeader className="pt-0">
+          <CardTitle className="text-lg text-gray-900">Sign In</CardTitle>
           <CardDescription className="text-gray-600">
             Enter your email and password to sign in
           </CardDescription>
@@ -70,9 +88,15 @@ function SignInForm() {
                 <p className="text-sm text-green-600">Account created successfully! Please sign in.</p>
               </div>
             )}
+
+            {mockExam && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-sm text-blue-600">Please sign in to take mock exams and track your progress.</p>
+              </div>
+            )}
             
             <div className="space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-2 mt-4">
                 <Label htmlFor="email" className="text-gray-900">Email</Label>
                 <Input
                   id="email"

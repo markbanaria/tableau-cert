@@ -40,6 +40,7 @@ export class QuizSampler {
   private loading = false;
   private loadPromise: Promise<void> | null = null;
   private sampledQuestionIds: Set<string> = new Set(); // Track sampled questions to avoid duplicates
+  private testConfig: any = null; // Cache for database test configuration
 
   /**
    * Optimized loading with bundled file, caching, and progress reporting
@@ -168,7 +169,42 @@ export class QuizSampler {
     this.loading = false;
     this.loadPromise = null;
     this.questionBanks.clear();
+    this.testConfig = null;
     await this.loadQuestionBanks(onProgress);
+  }
+
+  /**
+   * Fetch test configuration from database API
+   */
+  async getTestConfiguration(certificationSlug: string = 'tableau-consultant'): Promise<any> {
+    if (this.testConfig) {
+      return this.testConfig;
+    }
+
+    try {
+      const response = await fetch(`/api/certifications/${certificationSlug}/test-config`);
+      if (response.ok) {
+        this.testConfig = await response.json();
+        console.log('📊 Loaded test configuration from database:', this.testConfig);
+        return this.testConfig;
+      } else {
+        throw new Error(`Failed to fetch test config: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.warn('⚠️ Failed to load test configuration from database, using fallback:', error);
+      // Fallback to hardcoded configuration
+      this.testConfig = {
+        certificationName: 'Tableau Consultant',
+        testName: 'Tableau Consultant Exam',
+        totalQuestions: 60,
+        sections: TABLEAU_CONSULTANT_COMPOSITION.domains.map(domain => ({
+          sectionId: domain.id,
+          sectionName: domain.name,
+          questionCount: domain.questionCount
+        }))
+      };
+      return this.testConfig;
+    }
   }
 
   /**
@@ -191,7 +227,7 @@ export class QuizSampler {
 
 
 
-  async generateQuiz(options: SamplingOptions): Promise<QuizData> {
+  async generateQuiz(options: SamplingOptions, certificationSlug?: string): Promise<QuizData> {
     if (!this.loaded) {
       throw new Error('Question banks not loaded. Call loadQuestionBanks() first.');
     }
@@ -199,7 +235,7 @@ export class QuizSampler {
     // Reset sampled questions tracker for each new quiz generation
     this.sampledQuestionIds.clear();
 
-    const questions = await this.sampleQuestions(options);
+    const questions = await this.sampleQuestions(options, certificationSlug);
 
     if (questions.length === 0) {
       throw new Error('No questions available for the selected configuration. Please generate more question banks or adjust your selection.');
@@ -211,18 +247,18 @@ export class QuizSampler {
     };
   }
 
-  private async sampleQuestions(options: SamplingOptions): Promise<QuizQuestion[]> {
+  private async sampleQuestions(options: SamplingOptions, certificationSlug?: string): Promise<QuizQuestion[]> {
     const sampledQuestions: QuizQuestion[] = [];
 
     switch (options.compositionType) {
       case 'full_practice':
-        return this.sampleFullPracticeExam(options);
+        return await this.sampleFullPracticeExam(options, certificationSlug);
 
       case 'domain_focus':
         return this.sampleDomainFocus(options);
 
       case 'quick_review':
-        return this.sampleQuickReview(options);
+        return await this.sampleQuickReview(options, certificationSlug);
 
       case 'custom':
         return this.sampleCustom(options);
@@ -232,17 +268,14 @@ export class QuizSampler {
     }
   }
 
-  private sampleFullPracticeExam(options: SamplingOptions): QuizQuestion[] {
-    const distribution = getQuestionDistribution(
-      TABLEAU_CONSULTANT_COMPOSITION,
-      options.totalQuestions
-    );
-
+  private async sampleFullPracticeExam(options: SamplingOptions, certificationSlug?: string): Promise<QuizQuestion[]> {
+    // Get test configuration from database
+    const testConfig = await this.getTestConfiguration(certificationSlug);
     const sampledQuestions: QuizQuestion[] = [];
 
-    for (const domain of TABLEAU_CONSULTANT_COMPOSITION.domains) {
-      const questionsNeeded = distribution[domain.id];
-      const domainQuestions = this.getQuestionsForDomain(domain.id, questionsNeeded);
+    for (const section of testConfig.sections) {
+      const questionsNeeded = section.questionCount;
+      const domainQuestions = this.getQuestionsForDomain(section.sectionId, questionsNeeded);
       sampledQuestions.push(...domainQuestions);
     }
 
@@ -292,15 +325,16 @@ export class QuizSampler {
     return sampledQuestions;
   }
 
-  private sampleQuickReview(options: SamplingOptions): QuizQuestion[] {
-    // Balanced sampling across all domains
-    const domainCount = TABLEAU_CONSULTANT_COMPOSITION.domains.length;
-    const questionsPerDomain = Math.floor(options.totalQuestions / domainCount);
+  private async sampleQuickReview(options: SamplingOptions, certificationSlug?: string): Promise<QuizQuestion[]> {
+    // Get test configuration from database for balanced sampling
+    const testConfig = await this.getTestConfiguration(certificationSlug);
+    const sectionsCount = testConfig.sections.length;
+    const questionsPerSection = Math.floor(options.totalQuestions / sectionsCount);
     const sampledQuestions: QuizQuestion[] = [];
 
-    for (const domain of TABLEAU_CONSULTANT_COMPOSITION.domains) {
-      const domainQuestions = this.getQuestionsForDomain(domain.id, questionsPerDomain);
-      sampledQuestions.push(...domainQuestions);
+    for (const section of testConfig.sections) {
+      const sectionQuestions = this.getQuestionsForDomain(section.sectionId, questionsPerSection);
+      sampledQuestions.push(...sectionQuestions);
     }
 
     return sampledQuestions.slice(0, options.totalQuestions);
@@ -429,10 +463,29 @@ export class QuizSampler {
     return stats;
   }
 
-  getDomainCoverage(): Record<string, any> {
+  async getDomainCoverage(certificationSlug?: string): Promise<Record<string, any>> {
+    // Try to get database configuration first, fallback to hardcoded
+    let domains;
+    try {
+      const testConfig = await this.getTestConfiguration(certificationSlug);
+      domains = testConfig.sections.map((section: any) => {
+        // Map to hardcoded domain structure for question bank mapping
+        const hardcodedDomain = TABLEAU_CONSULTANT_COMPOSITION.domains.find(d => d.id === section.sectionId);
+        return {
+          id: section.sectionId,
+          name: section.sectionName,
+          questionBanks: hardcodedDomain?.questionBanks || [],
+          questionCount: section.questionCount
+        };
+      });
+    } catch (error) {
+      console.warn('Using fallback domain configuration:', error);
+      domains = TABLEAU_CONSULTANT_COMPOSITION.domains;
+    }
+
     const coverage: Record<string, any> = {};
 
-    for (const domain of TABLEAU_CONSULTANT_COMPOSITION.domains) {
+    for (const domain of domains) {
       let questionsCount = 0;
       let topicsLoaded = 0;
       const topicsTotal = domain.questionBanks.length;
@@ -441,7 +494,7 @@ export class QuizSampler {
       // Count questions from all question banks for this domain
       for (const bankFileName of domain.questionBanks) {
         const bank = this.questionBanks.get(bankFileName);
-        
+
         if (bank && bank.questions) {
           questionsCount += bank.questions.length;
           topicsLoaded++;

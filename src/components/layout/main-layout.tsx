@@ -6,7 +6,7 @@ import Sidebar from './sidebar'
 import TopBar from './topbar'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import AYXLogo from '@/components/ui/ayx-logo'
+import Logo from '@/components/ui/logo'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -14,6 +14,7 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const { data: session, status } = useSession()
 
   // Loading state
@@ -31,7 +32,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <div className="flex flex-col h-screen bg-gray-50">
         <div className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
           <Link href="/" className="cursor-pointer hover:opacity-80 transition-opacity">
-            <AYXLogo />
+            <Logo />
           </Link>
           <div className="flex items-center space-x-2">
             <Link href="/auth/signin">
@@ -52,15 +53,36 @@ export default function MainLayout({ children }: MainLayoutProps) {
   // Logged in state - full layout with sidebar and topbar
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar 
-        isMobileOpen={isMobileMenuOpen} 
-        onMobileClose={() => setIsMobileMenuOpen(false)} 
+      <Sidebar
+        isMobileOpen={isMobileMenuOpen}
+        onMobileClose={() => setIsMobileMenuOpen(false)}
+        isOpen={isSidebarOpen}
+        onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
-      <div className="flex-1 flex flex-col">
-        <TopBar onMobileMenuOpen={() => setIsMobileMenuOpen(true)} />
-        <main className="flex-1 overflow-auto p-0 md:p-6">
-          {children}
-        </main>
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-60' : 'md:ml-0'}`}>
+        {/* Desktop: Sticky topbar */}
+        <div className="hidden md:flex md:flex-col md:h-screen">
+          <TopBar
+            onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+            isSidebarOpen={isSidebarOpen}
+            onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          />
+          <main className="flex-1 overflow-auto p-6">
+            {children}
+          </main>
+        </div>
+
+        {/* Mobile: Scrollable topbar */}
+        <div className="md:hidden overflow-auto h-screen">
+          <TopBar
+            onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
+            isSidebarOpen={isSidebarOpen}
+            onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          />
+          <main className="p-0">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   )

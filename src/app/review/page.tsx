@@ -3,106 +3,68 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Quiz from '@/components/Quiz';
-import { QuizData, QuizQuestion } from '@/types/quiz';
+import { QuizData } from '@/types/quiz';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getQuizSampler } from '@/services/quizSampler';
 import { ArrowPathIcon, AdjustmentsHorizontalIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
+import { quizApi, QuizOptions } from '@/services/quizApi';
 
 export default function QuickReviewPage() {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [showQuiz, setShowQuiz] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [samplerReady, setSamplerReady] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState('Initializing...');
+  const [loadingOptions, setLoadingOptions] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState('Loading quiz options...');
+
+  // Quiz options from API
+  const [quizOptions, setQuizOptions] = useState<QuizOptions | null>(null);
 
   // Random sampling state
   const [randomCount, setRandomCount] = useState(10);
-  const [maxRandomQuestions, setMaxRandomQuestions] = useState(60);
 
   // Domain/Topic filtering state
-  const [domains, setDomains] = useState<Array<{ id: string; name: string; description: string }>>([]);
-  const [selectedDomain, setSelectedDomain] = useState<string>('');
-  const [topics, setTopics] = useState<string[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<string>('__all__');
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<number | 'mixed'>('mixed');
   const [targetedCount, setTargetedCount] = useState(10);
-  const [maxTargetedQuestions, setMaxTargetedQuestions] = useState(60);
 
   useEffect(() => {
-    initializeSampler();
+    loadQuizOptions();
   }, []);
 
-  useEffect(() => {
-    if (selectedDomain && samplerReady) {
-      const quizSampler = getQuizSampler();
-      const domainTopics = quizSampler.getTopicsForDomain(selectedDomain);
-      setTopics(domainTopics);
-      setSelectedTopic('__all__'); // Reset topic selection when domain changes
-      
-      // Update max questions for domain
-      const availableCount = quizSampler.getAvailableQuestionCount(selectedDomain);
-      setMaxTargetedQuestions(availableCount);
-      setTargetedCount(Math.min(10, availableCount));
-    } else {
-      setTopics([]);
-      setSelectedTopic('__all__');
-      setMaxTargetedQuestions(60);
-    }
-  }, [selectedDomain, samplerReady]);
-
-  useEffect(() => {
-    if (selectedDomain && selectedTopic && samplerReady) {
-      const quizSampler = getQuizSampler();
-      const topicName = selectedTopic === '__all__' ? undefined : selectedTopic;
-      const availableCount = quizSampler.getAvailableQuestionCount(selectedDomain, topicName);
-      setMaxTargetedQuestions(availableCount);
-      setTargetedCount(Math.min(targetedCount, availableCount));
-    }
-  }, [selectedTopic]);
-
-  const initializeSampler = async () => {
+  const loadQuizOptions = async () => {
     try {
-      const quizSampler = getQuizSampler();
-      
-      await quizSampler.loadQuestionBanks((loaded, total, message) => {
-        setLoadingMessage(message);
-      });
-      
-      const availableDomains = quizSampler.getDomains();
-      setDomains(availableDomains);
-      
-      // Set max random questions
-      const totalQuestions = quizSampler.getTotalAvailableQuestions();
-      setMaxRandomQuestions(totalQuestions);
-      
-      setSamplerReady(true);
+      setLoadingOptions(true);
+      setLoadingMessage('Fetching quiz options from database...');
+      const options = await quizApi.getQuizOptions();
+      setQuizOptions(options);
+      setLoadingMessage('Ready!');
     } catch (error) {
-      console.error('Failed to load question banks:', error);
-      setSamplerReady(true);
+      console.error('Failed to load quiz options:', error);
+      setLoadingMessage('Failed to load quiz options');
+    } finally {
+      setLoadingOptions(false);
     }
   };
 
   const generateRandomQuiz = async () => {
-    if (!samplerReady) {
-      alert('Question banks are still loading. Please wait.');
+    if (!quizOptions) {
+      alert('Quiz options are still loading. Please wait.');
       return;
     }
 
     setLoading(true);
     try {
-      const quizSampler = getQuizSampler();
-      const questions = await quizSampler.getRandomQuestions(randomCount);
-      
-      const quizData: QuizData = {
-        title: `Quick Review: Random ${randomCount} Questions`,
-        questions: questions
-      };
+      const quizData = await quizApi.generateQuiz({
+        questionCount: randomCount,
+        difficultyLevel: 'mixed'
+      });
 
       setQuizData(quizData);
       setShowQuiz(true);
@@ -115,32 +77,24 @@ export default function QuickReviewPage() {
   };
 
   const generateTargetedQuiz = async () => {
-    if (!samplerReady) {
-      alert('Question banks are still loading. Please wait.');
+    if (!quizOptions) {
+      alert('Quiz options are still loading. Please wait.');
       return;
     }
 
-    if (!selectedDomain) {
-      alert('Please select a domain first.');
+    if (selectedSections.length === 0 && selectedTopics.length === 0) {
+      alert('Please select at least one section or topic.');
       return;
     }
 
     setLoading(true);
     try {
-      const quizSampler = getQuizSampler();
-      const questions = await quizSampler.getQuestionsByDomainAndTopic(
-        selectedDomain,
-        selectedTopic === '__all__' ? undefined : selectedTopic,
-        targetedCount
-      );
-
-      const domainName = domains.find(d => d.id === selectedDomain)?.name || selectedDomain;
-      const topicName = selectedTopic !== '__all__' ? ` - ${formatTopicName(selectedTopic)}` : '';
-      
-      const quizData: QuizData = {
-        title: `Quick Review: ${domainName}${topicName}`,
-        questions: questions
-      };
+      const quizData = await quizApi.generateQuiz({
+        sectionIds: selectedSections.length > 0 ? selectedSections : undefined,
+        topicIds: selectedTopics.length > 0 ? selectedTopics : undefined,
+        difficultyLevel: selectedDifficulty,
+        questionCount: targetedCount
+      });
 
       setQuizData(quizData);
       setShowQuiz(true);
@@ -152,19 +106,60 @@ export default function QuickReviewPage() {
     }
   };
 
-  const formatTopicName = (topic: string): string => {
-    return topic
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
-
   const handleBackToSetup = () => {
     setShowQuiz(false);
     setQuizData(null);
   };
 
-  if (!samplerReady) {
+  const handleSectionChange = (sectionId: string) => {
+    setSelectedSections(prev => {
+      if (prev.includes(sectionId)) {
+        return prev.filter(id => id !== sectionId);
+      }
+      return [...prev, sectionId];
+    });
+    // Clear topic selection when sections change
+    setSelectedTopics([]);
+  };
+
+  const handleTopicChange = (topicId: string) => {
+    setSelectedTopics(prev => {
+      if (prev.includes(topicId)) {
+        return prev.filter(id => id !== topicId);
+      }
+      return [...prev, topicId];
+    });
+    // Clear section selection when topics change
+    setSelectedSections([]);
+  };
+
+  const getMaxQuestions = () => {
+    if (!quizOptions) return 100;
+    return quizOptions.maxQuestions || 100;
+  };
+
+  const getAvailableQuestionCount = () => {
+    if (!quizOptions) return 0;
+
+    if (selectedSections.length > 0) {
+      return selectedSections.reduce((sum, sectionId) => {
+        const section = quizOptions.sections?.find(s => s.id === sectionId);
+        return sum + (section?.questionCount || 0);
+      }, 0);
+    }
+
+    if (selectedTopics.length > 0) {
+      return selectedTopics.reduce((sum, topicId) => {
+        const topic = quizOptions.topics?.find(t => t.id === topicId);
+        return sum + (topic?.questionCount || 0);
+      }, 0);
+    }
+
+    // Total available questions
+    return quizOptions.sections?.reduce((sum, section) => sum + section.questionCount, 0) || 0;
+  };
+
+  if (loadingOptions) {
     return (
       <MainLayout>
         <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
@@ -186,8 +181,8 @@ export default function QuickReviewPage() {
     return (
       <MainLayout>
         <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
-          <Quiz 
-            quizData={quizData} 
+          <Quiz
+            quizData={quizData}
             reviewMode={true}
             onBack={handleBackToSetup}
             backLabel="Back to Review Setup"
@@ -208,11 +203,11 @@ export default function QuickReviewPage() {
           </Button>
         </Link>
       </div>
-      
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Quick Review</h1>
         <p className="text-muted-foreground">
-          Practice with random questions or focus on specific domains and topics
+          Practice with questions from the database ({getAvailableQuestionCount()} questions available)
         </p>
       </div>
 
@@ -224,7 +219,7 @@ export default function QuickReviewPage() {
           </TabsTrigger>
           <TabsTrigger value="targeted" className="flex items-center gap-2">
             <AdjustmentsHorizontalIcon className="w-4 h-4" />
-            By Domain & Topic
+            By Section & Topic
           </TabsTrigger>
         </TabsList>
 
@@ -233,7 +228,7 @@ export default function QuickReviewPage() {
             <CardHeader>
               <CardTitle>Random Question Sampling</CardTitle>
               <CardDescription>
-                Get a random mix of questions from all domains to test your overall knowledge
+                Get a random mix of questions from all sections to test your overall knowledge
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -243,26 +238,26 @@ export default function QuickReviewPage() {
                   id="random-count"
                   type="number"
                   min="1"
-                  max={maxRandomQuestions}
+                  max={getMaxQuestions()}
                   value={randomCount === 0 ? '' : randomCount}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const val = e.target.value;
                     if (val === '') {
                       setRandomCount(0);
                     } else {
-                      setRandomCount(Math.min(parseInt(val) || 0, maxRandomQuestions));
+                      setRandomCount(Math.min(parseInt(val) || 0, getMaxQuestions()));
                     }
                   }}
                   className="max-w-xs"
                 />
                 <p className="text-sm text-muted-foreground">
-                  Choose between 1 and {maxRandomQuestions} questions (max available)
+                  Choose between 1 and {getMaxQuestions()} questions
                 </p>
               </div>
 
-              <Button 
-                onClick={generateRandomQuiz} 
-                disabled={loading || !samplerReady || randomCount === 0 || randomCount > maxRandomQuestions}
+              <Button
+                onClick={generateRandomQuiz}
+                disabled={loading || !quizOptions || randomCount === 0 || randomCount > getMaxQuestions()}
                 size="lg"
                 className="w-full sm:w-auto bg-review hover:bg-review/90 text-white"
               >
@@ -275,81 +270,130 @@ export default function QuickReviewPage() {
         <TabsContent value="targeted">
           <Card>
             <CardHeader>
-              <CardTitle>Domain & Topic Focused Review</CardTitle>
+              <CardTitle>Section & Topic Focused Review</CardTitle>
               <CardDescription>
-                Select a specific domain and optionally a topic to focus your review
+                Select specific sections or topics to focus your review
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Sections Selection */}
               <div className="space-y-2">
-                <Label htmlFor="domain-select">Domain</Label>
-                <Select value={selectedDomain} onValueChange={setSelectedDomain}>
-                  <SelectTrigger id="domain-select">
-                    <SelectValue placeholder="Select a domain" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {domains.map(domain => (
-                      <SelectItem key={domain.id} value={domain.id}>
-                        {domain.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {selectedDomain && (
-                  <p className="text-sm text-muted-foreground">
-                    {domains.find(d => d.id === selectedDomain)?.description}
+                <Label>Select Sections</Label>
+                <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
+                  {quizOptions?.sections?.map(section => (
+                    <div key={section.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`section-${section.id}`}
+                        checked={selectedSections.includes(section.id)}
+                        onChange={() => handleSectionChange(section.id)}
+                        className="rounded border-gray-300"
+                        disabled={selectedTopics.length > 0}
+                      />
+                      <label
+                        htmlFor={`section-${section.id}`}
+                        className={`text-sm ${selectedTopics.length > 0 ? 'text-gray-400' : ''}`}
+                      >
+                        {section.name} ({section.questionCount} questions)
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                {selectedTopics.length > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    Clear topic selection to enable section selection
                   </p>
                 )}
               </div>
 
-              {selectedDomain && topics.length > 0 && (
-                <div className="space-y-2">
-                  <Label htmlFor="topic-select">Topic (Optional)</Label>
-                  <Select value={selectedTopic} onValueChange={setSelectedTopic}>
-                    <SelectTrigger id="topic-select">
-                      <SelectValue placeholder="All topics in domain" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__all__">All topics in domain</SelectItem>
-                      {topics.map(topic => (
-                        <SelectItem key={topic} value={topic}>
-                          {formatTopicName(topic)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <p className="text-sm text-muted-foreground">
-                    Leave blank to review all topics in the selected domain
-                  </p>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
                 </div>
-              )}
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">OR</span>
+                </div>
+              </div>
 
+              {/* Topics Selection */}
+              <div className="space-y-2">
+                <Label>Select Topics</Label>
+                <div className="space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
+                  {quizOptions?.topics?.map(topic => (
+                    <div key={topic.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`topic-${topic.id}`}
+                        checked={selectedTopics.includes(topic.id)}
+                        onChange={() => handleTopicChange(topic.id)}
+                        className="rounded border-gray-300"
+                        disabled={selectedSections.length > 0}
+                      />
+                      <label
+                        htmlFor={`topic-${topic.id}`}
+                        className={`text-sm ${selectedSections.length > 0 ? 'text-gray-400' : ''}`}
+                      >
+                        {topic.name} ({topic.questionCount} questions)
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                {selectedSections.length > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    Clear section selection to enable topic selection
+                  </p>
+                )}
+              </div>
+
+              {/* Difficulty Selection */}
+              <div className="space-y-2">
+                <Label htmlFor="difficulty-select">Difficulty Level</Label>
+                <Select
+                  value={selectedDifficulty.toString()}
+                  onValueChange={(value) => setSelectedDifficulty(value === 'mixed' ? 'mixed' : parseInt(value))}
+                >
+                  <SelectTrigger id="difficulty-select">
+                    <SelectValue placeholder="Select difficulty" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {quizOptions?.difficultyLevels?.map(level => (
+                      <SelectItem key={level.value.toString()} value={level.value.toString()}>
+                        {level.label} - {level.description}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Question Count */}
               <div className="space-y-2">
                 <Label htmlFor="targeted-count">Number of Questions</Label>
                 <Input
                   id="targeted-count"
                   type="number"
                   min="1"
-                  max={maxTargetedQuestions}
+                  max={Math.min(getMaxQuestions(), getAvailableQuestionCount())}
                   value={targetedCount === 0 ? '' : targetedCount}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const val = e.target.value;
                     if (val === '') {
                       setTargetedCount(0);
                     } else {
-                      setTargetedCount(Math.min(parseInt(val) || 0, maxTargetedQuestions));
+                      setTargetedCount(Math.min(parseInt(val) || 0, Math.min(getMaxQuestions(), getAvailableQuestionCount())));
                     }
                   }}
                   className="max-w-xs"
                 />
                 <p className="text-sm text-muted-foreground">
-                  Choose between 1 and {maxTargetedQuestions} questions (max available for selection)
+                  {getAvailableQuestionCount() > 0
+                    ? `Choose between 1 and ${Math.min(getMaxQuestions(), getAvailableQuestionCount())} questions`
+                    : 'Select sections or topics to see available questions'}
                 </p>
               </div>
 
-              <Button 
-                onClick={generateTargetedQuiz} 
-                disabled={loading || !samplerReady || !selectedDomain || targetedCount === 0 || targetedCount > maxTargetedQuestions}
+              <Button
+                onClick={generateTargetedQuiz}
+                disabled={loading || !quizOptions || (selectedSections.length === 0 && selectedTopics.length === 0) || targetedCount === 0}
                 size="lg"
                 className="w-full sm:w-auto bg-review hover:bg-review/90 text-white"
               >
@@ -359,14 +403,6 @@ export default function QuickReviewPage() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      {!samplerReady && (
-        <Card className="mt-8">
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Loading question banks...</p>
-          </CardContent>
-        </Card>
-      )}
     </div>
     </MainLayout>
   );
