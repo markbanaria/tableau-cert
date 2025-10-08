@@ -61,14 +61,18 @@ export default function QuizHistoryPage() {
       }
 
       // Always fetch fresh data when user visits the page
-      const response = await fetch('/api/quiz/sessions');
+      // Add cache busting for production to ensure fresh data
+      const timestamp = Date.now();
+      const response = await fetch(`/api/quiz/sessions?t=${timestamp}`);
       if (response.ok) {
         const data: QuizHistoryResponse = await response.json();
+        console.log('Fetched quiz history:', data);
         setQuizHistory(data.quizzes);
         // Cache the fresh quiz history
         ClientCache.cacheQuizHistory(data.quizzes);
       } else {
-        setError('Failed to load quiz history');
+        console.error('Quiz history API error:', response.status, response.statusText);
+        setError(`Failed to load quiz history (${response.status})`);
       }
     } catch (error) {
       console.error('Failed to load quiz history:', error);
