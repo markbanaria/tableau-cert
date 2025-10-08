@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "npm run bundle:questions && next build --turbopack",
     "start": "next start",
+    "postinstall": "prisma generate",
     "bundle:questions": "node scripts/bundle-question-banks.js",
     "migrate:questions": "tsx scripts/migrate-questions-enhanced.ts",
     "validate:migration": "tsx scripts/validate-migration.ts",
