@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma';
+import { unstable_cache } from 'next/cache';
+import { CACHE_TAGS, CACHE_DURATIONS } from '@/lib/cache';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
-  try {
-    // Get all certifications with their tests and sections
-    const certifications = await prisma.certification.findMany({
+// Cached function for fetching certifications
+const getCachedCertifications = unstable_cache(
+  async () => {
+    return await prisma.certification.findMany({
       include: {
         certificationTests: {
           include: {
@@ -23,6 +25,18 @@ export async function GET(request: NextRequest) {
         }
       }
     });
+  },
+  ['certifications'],
+  {
+    revalidate: CACHE_DURATIONS.FOUR_HOURS,
+    tags: [CACHE_TAGS.CERTIFICATIONS]
+  }
+);
+
+export async function GET(request: NextRequest) {
+  try {
+    // Get all certifications with 4-hour cache
+    const certifications = await getCachedCertifications();
 
     // Define certification metadata
     const certMetadata: Record<string, any> = {

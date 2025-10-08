@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@/generated/prisma'
 import { getServerSession } from 'next-auth/next'
+import { unstable_cache } from 'next/cache'
+import { CACHE_TAGS, CACHE_DURATIONS } from '@/lib/cache'
 
 const prisma = new PrismaClient()
 
@@ -317,11 +319,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const certification = searchParams.get('certification');
-
+// Cached function for quiz options
+const getCachedQuizOptions = unstable_cache(
+  async (certification?: string) => {
     // If certification is specified, filter sections by that certification
     let sectionsQuery: any = {
       select: {
@@ -380,7 +380,23 @@ export async function GET(request: NextRequest) {
         orderBy: { name: 'asc' }
       }),
       prisma.section.findMany(sectionsQuery)
-    ])
+    ]);
+
+    return { topics, sections };
+  },
+  ['quiz-options'],
+  {
+    revalidate: CACHE_DURATIONS.FOUR_HOURS,
+    tags: [CACHE_TAGS.QUIZ_OPTIONS]
+  }
+);
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const certification = searchParams.get('certification');
+
+    const { topics, sections } = await getCachedQuizOptions(certification || undefined);
 
     const sectionsWithCounts = sections.map((section: any) => ({
       id: section.id,
