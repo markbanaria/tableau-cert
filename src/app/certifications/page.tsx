@@ -174,20 +174,20 @@ export default function CertificationsPage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 lg:items-stretch">
           {certifications.map((cert) => {
             const isAvailable = cert.status === 'available';
 
             if (isAvailable) {
               return (
-                <Link key={cert.id} href={`/certifications/${cert.id}`} className="block">
+                <Link key={cert.id} href={`/certifications/${cert.id}`} className="block lg:h-full">
                   <CertificationCard certification={cert} />
                 </Link>
               );
             }
 
             return (
-              <div key={cert.id}>
+              <div key={cert.id} className="lg:h-full">
                 <CertificationCard certification={cert} />
               </div>
             );

@@ -296,15 +296,18 @@ export default function Home() {
                           <>
                             {dashboardData.userCertifications.map((userCert) => (
                               <div key={userCert.user_certification_id} className="group">
-                                <div className="p-3 border rounded-lg hover:shadow-md transition-shadow">
+                                <div className="p-3 border rounded-lg">
                                   <div className="flex items-center gap-3">
                                     <div className="flex-1 min-w-0">
                                       <Link href={`/certifications/${userCert.tracks}`}>
                                         <p className="font-medium text-sm truncate hover:underline cursor-pointer">{userCert.name}</p>
                                       </Link>
-                                      <p className="text-xs text-muted-foreground truncate">
-                                        {userCert.level} • {userCert.status === 'completed' ? 'Completed' : 'In Progress'}
-                                      </p>
+                                      <div className="flex items-center gap-2">
+                                        <p className="text-xs text-muted-foreground">{userCert.level}</p>
+                                        <Badge variant={userCert.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
+                                          {userCert.status === 'completed' ? 'Completed' : 'In Progress'}
+                                        </Badge>
+                                      </div>
                                     </div>
                                     <div className="flex items-center flex-shrink-0 gap-2">
                                       <Link href={`/certifications/${userCert.tracks}/quiz`}>
@@ -313,7 +316,7 @@ export default function Home() {
                                         </Button>
                                       </Link>
                                       <Link href={`/certifications/${userCert.tracks}/review`}>
-                                        <Button size="sm" variant="outline" className="text-xs px-2">
+                                        <Button size="sm" className="text-xs px-2 bg-review hover:bg-review/90 text-white shadow-none">
                                           Review
                                         </Button>
                                       </Link>

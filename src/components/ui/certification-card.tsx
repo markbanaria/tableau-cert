@@ -49,7 +49,7 @@ export default function CertificationCard({ certification, fullWidth = false }: 
   const statusConfig = STATUS_CONFIG[certification.status] || STATUS_CONFIG.available;
 
   return (
-    <Card className={`shadow-none relative overflow-hidden py-0 ${!fullWidth && isAvailable ? 'hover:shadow-lg transition-shadow cursor-pointer' : ''} ${!isAvailable ? 'text-neutral-400' : ''}`}>
+    <Card className={`shadow-none relative overflow-hidden py-0 lg:h-full ${!fullWidth && isAvailable ? 'hover:shadow-lg transition-shadow cursor-pointer' : ''} ${!isAvailable ? 'text-neutral-400' : ''}`}>
       <CardContent className="p-6 flex flex-col h-full">
         {/* Header: Logo, Title with grow, Available badge */}
         <div className='flex flex-row'>
