@@ -259,9 +259,6 @@ export async function GET(request: NextRequest) {
         const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
         const passed = percentage >= 70;
 
-        // Log quiz data for debugging
-        console.log(`Quiz ${quiz.id}: totalQuestions=${totalQuestions}, correctAnswers=${correctAnswers}, status=${quiz.status}, responses=${quiz.quizResponses.length}`);
-
         return {
           id: quiz.id,
           status: quiz.status,

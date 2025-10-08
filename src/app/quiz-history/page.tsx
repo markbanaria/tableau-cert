@@ -56,7 +56,6 @@ export default function QuizHistoryPage() {
       // Check cache first and display it immediately for better UX
       const cachedHistory = ClientCache.getCachedQuizHistory();
       if (cachedHistory) {
-        console.log('Using cached quiz history as initial data');
         setQuizHistory(cachedHistory);
       }
 
@@ -66,16 +65,6 @@ export default function QuizHistoryPage() {
       const response = await fetch(`/api/quiz/sessions?t=${timestamp}`);
       if (response.ok) {
         const data: QuizHistoryResponse = await response.json();
-        console.log('Fetched quiz history:', data);
-        console.log('Individual quiz data:', data.quizzes.map(q => ({
-          id: q.id,
-          testName: q.testName,
-          totalQuestions: q.totalQuestions,
-          correctAnswers: q.correctAnswers,
-          percentage: q.percentage,
-          status: q.status,
-          completedAt: q.completedAt
-        })));
         setQuizHistory(data.quizzes);
         // Cache the fresh quiz history
         ClientCache.cacheQuizHistory(data.quizzes);
