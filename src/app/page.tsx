@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,6 +74,7 @@ interface DashboardData {
 
 export default function Home() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const [samplerReady, setSamplerReady] = useState(false);
   const [availableQuestions, setAvailableQuestions] = useState(0);
   const [domainCoverage, setDomainCoverage] = useState<Record<string, any>>({});
@@ -87,8 +89,11 @@ export default function Home() {
   useEffect(() => {
     if (session?.user) {
       loadDashboardData();
+    } else if (status !== 'loading') {
+      // Redirect non-logged-in users to marketplace
+      router.push('/certifications');
     }
-  }, [session]);
+  }, [session, status, router]);
 
   const initializeSampler = async () => {
     try {
@@ -366,134 +371,12 @@ export default function Home() {
     );
   }
 
-  // Show regular page for non-logged-in users
+  // Show loading while redirecting non-logged-in users
   return (
     <MainLayout>
       <div className="container mx-auto px-4 sm:px-6 pb-8 pt-8 md:pt-0">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Tableau Consultant Certification</h1>
-          <p className="text-muted-foreground">
-            Practice and prepare for your Tableau certification
-          </p>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-4">
-            <p className="text-sm text-muted-foreground">
-              <span className="font-medium">{availableQuestions}</span> questions available
-            </p>
-            <Link href="/certifications" className="sm:w-auto">
-              <Button variant="outline" size="sm" className="text-xs sm:text-sm">
-                View All Certifications
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Mobile Quick Action Buttons - Hidden on Desktop */}
-        <div className="grid grid-cols-2 gap-3 mb-6 md:hidden">
-          <Link href="/quiz" className="w-full">
-            <Button className="w-full" size="lg">
-              Mock Exam
-            </Button>
-          </Link>
-          <Link href="/review" className="w-full">
-            <Button className="w-full bg-review hover:bg-review/90 text-white" size="lg">
-              Quick Review
-            </Button>
-          </Link>
-        </div>
-
-        {/* Question Bank Coverage */}
-        {samplerReady && Object.keys(domainCoverage).length > 0 && (() => {
-          // Calculate total aggregated coverage
-          const totalCoverage = Object.values(domainCoverage).reduce((sum, data: any) => sum + data.coveragePercentage, 0);
-          const avgCoverage = Math.round(totalCoverage / Object.keys(domainCoverage).length);
-          
-          return (
-            <Card className="mb-8 shadow-none">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="coverage" className="border-none">
-                  <div className="px-6">
-                    <AccordionTrigger className="p-0 hover:no-underline">
-                      <div className="flex items-center justify-between w-full pr-2">
-                        <div className="flex flex-col items-start text-left">
-                          <CardTitle className="text-lg">Question Bank Coverage</CardTitle>
-                          <CardDescription className="mt-1 text-xs sm:text-sm">
-                            Available questions by domain (including subtopics)
-                          </CardDescription>
-                        </div>
-                        <span className="text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded whitespace-nowrap ml-2 sm:ml-4 bg-muted text-muted-foreground">
-                          {avgCoverage}% total
-                        </span>
-                      </div>
-                    </AccordionTrigger>
-                  </div>
-                  <AccordionContent className="px-6 pb-6 pt-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                      {Object.entries(domainCoverage).map(([domainName, data]: [string, any]) => (
-                        <div key={domainName} className="border rounded-lg p-4">
-                          <div className="mb-2">
-                            <span className="text-xs px-2 py-1 rounded bg-muted text-muted-foreground">
-                              {data.coveragePercentage}% coverage
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-start mb-4">
-                            <h4 className="font-medium text-sm">{domainName}</h4>
-                          </div>
-                          <div className="text-sm space-y-1 text-muted-foreground">
-                            <div className="flex justify-between">
-                              <span>Questions:</span>
-                              <span className="font-medium text-foreground">
-                                {data.totalQuestions} / {data.requiredQuestions} needed
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Topics:</span>
-                              <span className="font-medium text-foreground">
-                                {data.topicsLoaded} / {data.topicsTotal} loaded
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </Card>
-          );
-        })()}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>Mock Exam</CardTitle>
-              <CardDescription>
-                Full practice exams with official domain weightings
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/quiz">
-                <Button className="w-full">
-                  Start Mock Exam
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle>Quick Review</CardTitle>
-              <CardDescription>
-                Random sampling or targeted review by domain and topic
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/review">
-                <Button className="w-full bg-review hover:bg-review/90 text-white">
-                  Quick Review
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        <div className="text-center">
+          <p className="text-muted-foreground">Redirecting to certification marketplace...</p>
         </div>
       </div>
     </MainLayout>

@@ -208,19 +208,52 @@ export default function CertificationDetailPage() {
         {isAvailable && (
           <div className="mt-6">
             {!session?.user ? (
-              /* Not logged in - show sign in message */
-              <Card className="shadow-none">
-                <CardContent className="text-center py-8">
-                  <p className="text-muted-foreground mb-4">
-                    Sign in to start practicing for this certification
-                  </p>
-                  <Link href="/auth/signin">
-                    <Button size="lg">
-                      Sign In to Start
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+              /* Not logged in - show limited options */
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                {/* Quick Review Card - Available for logged out users */}
+                <Card className="shadow-none flex flex-col">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <BookOpenIcon className="w-5 h-5 mr-2" />
+                      Quick Review
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col flex-grow">
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                      Practice with targeted questions by specific sections or topics to focus your study efforts.
+                    </p>
+                    <div className="mt-auto pt-8">
+                      <Link href={`/certifications/${certificationSlug}/review`}>
+                        <Button size="lg" className="bg-review hover:bg-review/90 text-white w-full">
+                          Start Review
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Mock Exam Card - Requires login */}
+                <Card className="shadow-none flex flex-col">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <PlayIcon className="w-5 h-5 mr-2" />
+                      Mock Exam
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col flex-grow">
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow">
+                      Take a full-length practice exam that simulates the real certification test experience with timed questions.
+                    </p>
+                    <div className="mt-auto pt-8">
+                      <Link href="/auth/signin?mockExam=true">
+                        <Button size="lg" className="w-full">
+                          Sign In for Mock Exam
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ) : !userCertification ? (
               /* Not taking certification - show Start Practicing */
               <Card className="shadow-none">

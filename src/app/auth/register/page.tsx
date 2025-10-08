@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import LogoReverse from '@/components/ui/logo-reverse'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
@@ -72,9 +73,25 @@ export default function RegisterPage() {
             </Button>
           </Link>
         </div>
-        <Card className="w-full border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-2xl text-gray-900">Register</CardTitle>
+        <Card className="w-full border-gray-200 overflow-hidden pt-0">
+        <div className="bg-review border-b border-gray-200 h-30 relative">
+          <div className="flex items-center h-full">
+            <div className="pl-8">
+              <Link href="/" className="block">
+                <LogoReverse />
+              </Link>
+            </div>
+            <div className="absolute left-1/3 top-0 w-2/3 h-full opacity-20">
+              <img
+                src="/pattern.png"
+                alt=""
+                className="w-full h-full object-cover object-left"
+              />
+            </div>
+          </div>
+        </div>
+        <CardHeader className="pt-0">
+          <CardTitle className="text-lg text-gray-900">Register</CardTitle>
           <CardDescription className="text-gray-600">
             Create a new account with your email address
           </CardDescription>
@@ -82,7 +99,7 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit}>
           <CardContent>
             <div className="space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-2 mt-4">
                 <Label htmlFor="name" className="text-gray-900">Name (Optional)</Label>
                 <Input
                   id="name"

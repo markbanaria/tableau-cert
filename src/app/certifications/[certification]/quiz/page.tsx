@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Quiz from '@/components/Quiz';
 import { QuizData, QuizResult } from '@/types/quiz';
@@ -15,6 +16,8 @@ import MainLayout from '@/components/layout/main-layout';
 import { quizApi, QuizOptions } from '@/services/quizApi';
 
 export default function CertificationQuizPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const params = useParams();
   const certificationSlug = params.certification as string;
 
@@ -40,9 +43,17 @@ export default function CertificationQuizPage() {
   });
 
   useEffect(() => {
-    loadCertificationInfo();
-    loadQuizOptions();
-  }, [certificationSlug]);
+    if (status !== 'loading' && !session?.user) {
+      // Redirect to signin with mockExam alert
+      router.push('/auth/signin?mockExam=true');
+      return;
+    }
+
+    if (session?.user) {
+      loadCertificationInfo();
+      loadQuizOptions();
+    }
+  }, [certificationSlug, session, status, router]);
 
   const loadCertificationInfo = async () => {
     try {

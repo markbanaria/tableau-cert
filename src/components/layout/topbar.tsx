@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { UserIcon, Cog6ToothIcon, ArrowRightOnRectangleIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ArrowRightOnRectangleIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import CertificationActionsGroup from '@/components/ui/certification-actions-group'
 
 interface TopBarProps {
@@ -92,19 +92,6 @@ export default function TopBar({ onMobileMenuOpen, isSidebarOpen = true, onSideb
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-gray-200" />
-              <DropdownMenuItem asChild>
-                <Link href="/profile" className="cursor-pointer">
-                  <UserIcon className="mr-2 h-4 w-4 text-gray-600" />
-                  <span className="text-gray-900">Profile</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/settings" className="cursor-pointer">
-                  <Cog6ToothIcon className="mr-2 h-4 w-4 text-gray-600" />
-                  <span className="text-gray-900">Settings</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-200" />
               <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                 <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4 text-gray-600" />
                 <span className="text-gray-900">Log out</span>
@@ -153,19 +140,6 @@ export default function TopBar({ onMobileMenuOpen, isSidebarOpen = true, onSideb
                     <p className="text-xs text-gray-600">{session.user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-gray-200" />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
-                    <UserIcon className="mr-2 h-4 w-4 text-gray-600" />
-                    <span className="text-gray-900">Profile</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/settings" className="cursor-pointer">
-                    <Cog6ToothIcon className="mr-2 h-4 w-4 text-gray-600" />
-                    <span className="text-gray-900">Settings</span>
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                   <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4 text-gray-600" />

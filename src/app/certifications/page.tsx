@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,6 +56,7 @@ const LEVEL_CONFIG = {
 };
 
 export default function CertificationsPage() {
+  const { data: session } = useSession();
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [samplerReady, setSamplerReady] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('Loading certification data...');
@@ -122,14 +124,16 @@ export default function CertificationsPage() {
     return (
       <MainLayout>
         <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
-          <div className="mb-4">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <ArrowLeftIcon className="w-4 h-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
-          </div>
+          {session?.user && (
+            <div className="mb-4">
+              <Link href="/">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                  Back to Home
+                </Button>
+              </Link>
+            </div>
+          )}
           <LoadingState message={loadingMessage} />
         </div>
       </MainLayout>
@@ -139,14 +143,16 @@ export default function CertificationsPage() {
   return (
     <MainLayout>
       <div className="container mx-auto px-6 pb-8 pt-8 md:pt-0">
-        <div className="mb-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeftIcon className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
-        </div>
+        {session?.user && (
+          <div className="mb-4">
+            <Link href="/">
+              <Button variant="ghost" size="sm">
+                <ArrowLeftIcon className="w-4 h-4 mr-2" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+        )}
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Certification Marketplace</h1>

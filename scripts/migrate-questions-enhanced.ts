@@ -91,7 +91,7 @@ class EnhancedQuestionMigrator {
           await this.processQuestionBank(path.join(questionBanksPath, file))
           this.stats.processedFiles.push(file)
         } catch (error) {
-          const errorMsg = `Error processing ${file}: ${error.message}`
+          const errorMsg = `Error processing ${file}: ${error instanceof Error ? error.message : String(error)}`
           console.error(`❌ ${errorMsg}`)
           this.stats.errors.push(errorMsg)
         }
