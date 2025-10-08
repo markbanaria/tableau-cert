@@ -63,17 +63,22 @@ export async function GET(request: NextRequest) {
         description: st.section.description
       })),
       ...(includeQuestions && {
-        questions: topic.topicQuestions.map(tq => ({
-          id: tq.question.id,
-          content: tq.question.content,
-          questionType: tq.question.questionType,
-          difficultyLevel: tq.question.difficultyLevel,
-          answers: tq.question.answers.map(answer => ({
-            id: answer.id,
-            content: answer.content,
-            isCorrect: answer.isCorrect
-          }))
-        }))
+        questions: topic.topicQuestions.map(tq => {
+          if ('question' in tq) {
+            return {
+              id: tq.question.id,
+              content: tq.question.content,
+              questionType: tq.question.questionType,
+              difficultyLevel: tq.question.difficultyLevel,
+              answers: tq.question.answers.map(answer => ({
+                id: answer.id,
+                content: answer.content,
+                isCorrect: answer.isCorrect
+              }))
+            }
+          }
+          return null
+        }).filter(Boolean)
       })
     }))
 

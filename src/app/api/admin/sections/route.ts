@@ -45,12 +45,17 @@ export async function GET(request: NextRequest) {
       createdAt: section.createdAt,
       topicCount: section._count.sectionTopics,
       ...(includeTopics && {
-        topics: section.sectionTopics.map(st => ({
-          id: st.topic.id,
-          name: st.topic.name,
-          description: st.topic.description,
-          questionCount: st.topic._count.topicQuestions
-        }))
+        topics: section.sectionTopics.map(st => {
+          if ('topic' in st) {
+            return {
+              id: st.topic.id,
+              name: st.topic.name,
+              description: st.topic.description,
+              questionCount: st.topic._count.topicQuestions
+            }
+          }
+          return null
+        }).filter(Boolean)
       })
     }))
 

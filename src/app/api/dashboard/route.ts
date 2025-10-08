@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
         totalQuestions,
         correctAnswers,
         timeTaken: quiz.timeTaken,
-        testName: quiz.test?.name || (quiz.test?.testSections?.length > 0 ?
+        testName: quiz.test?.name || (quiz.test?.testSections && quiz.test.testSections.length > 0 ?
           quiz.test.testSections.map(ts => ts.section.name).join(', ') : 'Quick Review'),
         passed,
         percentage

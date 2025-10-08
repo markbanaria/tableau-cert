@@ -66,7 +66,7 @@ class MigrationValidator {
       return result
 
     } catch (error) {
-      result.errors.push(`Validation failed: ${error.message}`)
+      result.errors.push(`Validation failed: ${error instanceof Error ? error.message : String(error)}`)
       result.isValid = false
       return result
     } finally {
@@ -141,29 +141,16 @@ class MigrationValidator {
       console.log('   Skipping orphaned answers check for performance')
 
     } catch (error) {
-      console.error('❌ Error in validateQuestionAnswers:', error.message)
-      result.errors.push(`Validation error in question-answers: ${error.message}`)
+      console.error('❌ Error in validateQuestionAnswers:', error instanceof Error ? error.message : String(error))
+      result.errors.push(`Validation error in question-answers: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
   private async validateTopicQuestions(result: ValidationResult) {
     console.log('🏷️  Validating topic-question relationships...')
 
-    // Find orphaned topic-question relationships
-    const orphanedTopicQuestions = await prisma.topicQuestion.findMany({
-      where: {
-        OR: [
-          { topic: null },
-          { question: null }
-        ]
-      }
-    })
-
-    result.summary.orphanedTopicQuestions = orphanedTopicQuestions.length
-
-    if (orphanedTopicQuestions.length > 0) {
-      result.errors.push(`Found ${orphanedTopicQuestions.length} orphaned topic-question relationships`)
-    }
+    // Since topicId and questionId are non-nullable, we don't need to check for orphaned relationships
+    result.summary.orphanedTopicQuestions = 0
 
     // Check that all questions belong to at least one topic
     const questionsWithoutTopics = await prisma.question.findMany({
@@ -241,7 +228,7 @@ class MigrationValidator {
       console.log(`   Source topics: ${sourceTopicCount}`)
 
     } catch (error) {
-      result.warnings.push(`Could not compare with source data: ${error.message}`)
+      result.warnings.push(`Could not compare with source data: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 

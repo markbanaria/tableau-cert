@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       difficultyLevel = 'mixed',
       questionCount = 10,
       questionTypes = ['multiple_choice'],
-      userId = session?.user?.id
+      userId = (session?.user as any)?.id
     } = body
 
     // Validate inputs
@@ -233,13 +233,13 @@ export async function POST(request: NextRequest) {
       const answers = question.answers;
 
       // Find which index position has the correct answer
-      const correctAnswerIndex = answers.findIndex(answer => answer.isCorrect);
+      const correctAnswerIndex = answers.findIndex((answer: any) => answer.isCorrect);
 
       // Debug log to see what's in the database
       if (index < 2) { // Only log first 2 questions to avoid spam
         console.log(`Question ${index + 1}:`, {
           questionId: question.id,
-          answers: answers.map((a, i) => ({ index: i, content: a.content, isCorrect: a.isCorrect })),
+          answers: answers.map((a: any, i: number) => ({ index: i, content: a.content, isCorrect: a.isCorrect })),
           correctAnswerIndex
         });
       }
@@ -253,16 +253,16 @@ export async function POST(request: NextRequest) {
         explanation: question.explanation,
         sourceUrl: question.sourceUrl,
         correctAnswer: correctAnswerIndex,
-        answers: answers.map(answer => ({
+        answers: answers.map((answer: any) => ({
           id: answer.id,
           content: answer.content
         })),
-        options: answers.map(answer => answer.content),
-        answerIds: answers.map(answer => answer.id),
-        topics: question.topicQuestions.map(tq => ({
+        options: answers.map((answer: any) => answer.content),
+        answerIds: answers.map((answer: any) => answer.id),
+        topics: question.topicQuestions.map((tq: any) => ({
           id: tq.topic.id,
           name: tq.topic.name,
-          sections: tq.topic.sectionTopics.map(st => ({
+          sections: tq.topic.sectionTopics.map((st: any) => ({
             id: st.section.id,
             name: st.section.name
           }))
@@ -281,10 +281,10 @@ export async function POST(request: NextRequest) {
       difficultyBreakdown.set(diff, (difficultyBreakdown.get(diff) || 0) + 1)
 
       // Count by topic and section
-      question.topicQuestions.forEach(tq => {
+      question.topicQuestions.forEach((tq: any) => {
         topicBreakdown.set(tq.topic.name, (topicBreakdown.get(tq.topic.name) || 0) + 1)
 
-        tq.topic.sectionTopics.forEach(st => {
+        tq.topic.sectionTopics.forEach((st: any) => {
           sectionBreakdown.set(st.section.name, (sectionBreakdown.get(st.section.name) || 0) + 1)
         })
       })
@@ -382,14 +382,14 @@ export async function GET(request: NextRequest) {
       prisma.section.findMany(sectionsQuery)
     ])
 
-    const sectionsWithCounts = sections.map(section => ({
+    const sectionsWithCounts = sections.map((section: any) => ({
       id: section.id,
       name: section.name,
       questionCount: section.sectionTopics.reduce(
-        (sum, st) => sum + st.topic._count.topicQuestions,
+        (sum: number, st: any) => sum + st.topic._count.topicQuestions,
         0
       ),
-      topics: section.sectionTopics.map(st => ({
+      topics: section.sectionTopics.map((st: any) => ({
         id: st.topic.id,
         name: st.topic.name,
         questionCount: st.topic._count.topicQuestions

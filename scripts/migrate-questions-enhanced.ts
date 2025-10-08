@@ -64,11 +64,11 @@ class EnhancedQuestionMigrator {
 
   private topicMetadataMap = new Map<string, TopicMetadata>()
 
-  private difficultyMap = {
+  private difficultyMap: { [key: string]: number } = {
     'BEGINNER': 1,
     'INTERMEDIATE': 3,
     'ADVANCED': 5
-  } as const
+  }
 
   async migrateAllQuestionBanks(): Promise<void> {
     console.log('🚀 Starting enhanced question bank migration...')
@@ -279,7 +279,7 @@ class EnhancedQuestionMigrator {
     let correctAnswerIndex: number
     if (typeof questionData.correctAnswer === 'string') {
       // Handle A, B, C, D format
-      const letterMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 }
+      const letterMap: { [key: string]: number } = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 }
       correctAnswerIndex = letterMap[questionData.correctAnswer.toUpperCase()] ?? 0
     } else {
       correctAnswerIndex = questionData.correctAnswer

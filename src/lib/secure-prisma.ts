@@ -1,8 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-declare global {
-  var prisma: PrismaClient | undefined
-}
+import { PrismaClient } from '@/generated/prisma'
 
 /**
  * Extended Prisma client with automatic user isolation for quiz-related operations
@@ -194,8 +190,8 @@ export class SecurePrismaClient extends PrismaClient {
 }
 
 // Create a singleton instance
-export const securePrisma = globalThis.prisma as SecurePrismaClient || new SecurePrismaClient()
+export const securePrisma = (globalThis as any).prisma as SecurePrismaClient || new SecurePrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
-  globalThis.prisma = securePrisma as any
+  (globalThis as any).prisma = securePrisma
 }

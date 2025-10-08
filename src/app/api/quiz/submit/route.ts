@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
 
     // Update quiz record if provided
     let updatedQuiz = null
-    if (quizId && session?.user?.id) {
+    if (quizId && (session?.user as any)?.id) {
       try {
         // Use a transaction to ensure both quiz update and responses are saved atomically
         const result = await prisma.$transaction(async (tx) => {

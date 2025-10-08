@@ -11,7 +11,8 @@ interface QuestionBank {
   title: string
   description: string
   metadata: {
-    topic: string
+    topic?: string
+    title?: string
     domain: string
     difficulty: string
     sourceUrl: string
@@ -50,11 +51,11 @@ class QuestionMigrator {
     processedFiles: []
   }
 
-  private difficultyMap = {
+  private difficultyMap: { [key: string]: number } = {
     'BEGINNER': 1,
     'INTERMEDIATE': 3,
     'ADVANCED': 5
-  } as const
+  }
 
   async migrateAllQuestionBanks(): Promise<void> {
     console.log('🚀 Starting question bank migration...')
@@ -74,7 +75,7 @@ class QuestionMigrator {
           await this.processQuestionBank(path.join(questionBanksPath, file))
           this.stats.processedFiles.push(file)
         } catch (error) {
-          const errorMsg = `Error processing ${file}: ${error.message}`
+          const errorMsg = `Error processing ${file}: ${error instanceof Error ? error.message : String(error)}`
           console.error(`❌ ${errorMsg}`)
           this.stats.errors.push(errorMsg)
         }
@@ -135,7 +136,7 @@ class QuestionMigrator {
         await this.processQuestion(questionData, topic.id)
         this.stats.totalQuestions++
       } catch (error) {
-        const errorMsg = `Error processing question ${questionData.id} in ${path.basename(filePath)}: ${error.message}`
+        const errorMsg = `Error processing question ${questionData.id} in ${path.basename(filePath)}: ${error instanceof Error ? error.message : String(error)}`
         console.error(`❌ ${errorMsg}`)
         this.stats.errors.push(errorMsg)
       }
