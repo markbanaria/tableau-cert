@@ -72,14 +72,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </main>
         </div>
 
-        {/* Mobile: Scrollable layout */}
-        <div className="md:hidden h-screen overflow-auto">
+        {/* Mobile: Fixed layout with proper scrolling */}
+        <div className="md:hidden flex flex-col h-screen">
           <TopBar
             onMobileMenuOpen={() => setIsMobileMenuOpen(true)}
             isSidebarOpen={isSidebarOpen}
             onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
           />
-          <main className="md:p-6">
+          <main className="flex-1 overflow-auto p-4">
             {children}
           </main>
         </div>

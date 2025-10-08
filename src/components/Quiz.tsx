@@ -682,7 +682,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
                   <RadioGroupItem
                     value={index.toString()}
                     id={`option-${index}`}
-                    className={
+                    className={`cursor-pointer ${
                       reviewMode
                         ? showHint && index === currentQuestion.correctAnswer
                           ? "border-green-500 text-green-500"
@@ -690,15 +690,16 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
                           ? "border-review text-review"
                           : ""
                         : ""
-                    }
+                    }`}
                   />
                   <Label
                     htmlFor={`option-${index}`}
-                    className={`text-sm font-normal cursor-pointer flex-1 flex items-center ${
+                    className={`text-sm font-normal cursor-pointer flex-1 flex items-center pointer-events-auto ${
                       reviewMode && showHint && index === currentQuestion.correctAnswer
                         ? "text-green-700 font-medium"
                         : ""
                     }`}
+                    onClick={() => handleOptionSelect(index.toString())}
                   >
                     {option}
                     {reviewMode && showHint && index === currentQuestion.correctAnswer && (
