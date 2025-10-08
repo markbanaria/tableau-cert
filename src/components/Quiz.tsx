@@ -10,7 +10,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
 import { ArrowTopRightOnSquareIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon, HomeIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
-import { generateResultsPDF } from '@/utils/generateResultsPDF';\nimport { ClientCache } from '@/lib/clientCache';
+import { generateResultsPDF } from '@/utils/generateResultsPDF';
+import { ClientCache } from '@/lib/clientCache';
 
 interface QuizProps {
   quizData: QuizData;

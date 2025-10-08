@@ -17,7 +17,8 @@ import {
 } from '@heroicons/react/24/outline';
 import MainLayout from '@/components/layout/main-layout';
 import { LoadingState } from '@/components/QuestionBankLoader';
-import QuizCard from '@/components/QuizCard';\nimport { ClientCache } from '@/lib/clientCache';
+import QuizCard from '@/components/QuizCard';
+import { ClientCache } from '@/lib/clientCache';
 
 interface QuizQuestion {
   id: string;
