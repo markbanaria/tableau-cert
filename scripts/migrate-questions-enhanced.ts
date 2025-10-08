@@ -207,7 +207,7 @@ class EnhancedQuestionMigrator {
         await this.processQuestion(questionData, topic.id, metadata)
         this.stats.totalQuestions++
       } catch (error) {
-        const errorMsg = `Error processing question ${questionData.id} in ${path.basename(filePath)}: ${error.message}`
+        const errorMsg = `Error processing question ${questionData.id} in ${path.basename(filePath)}: ${error instanceof Error ? error.message : String(error)}`
         console.error(`❌ ${errorMsg}`)
         this.stats.errors.push(errorMsg)
       }
