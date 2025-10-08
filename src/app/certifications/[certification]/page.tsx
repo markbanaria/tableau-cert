@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeftIcon, BookOpenIcon, PlayIcon } from '@heroicons/react/24/outline';
 import MainLayout from '@/components/layout/main-layout';
 import CertificationCard from '@/components/ui/certification-card';
+import { ClientCache } from '@/lib/clientCache';
 
 interface Certification {
   id: string;
@@ -36,6 +37,7 @@ export default function CertificationDetailPage() {
   const [certification, setCertification] = useState<Certification | null>(null);
   const [loading, setLoading] = useState(true);
   const [userCertification, setUserCertification] = useState<any>(null);
+  const [userCertificationLoading, setUserCertificationLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
@@ -73,14 +75,35 @@ export default function CertificationDetailPage() {
   };
 
   const loadUserCertificationStatus = async () => {
+    if (!certification?.id) return;
+
     try {
-      const response = await fetch(`/api/user-certifications/${certification?.id}`);
+      setUserCertificationLoading(true);
+
+      // Check cache first and display it immediately for better UX
+      if (ClientCache.hasCachedUserCertification(certification.id)) {
+        const cachedUserCert = ClientCache.getCachedUserCertification(certification.id);
+        console.log('Using cached user certification status');
+        setUserCertification(cachedUserCert);
+        setUserCertificationLoading(false);
+      }
+
+      // Always fetch fresh data
+      const response = await fetch(`/api/user-certifications/${certification.id}`);
       if (response.ok) {
         const data = await response.json();
         setUserCertification(data.userCertification);
+        // Cache the result (null or actual data)
+        ClientCache.cacheUserCertification(certification.id, data.userCertification);
+      } else if (response.status === 404) {
+        // User hasn't started this certification
+        setUserCertification(null);
+        ClientCache.cacheUserCertification(certification.id, null);
       }
     } catch (error) {
       console.error('Error loading user certification status:', error);
+    } finally {
+      setUserCertificationLoading(false);
     }
   };
 
@@ -101,6 +124,8 @@ export default function CertificationDetailPage() {
       });
 
       if (response.ok) {
+        // Invalidate cache and reload
+        ClientCache.invalidateUserCertification(certification.id);
         await loadUserCertificationStatus();
       }
     } catch (error) {
@@ -126,6 +151,8 @@ export default function CertificationDetailPage() {
       });
 
       if (response.ok) {
+        // Invalidate cache and reload
+        ClientCache.invalidateUserCertification(certification.id);
         await loadUserCertificationStatus();
       }
     } catch (error) {
@@ -145,6 +172,8 @@ export default function CertificationDetailPage() {
       });
 
       if (response.ok) {
+        // Invalidate cache and set to null
+        ClientCache.invalidateUserCertification(certification.id);
         setUserCertification(null);
       }
     } catch (error) {
@@ -254,6 +283,13 @@ export default function CertificationDetailPage() {
                   </CardContent>
                 </Card>
               </div>
+            ) : userCertificationLoading ? (
+              /* Loading user certification status */
+              <Card className="shadow-none">
+                <CardContent className="text-center py-8">
+                  <p className="text-muted-foreground">Checking certification status...</p>
+                </CardContent>
+              </Card>
             ) : !userCertification ? (
               /* Not taking certification - show Start Practicing */
               <Card className="shadow-none">

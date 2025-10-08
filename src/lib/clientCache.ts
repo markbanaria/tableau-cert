@@ -147,4 +147,44 @@ export class ClientCache {
   static getCachedCertifications(): any[] | null {
     return this.get<any[]>('certifications');
   }
+
+  // User certification cache
+  static cacheUserCertification(certificationId: string, userCertification: any): void {
+    this.set(`user-certification-${certificationId}`, userCertification, this.SESSION_DURATION);
+  }
+
+  static getCachedUserCertification(certificationId: string): any | undefined {
+    return this.get(`user-certification-${certificationId}`);
+  }
+
+  static hasCachedUserCertification(certificationId: string): boolean {
+    if (typeof window === 'undefined') return false;
+
+    try {
+      const cached = sessionStorage.getItem(`user-certification-${certificationId}`);
+      return cached !== null;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  static invalidateUserCertification(certificationId: string): void {
+    this.remove(`user-certification-${certificationId}`);
+  }
+
+  static invalidateAllUserCertifications(): void {
+    if (typeof window === 'undefined') return;
+
+    try {
+      // Get all keys from sessionStorage and remove user-certification entries
+      const keys = Object.keys(sessionStorage);
+      keys.forEach(key => {
+        if (key.includes('user-certification-')) {
+          sessionStorage.removeItem(key);
+        }
+      });
+    } catch (error) {
+      console.warn('Failed to invalidate user certifications cache:', error);
+    }
+  }
 }
