@@ -43,7 +43,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             </Link>
           </div>
         </div>
-        <main className="flex-1 overflow-auto md:p-6">
+        <main className="flex-1 overflow-auto p-4 pb-30 md:pb-4">
           {children}
         </main>
       </div>
@@ -79,7 +79,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             isSidebarOpen={isSidebarOpen}
             onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
           />
-          <main className="flex-1 overflow-auto pb-30">
+          <main className="flex-1 overflow-auto pb-30 md:pb-0">
             {children}
           </main>
         </div>
