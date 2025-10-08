@@ -17,7 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import MainLayout from '@/components/layout/main-layout';
 import { LoadingState } from '@/components/QuestionBankLoader';
-import QuizCard from '@/components/QuizCard';
+import QuizCard from '@/components/QuizCard';\nimport { ClientCache } from '@/lib/clientCache';
 
 interface QuizQuestion {
   id: string;
@@ -76,10 +76,21 @@ export default function QuizReviewPage() {
   const loadQuizReviewData = async () => {
     try {
       setLoading(true);
+
+      // Check cache first since quiz results don't change
+      const cachedResult = ClientCache.getCachedQuizResultData(quizId);
+      if (cachedResult) {
+        setQuizData(cachedResult);
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`/api/quiz/${quizId}/review`);
       if (response.ok) {
         const data = await response.json();
         setQuizData(data);
+        // Cache the quiz result data (it doesn't change)
+        ClientCache.cacheQuizResultData(quizId, data);
       } else if (response.status === 404) {
         setError('Quiz not found');
       } else {

@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { QuizData, QuizAnswer, QuizResult, QuizQuestion, DomainScore } from '@/types/quiz';
 import { ArrowTopRightOnSquareIcon, CheckCircleIcon, XCircleIcon, ArrowLeftIcon, HomeIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline';
-import { generateResultsPDF } from '@/utils/generateResultsPDF';
+import { generateResultsPDF } from '@/utils/generateResultsPDF';\nimport { ClientCache } from '@/lib/clientCache';
 
 interface QuizProps {
   quizData: QuizData;
@@ -179,6 +179,9 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
       if (!response.ok) {
         throw new Error(`Failed to save quiz session: ${response.statusText}`);
       }
+
+      // Invalidate cache after successful quiz completion
+      ClientCache.invalidateUserActivityData();
 
       return true;
     } catch (error) {

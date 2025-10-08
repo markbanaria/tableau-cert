@@ -125,7 +125,7 @@ export default function CertificationDetailPage() {
 
       if (response.ok) {
         // Invalidate cache and reload
-        ClientCache.invalidateUserCertification(certification.id);
+        ClientCache.invalidateOnCertificationChange();
         await loadUserCertificationStatus();
       }
     } catch (error) {
@@ -152,7 +152,7 @@ export default function CertificationDetailPage() {
 
       if (response.ok) {
         // Invalidate cache and reload
-        ClientCache.invalidateUserCertification(certification.id);
+        ClientCache.invalidateOnCertificationChange();
         await loadUserCertificationStatus();
       }
     } catch (error) {
@@ -173,7 +173,7 @@ export default function CertificationDetailPage() {
 
       if (response.ok) {
         // Invalidate cache and set to null
-        ClientCache.invalidateUserCertification(certification.id);
+        ClientCache.invalidateOnCertificationChange();
         setUserCertification(null);
       }
     } catch (error) {

@@ -187,4 +187,43 @@ export class ClientCache {
       console.warn('Failed to invalidate user certifications cache:', error);
     }
   }
+
+  // Dashboard data cache
+  static cacheDashboardData(dashboardData: any): void {
+    this.set('dashboard-data', dashboardData, this.SESSION_DURATION);
+  }
+
+  static getCachedDashboardData(): any | null {
+    return this.get('dashboard-data');
+  }
+
+  static invalidateDashboardData(): void {
+    this.remove('dashboard-data');
+  }
+
+  // Quiz result cache (for individual quiz results/reviews)
+  static cacheQuizResultData(quizId: string, resultData: any): void {
+    this.set(`quiz-result-data-${quizId}`, resultData, this.SESSION_DURATION);
+  }
+
+  static getCachedQuizResultData(quizId: string): any | null {
+    return this.get(`quiz-result-data-${quizId}`);
+  }
+
+  static invalidateQuizResultData(quizId: string): void {
+    this.remove(`quiz-result-data-${quizId}`);
+  }
+
+  // Invalidate all cached data when user completes a quiz or changes certifications
+  static invalidateUserActivityData(): void {
+    this.invalidateDashboardData();
+    this.remove('quiz-history'); // Clear quiz history cache
+    // Note: Keep individual quiz results cached as they don't change
+  }
+
+  // Invalidate when certification status changes
+  static invalidateOnCertificationChange(): void {
+    this.invalidateUserActivityData();
+    this.invalidateAllUserCertifications();
+  }
 }

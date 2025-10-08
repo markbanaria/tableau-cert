@@ -24,6 +24,7 @@ import { getQuizSampler } from '@/services/quizSampler';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
 import QuizCard from '@/components/QuizCard';
+import { ClientCache } from '@/lib/clientCache';
 
 interface DashboardData {
   user: {
@@ -119,10 +120,21 @@ export default function Home() {
   const loadDashboardData = async () => {
     try {
       setDashboardLoading(true);
+
+      // Check cache first and display immediately for better UX
+      const cachedDashboard = ClientCache.getCachedDashboardData();
+      if (cachedDashboard) {
+        setDashboardData(cachedDashboard);
+        setDashboardLoading(false);
+      }
+
+      // Always fetch fresh data to keep dashboard current
       const response = await fetch('/api/dashboard');
       if (response.ok) {
         const data = await response.json();
         setDashboardData(data);
+        // Cache the fresh dashboard data
+        ClientCache.cacheDashboardData(data);
       }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
