@@ -53,20 +53,19 @@ export default function QuizHistoryPage() {
     try {
       setLoading(true);
 
-      // Check cache first
+      // Check cache first and display it immediately for better UX
       const cachedHistory = ClientCache.getCachedQuizHistory();
       if (cachedHistory) {
-        console.log('Using cached quiz history');
+        console.log('Using cached quiz history as initial data');
         setQuizHistory(cachedHistory);
-        setLoading(false);
-        return;
       }
 
+      // Always fetch fresh data when user visits the page
       const response = await fetch('/api/quiz/sessions');
       if (response.ok) {
         const data: QuizHistoryResponse = await response.json();
         setQuizHistory(data.quizzes);
-        // Cache the quiz history
+        // Cache the fresh quiz history
         ClientCache.cacheQuizHistory(data.quizzes);
       } else {
         setError('Failed to load quiz history');
