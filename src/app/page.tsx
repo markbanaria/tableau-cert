@@ -287,7 +287,7 @@ export default function Home() {
                                 <div className="p-3 border rounded-lg hover:shadow-md transition-shadow">
                                   <div className="flex items-center gap-3">
                                     <div className="flex-1 min-w-0">
-                                      <Link href={`/certifications/${userCert.certification_id}`}>
+                                      <Link href={`/certifications/${userCert.tracks}`}>
                                         <p className="font-medium text-sm truncate hover:underline cursor-pointer">{userCert.name}</p>
                                       </Link>
                                       <p className="text-xs text-muted-foreground truncate">
@@ -295,12 +295,12 @@ export default function Home() {
                                       </p>
                                     </div>
                                     <div className="flex items-center flex-shrink-0 gap-2">
-                                      <Link href={`/certifications/${userCert.certification_id}/quiz`}>
+                                      <Link href={`/certifications/${userCert.tracks}/quiz`}>
                                         <Button size="sm" className="text-xs px-2">
                                           Mock Exam
                                         </Button>
                                       </Link>
-                                      <Link href={`/certifications/${userCert.certification_id}/review`}>
+                                      <Link href={`/certifications/${userCert.tracks}/review`}>
                                         <Button size="sm" variant="outline" className="text-xs px-2">
                                           Review
                                         </Button>
