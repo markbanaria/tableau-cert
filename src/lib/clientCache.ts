@@ -8,11 +8,16 @@ interface CacheItem<T> {
 
 interface QuizResult {
   id: string;
-  score: number;
+  status: string;
+  score: number | null;
+  startedAt: string;
+  completedAt: string | null;
+  timeTaken: number | null;
+  testName: string;
+  totalQuestions: number;
+  correctAnswers: number;
   percentage: number;
-  completedAt: string;
-  timeTaken: number;
-  answers: any[];
+  passed: boolean;
 }
 
 interface QuizHistory {
