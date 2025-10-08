@@ -90,35 +90,50 @@ export async function POST(request: NextRequest) {
       // Use section-based distribution with proportional scaling
       console.log('Using section-based question distribution with proportional scaling');
 
-      // Calculate total questions in the configuration
-      const totalConfigQuestions = testConfig.testSections.reduce(
-        (sum: number, section: any) => sum + section.questionCount,
-        0
-      );
-
-      // Calculate proportional distribution
-      const sectionAllocations = testConfig.testSections.map((testSection: any) => {
-        const proportion = testSection.questionCount / totalConfigQuestions;
-        const allocatedCount = Math.round(proportion * questionCount);
-        return {
-          ...testSection,
-          allocatedCount
-        };
-      });
-
-      // Adjust allocations to exactly match requested count
-      let totalAllocated = sectionAllocations.reduce((sum: number, section: any) => sum + section.allocatedCount, 0);
-      const difference = questionCount - totalAllocated;
-
-      if (difference !== 0) {
-        // Adjust the largest section by the difference
-        const largestSection = sectionAllocations.reduce((max: any, section: any) =>
-          section.allocatedCount > max.allocatedCount ? section : max
+      // Filter test sections if specific sections are requested
+      let sectionsToProcess = testConfig.testSections;
+      if (sectionIds.length > 0) {
+        sectionsToProcess = testConfig.testSections.filter((testSection: any) =>
+          sectionIds.includes(testSection.sectionId)
         );
-        largestSection.allocatedCount += difference;
+        console.log(`Filtering to requested sections: ${sectionIds.join(', ')}`);
+        console.log(`Found ${sectionsToProcess.length} matching sections out of ${testConfig.testSections.length} total`);
       }
 
-      for (const sectionAllocation of sectionAllocations) {
+      // If no matching sections found, fall back to original random selection
+      if (sectionsToProcess.length === 0) {
+        console.log('No matching sections found in test config, falling back to random selection');
+        sectionsToProcess = [];
+      } else {
+        // Calculate total questions in the filtered configuration
+        const totalConfigQuestions = sectionsToProcess.reduce(
+          (sum: number, section: any) => sum + section.questionCount,
+          0
+        );
+
+        // Calculate proportional distribution
+        const sectionAllocations = sectionsToProcess.map((testSection: any) => {
+          const proportion = testSection.questionCount / totalConfigQuestions;
+          const allocatedCount = Math.round(proportion * questionCount);
+          return {
+            ...testSection,
+            allocatedCount
+          };
+        });
+
+        // Adjust allocations to exactly match requested count
+        let totalAllocated = sectionAllocations.reduce((sum: number, section: any) => sum + section.allocatedCount, 0);
+        const difference = questionCount - totalAllocated;
+
+        if (difference !== 0) {
+          // Adjust the largest section by the difference
+          const largestSection = sectionAllocations.reduce((max: any, section: any) =>
+            section.allocatedCount > max.allocatedCount ? section : max
+          );
+          largestSection.allocatedCount += difference;
+        }
+
+        for (const sectionAllocation of sectionAllocations) {
         const sectionWhere = {
           ...where,
           topicQuestions: {
@@ -164,8 +179,12 @@ export async function POST(request: NextRequest) {
         shuffledQuestions.push(...shuffledSectionQuestions);
 
         console.log(`Section "${sectionAllocation.section.name}": ${shuffledSectionQuestions.length}/${sectionAllocation.allocatedCount} questions (${((sectionAllocation.questionCount / totalConfigQuestions) * 100).toFixed(1)}% of total)`);
+        }
       }
-    } else {
+    }
+
+    // If we didn't get questions from section-based distribution, use fallback
+    if (shuffledQuestions.length === 0) {
       // Fallback to original random selection
       console.log('Using fallback random question distribution');
 
