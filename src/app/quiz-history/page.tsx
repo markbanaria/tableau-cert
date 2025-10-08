@@ -49,20 +49,20 @@ export default function QuizHistoryPage() {
     }
   }, [session]);
 
-  const loadQuizHistory = async () => {
+  const loadQuizHistory = async (forceRefresh = false) => {
     try {
       setLoading(true);
 
-      // Check cache first and display it immediately for better UX
+      // Check cache first for instant loading
       const cachedHistory = ClientCache.getCachedQuizHistory();
-      if (cachedHistory) {
+      if (cachedHistory && !forceRefresh) {
         setQuizHistory(cachedHistory);
+        setLoading(false);
+        return;
       }
 
-      // Always fetch fresh data when user visits the page
-      // Add cache busting for production to ensure fresh data
-      const timestamp = Date.now();
-      const response = await fetch(`/api/quiz/sessions?t=${timestamp}`);
+      // Fetch fresh data only if cache is empty or refresh is forced
+      const response = await fetch('/api/quiz/sessions');
       if (response.ok) {
         const data: QuizHistoryResponse = await response.json();
         setQuizHistory(data.quizzes);
@@ -131,7 +131,7 @@ export default function QuizHistoryPage() {
             <CardContent className="pt-6">
               <p className="text-center text-red-600">{error}</p>
               <div className="text-center mt-4">
-                <Button onClick={loadQuizHistory}>Try Again</Button>
+                <Button onClick={() => loadQuizHistory(true)}>Try Again</Button>
               </div>
             </CardContent>
           </Card>
