@@ -10,13 +10,18 @@ export interface QuizQuestion {
     tags?: string[];
     domain?: string;
     domainName?: string;
+    topic?: string;
   };
+  answerIds?: string[]; // For database-backed questions
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export interface QuizData {
   title: string;
   description?: string;
   questions: QuizQuestion[];
+  metadata?: any; // Additional metadata from the API
+  sessionId?: string; // For database quiz session tracking
 }
 
 export interface QuizAnswer {
@@ -40,4 +45,11 @@ export interface QuizResult {
   passed: boolean;
   domainScores?: DomainScore[]; // Optional domain breakdown
   weightedScore?: number; // Optional weighted score (e.g., out of 1000)
+  timeTaken?: number; // Time taken in seconds
+  responses?: Array<{
+    questionId: string;
+    answerId?: string;
+    userAnswer?: string;
+    isCorrect: boolean;
+  }>; // For database session tracking
 }

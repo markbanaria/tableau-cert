@@ -28,6 +28,8 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
   const [result, setResult] = useState<QuizResult | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [showFullDetails, setShowFullDetails] = useState(false);
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [isSaving, setIsSaving] = useState(false);
 
   // Unified answer tracking system - single source of truth
   const [answerMap, setAnswerMap] = useState<Map<string, string>>(new Map());
@@ -39,7 +41,10 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
   useEffect(() => {
     const savedAnswer = answerMap.get(currentQuestion.id);
     setSelectedOption(savedAnswer || '');
-  }, [currentQuestionIndex, currentQuestion.id, answerMap]);
+
+    // Reset showHint when changing questions
+    setShowHint(false);
+  }, [currentQuestionIndex, currentQuestion.id]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
@@ -134,42 +139,108 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
     }));
   };
 
-  const handleNext = () => {
+  const saveQuizSession = async (result: QuizResult): Promise<boolean> => {
+    if (!quizData.sessionId) return true;
+
+    try {
+      const timeTaken = Math.round((new Date().getTime() - startTime.getTime()) / 1000);
+
+      // Prepare response data for database
+      const responses = result.answers.map(answer => {
+        const question = quizData.questions.find(q => q.id === answer.questionId);
+        const isCorrect = question ? question.correctAnswer === answer.selectedOption : false;
+        const answerId = question?.answerIds?.[answer.selectedOption] || null;
+
+        return {
+          questionId: answer.questionId,
+          answerId,
+          userAnswer: question?.options[answer.selectedOption] || null,
+          isCorrect
+        };
+      });
+
+      const response = await fetch('/api/quiz/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          quizId: quizData.sessionId,
+          sessionId: quizData.sessionId,
+          result: {
+            ...result,
+            timeTaken,
+            responses
+          },
+          completedAt: new Date().toISOString()
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save quiz session: ${response.statusText}`);
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Failed to save quiz session:', error);
+      return false;
+    }
+  };
+
+  const handleNext = async () => {
     if (!reviewMode && selectedOption === '') return;
 
     if (!reviewMode && isLastQuestion) {
-      // Generate final answers array from the answer map
-      const finalAnswers: QuizAnswer[] = [];
-      for (const [questionId, answer] of answerMap.entries()) {
-        finalAnswers.push({
-          questionId,
-          selectedOption: parseInt(answer)
-        });
+      setIsSaving(true);
+
+      try {
+        // Generate final answers array from the answer map
+        const finalAnswers: QuizAnswer[] = [];
+        for (const [questionId, answer] of answerMap.entries()) {
+          finalAnswers.push({
+            questionId,
+            selectedOption: parseInt(answer)
+          });
+        }
+
+        const score = finalAnswers.reduce((acc, answer) => {
+          const question = quizData.questions.find(q => q.id === answer.questionId);
+          return question && question.correctAnswer === answer.selectedOption ? acc + 1 : acc;
+        }, 0);
+
+        const domainScores = calculateDomainScores(finalAnswers);
+
+        // Calculate weighted score (out of 1000) based on domain performance
+        // This assumes the quiz follows official domain weightings
+        const weightedScore = Math.round((score / quizData.questions.length) * 1000);
+
+        const timeTaken = Math.round((new Date().getTime() - startTime.getTime()) / 1000);
+
+        const quizResult: QuizResult = {
+          score,
+          totalQuestions: quizData.questions.length,
+          answers: finalAnswers,
+          passed: score >= Math.ceil(quizData.questions.length * 0.7), // 70% pass rate
+          domainScores,
+          weightedScore,
+          timeTaken
+        };
+
+        // Save session to database BEFORE showing results
+        if (quizData.sessionId) {
+          const saveSuccess = await saveQuizSession(quizResult);
+          if (!saveSuccess) {
+            // Still show results even if save failed, but maybe show a warning
+            console.warn('Quiz results may not be saved properly');
+          }
+        }
+
+        setResult(quizResult);
+        setIsComplete(true);
+        onComplete?.(quizResult);
+      } finally {
+        setIsSaving(false);
       }
-
-      const score = finalAnswers.reduce((acc, answer) => {
-        const question = quizData.questions.find(q => q.id === answer.questionId);
-        return question && question.correctAnswer === answer.selectedOption ? acc + 1 : acc;
-      }, 0);
-
-      const domainScores = calculateDomainScores(finalAnswers);
-
-      // Calculate weighted score (out of 1000) based on domain performance
-      // This assumes the quiz follows official domain weightings
-      const weightedScore = Math.round((score / quizData.questions.length) * 1000);
-
-      const quizResult: QuizResult = {
-        score,
-        totalQuestions: quizData.questions.length,
-        answers: finalAnswers,
-        passed: score >= Math.ceil(quizData.questions.length * 0.7), // 70% pass rate
-        domainScores,
-        weightedScore
-      };
-
-      setResult(quizResult);
-      setIsComplete(true);
-      onComplete?.(quizResult);
       return;
     }
 
@@ -212,6 +283,7 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
     setResult(null);
     setAnswerMap(new Map());
     setShowFullDetails(false);
+    setStartTime(new Date());
   };
 
   const handleDownloadPDF = () => {
@@ -678,17 +750,36 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
 
           <Button
             onClick={handleNext}
-            disabled={!reviewMode && selectedOption === ''}
+            disabled={(!reviewMode && selectedOption === '') || isSaving}
             className={reviewMode ? 'bg-review hover:bg-review/90 text-white' : ''}
           >
-            {currentQuestionIndex === quizData.questions.length - 1
-              ? reviewMode ? 'Finish Review' : 'Finish'
-              : 'Next'
-            }
+            {isSaving ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Saving results...
+              </div>
+            ) : (
+              currentQuestionIndex === quizData.questions.length - 1
+                ? reviewMode ? 'Finish Review' : 'Finish'
+                : 'Next'
+            )}
           </Button>
         </CardFooter>
       </Card>
       </div>
+
+      {/* Loading Overlay */}
+      {isSaving && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg shadow-2xl flex items-center gap-4 max-w-md mx-4">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <div>
+              <div className="text-lg font-semibold">Saving your quiz results...</div>
+              <div className="text-sm text-gray-600 mt-1">Please wait while we save your answers</div>
+            </div>
+          </div>
+        </div>
+      )}
     </TooltipProvider>
   );
 }

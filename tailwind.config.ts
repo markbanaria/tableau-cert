@@ -61,6 +61,16 @@ const config: Config = {
           light: "var(--review-light)",
           border: "var(--review-border)",
         },
+        passed: {
+          DEFAULT: "var(--passed)",
+          light: "var(--passed-light)",
+          border: "var(--passed-border)",
+        },
+        failed: {
+          DEFAULT: "var(--failed)",
+          light: "var(--failed-light)",
+          border: "var(--failed-border)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -69,6 +79,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-plus-jakarta-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-ibm-plex-mono)", "monospace"],
       },
       fontSize: {
         'body': '14px',
