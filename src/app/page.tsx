@@ -277,7 +277,7 @@ export default function Home() {
                 <div className="order-1 lg:order-2">
                   <Card className="shadow-none">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
+                      <CardTitle className="flex items-center mt-2">
                         <PlayIcon className="h-5 w-5" />
                         {dashboardData.userCertifications && dashboardData.userCertifications.length > 0
                           ? 'My Certifications'
@@ -297,26 +297,26 @@ export default function Home() {
                             {dashboardData.userCertifications.map((userCert) => (
                               <div key={userCert.user_certification_id} className="group">
                                 <div className="p-3 border rounded-lg">
-                                  <div className="flex items-center gap-3">
+                                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                     <div className="flex-1 min-w-0">
                                       <Link href={`/certifications/${userCert.tracks}`}>
                                         <p className="font-medium text-sm truncate hover:underline cursor-pointer">{userCert.name}</p>
                                       </Link>
-                                      <div className="flex items-center gap-2">
+                                      <div className="flex items-center mt-1 mb-2">
                                         <p className="text-xs text-muted-foreground">{userCert.level}</p>
                                         <Badge variant={userCert.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
                                           {userCert.status === 'completed' ? 'Completed' : 'In Progress'}
                                         </Badge>
                                       </div>
                                     </div>
-                                    <div className="flex items-center flex-shrink-0 gap-2">
-                                      <Link href={`/certifications/${userCert.tracks}/quiz`}>
-                                        <Button size="sm" className="text-xs px-2">
+                                    <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-shrink-0">
+                                      <Link href={`/certifications/${userCert.tracks}/quiz`} className="flex-1 sm:flex-initial">
+                                        <Button size="sm" className="text-xs px-2 w-full sm:w-auto">
                                           Mock Exam
                                         </Button>
                                       </Link>
-                                      <Link href={`/certifications/${userCert.tracks}/review`}>
-                                        <Button size="sm" className="text-xs px-2 bg-review hover:bg-review/90 text-white shadow-none">
+                                      <Link href={`/certifications/${userCert.tracks}/review`} className="flex-1 sm:flex-initial">
+                                        <Button size="sm" className="text-xs px-2 bg-review hover:bg-review/90 text-white shadow-none w-full sm:w-auto">
                                           Review
                                         </Button>
                                       </Link>
