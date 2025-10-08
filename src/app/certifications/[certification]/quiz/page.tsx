@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { ClientCache } from '@/lib/clientCache';
 import Link from 'next/link';
 import Quiz from '@/components/Quiz';
 import { QuizData, QuizResult } from '@/types/quiz';
@@ -14,6 +15,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
 import { quizApi, QuizOptions } from '@/services/quizApi';
+import { useQuizPreloader } from '@/hooks/usePreloader';
 
 export default function CertificationQuizPage() {
   const { data: session, status } = useSession();
@@ -41,6 +43,9 @@ export default function CertificationQuizPage() {
     description: '',
     domains: [] as Array<{ id: string; name: string; weight: number }>
   });
+
+  // Preload quiz data for this certification
+  useQuizPreloader(certificationSlug);
 
   useEffect(() => {
     if (status !== 'loading' && !session?.user) {
@@ -111,9 +116,20 @@ export default function CertificationQuizPage() {
     try {
       setLoadingOptions(true);
       setLoadingMessage('Fetching exam options from database...');
-      const options = await quizApi.getQuizOptions();
-      setQuizOptions(options);
-      setLoadingMessage('Ready!');
+
+      // Check cache first
+      const cachedOptions = ClientCache.getCachedQuizOptions(certificationSlug);
+      if (cachedOptions) {
+        console.log('Using cached quiz options');
+        setQuizOptions(cachedOptions);
+        setLoadingMessage('Ready!');
+      } else {
+        const options = await quizApi.getQuizOptions();
+        setQuizOptions(options);
+        // Cache the options
+        ClientCache.cacheQuizOptions(certificationSlug, options);
+        setLoadingMessage('Ready!');
+      }
     } catch (error) {
       console.error('Failed to load quiz options:', error);
       setLoadingMessage('Failed to load quiz options');

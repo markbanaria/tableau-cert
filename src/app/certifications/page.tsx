@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { ClientCache } from '@/lib/clientCache';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +12,7 @@ import { getQuizSampler } from '@/services/quizSampler';
 import { LoadingState } from '@/components/QuestionBankLoader';
 import MainLayout from '@/components/layout/main-layout';
 import CertificationCard from '@/components/ui/certification-card';
+import { usePreloader } from '@/hooks/usePreloader';
 
 interface Certification {
   id: string;
@@ -61,29 +63,40 @@ export default function CertificationsPage() {
   const [samplerReady, setSamplerReady] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('Loading certification data...');
 
+  // Preload quiz data for authenticated users
+  usePreloader();
+
   useEffect(() => {
     initializeCertificationData();
   }, []);
 
   const initializeCertificationData = async () => {
     try {
-      // First, fetch certifications from database
+      // Check for cached certifications first
       setLoadingMessage('Loading certifications...');
       let dbCertifications: Certification[] = [];
 
-      try {
-        const response = await fetch('/api/certifications');
-        if (response.ok) {
-          const data = await response.json();
-          dbCertifications = data.certifications.map((cert: any) => ({
-            ...cert,
-            sections: cert.sections || []
-          }));
-        } else {
-          throw new Error('Failed to fetch certifications');
+      const cachedCertifications = ClientCache.getCachedCertifications();
+      if (cachedCertifications) {
+        console.log('Using cached certifications');
+        dbCertifications = cachedCertifications;
+      } else {
+        try {
+          const response = await fetch('/api/certifications');
+          if (response.ok) {
+            const data = await response.json();
+            dbCertifications = data.certifications.map((cert: any) => ({
+              ...cert,
+              sections: cert.sections || []
+            }));
+            // Cache the certifications
+            ClientCache.cacheCertifications(dbCertifications);
+          } else {
+            throw new Error('Failed to fetch certifications');
+          }
+        } catch (error) {
+          console.warn('Using fallback certification data:', error);
         }
-      } catch (error) {
-        console.warn('Using fallback certification data:', error);
       }
 
       setCertifications(dbCertifications);

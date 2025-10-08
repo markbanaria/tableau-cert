@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { ClientCache } from '@/lib/clientCache';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -51,10 +52,22 @@ export default function QuizHistoryPage() {
   const loadQuizHistory = async () => {
     try {
       setLoading(true);
+
+      // Check cache first
+      const cachedHistory = ClientCache.getCachedQuizHistory();
+      if (cachedHistory) {
+        console.log('Using cached quiz history');
+        setQuizHistory(cachedHistory);
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch('/api/quiz/sessions');
       if (response.ok) {
         const data: QuizHistoryResponse = await response.json();
         setQuizHistory(data.quizzes);
+        // Cache the quiz history
+        ClientCache.cacheQuizHistory(data.quizzes);
       } else {
         setError('Failed to load quiz history');
       }
