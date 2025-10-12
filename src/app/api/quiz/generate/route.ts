@@ -146,18 +146,18 @@ export async function POST(request: NextRequest) {
     if (topicIds.length > 0) {
       console.log(`Specific topics selected: ${topicIds.length} topics, using direct topic filtering`);
       // Fall through to the simple random selection logic below
-    } else if (testConfig && testConfig.testSections.length > 0) {
+    } else if (testConfig && (testConfig as any).testSections?.length > 0) {
       // Use section-based distribution with proportional scaling
       console.log('Using section-based question distribution with proportional scaling');
 
       // Filter test sections if specific sections are requested
-      let sectionsToProcess = testConfig.testSections;
+      let sectionsToProcess = (testConfig as any).testSections;
       if (sectionIds.length > 0) {
-        sectionsToProcess = testConfig.testSections.filter((testSection: any) =>
+        sectionsToProcess = (testConfig as any).testSections.filter((testSection: any) =>
           sectionIds.includes(testSection.sectionId)
         );
         console.log(`Filtering to requested sections: ${sectionIds.join(', ')}`);
-        console.log(`Found ${sectionsToProcess.length} matching sections out of ${testConfig.testSections.length} total`);
+        console.log(`Found ${sectionsToProcess.length} matching sections out of ${(testConfig as any).testSections.length} total`);
       }
 
       // If no matching sections found, fall back to original random selection
@@ -520,7 +520,7 @@ export async function GET(request: NextRequest) {
       topics: topics.map(topic => ({
         id: topic.id,
         name: topic.name,
-        questionCount: topic._count.topicQuestions
+        questionCount: (topic as any)._count.topicQuestions
       })),
       sections: sectionsWithCounts,
       questionTypes: ['multiple_choice', 'Object Manager and Lightning App Builder'],
