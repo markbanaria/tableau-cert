@@ -119,7 +119,8 @@ export default function CertificationReviewPage() {
 
       const quizData = await quizApi.generateQuiz({
         questionCount: randomCount,
-        difficultyLevel: 'mixed'
+        difficultyLevel: 'mixed',
+        certification: certificationSlug
       });
 
       // Add session ID to quiz data for tracking
@@ -174,7 +175,8 @@ export default function CertificationReviewPage() {
         sectionIds: selectedTopics.length > 0 ? undefined : (selectedSections.length > 0 ? selectedSections : undefined),
         topicIds: selectedTopics.length > 0 ? selectedTopics : undefined,
         difficultyLevel: selectedDifficulty,
-        questionCount: targetedCount
+        questionCount: targetedCount,
+        certification: certificationSlug
       });
 
       // Add session ID to quiz data for tracking

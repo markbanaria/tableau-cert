@@ -18,7 +18,7 @@ interface Certification {
   color?: string;
   icon: string;
   status: 'available' | 'coming_soon' | 'beta';
-  sections?: Array<{ name: string; id: string }>;
+  sections?: Array<{ name: string; id: string; questionCount?: number }>;
 }
 
 interface CertificationCardProps {
@@ -104,11 +104,6 @@ export default function CertificationCard({ certification, fullWidth = false }: 
                 <span className={`text-sm font-bold ${!isAvailable ? 'text-neutral-400' : ''}`}>Practice Questions Available</span>
                 <span className={`text-sm font-bold ${!isAvailable ? 'text-neutral-400' : ''}`}>{certification.availableQuestions}</span>
               </div>
-              {certification.coverage > 0 && (
-                <div className={`text-xs mt-1 ${!isAvailable ? 'text-neutral-400' : 'text-muted-foreground'}`}>
-                  {certification.coverage}% domain coverage
-                </div>
-              )}
             </div>
           )}
 

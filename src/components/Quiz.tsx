@@ -38,14 +38,27 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
   const currentQuestion = quizData.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quizData.questions.length - 1;
 
+  // Debug logging
+  console.log('Quiz Debug:', {
+    questionsLength: quizData.questions.length,
+    currentQuestionIndex,
+    isLastQuestion,
+    isComplete,
+    hasResult: !!result,
+    currentQuestion: currentQuestion ? 'exists' : 'undefined',
+    reviewMode
+  });
+
   // Restore selected option when question changes
   useEffect(() => {
-    const savedAnswer = answerMap.get(currentQuestion.id);
-    setSelectedOption(savedAnswer || '');
+    if (currentQuestion) {
+      const savedAnswer = answerMap.get(currentQuestion.id);
+      setSelectedOption(savedAnswer || '');
+    }
 
     // Reset showHint when changing questions
     setShowHint(false);
-  }, [currentQuestionIndex, currentQuestion.id]);
+  }, [currentQuestionIndex, currentQuestion?.id]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
@@ -299,6 +312,48 @@ export default function Quiz({ quizData, onComplete, reviewMode = false, onBack,
   const handleGoHome = () => {
     router.push('/');
   };
+
+  // Don't render if there are no questions
+  if (!quizData.questions || quizData.questions.length === 0) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">No Questions Available</CardTitle>
+          <CardDescription>
+            No questions were found for the selected criteria. Please try different filters.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-center">
+          {onBack && (
+            <Button onClick={onBack} variant="outline">
+              {backLabel || 'Back'}
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Don't render if current question is undefined
+  if (!currentQuestion) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Question Not Found</CardTitle>
+          <CardDescription>
+            The current question could not be loaded. Please try again.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-center">
+          {onBack && (
+            <Button onClick={onBack} variant="outline">
+              {backLabel || 'Back'}
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (isComplete && result) {
     return (

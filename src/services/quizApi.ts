@@ -19,6 +19,7 @@ export interface QuizGenerationRequest {
   difficultyLevel?: number | 'mixed';
   questionCount?: number;
   questionTypes?: string[];
+  certification?: string;
 }
 
 export interface QuizGenerationResponse {
@@ -88,7 +89,12 @@ class QuizApiService {
 
   async generateQuiz(options: QuizGenerationRequest): Promise<QuizData> {
     try {
-      const response = await fetch(`${this.baseUrl}/generate`, {
+      // Add certification parameter to URL if provided
+      const url = options.certification
+        ? `${this.baseUrl}/generate?certification=${options.certification}`
+        : `${this.baseUrl}/generate`;
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,11 +134,24 @@ class QuizApiService {
         };
       });
 
-      return {
+      const quizData = {
         title: this.generateQuizTitle(options, data.metadata),
         questions,
         metadata: data.metadata
       };
+
+      console.log('QuizAPI Debug:', {
+        title: quizData.title,
+        questionCount: questions.length,
+        firstQuestion: questions[0] ? {
+          id: questions[0].id,
+          question: questions[0].question.substring(0, 50) + '...',
+          optionsCount: questions[0].options.length
+        } : 'none',
+        options
+      });
+
+      return quizData;
     } catch (error) {
       console.error('Error generating quiz:', error);
       throw error;

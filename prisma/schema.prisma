@@ -196,12 +196,19 @@ model Certification {
   name               String
   description        String?
   tracks             String?
+  vendor             String?
+  level              String?
+  color              String?
+  icon               String?
+  status             String?             @default("available")
   createdAt          DateTime            @default(now()) @map("created_at")
   updatedAt          DateTime            @updatedAt @map("updated_at")
   certificationTests CertificationTest[]
 
   @@index([name])
   @@index([tracks])
+  @@index([vendor])
+  @@index([status])
   @@map("certifications")
   @@schema("public")
 }

@@ -29,7 +29,7 @@ interface Certification {
   color: string;
   icon: string;
   status: 'available' | 'coming_soon' | 'beta';
-  sections?: Array<{ name: string; id: string }>;
+  sections?: Array<{ name: string; id: string; questionCount?: number }>;
 }
 
 const STATUS_CONFIG = {
@@ -99,32 +99,21 @@ export default function CertificationsPage() {
         }
       }
 
-      setCertifications(dbCertifications);
-
-      // Then load question bank data
-      const quizSampler = getQuizSampler();
-
-      await quizSampler.loadQuestionBanks((loaded, total, message) => {
-        setLoadingMessage(message);
+      // Sort certifications with available ones first
+      const sortedCertifications = dbCertifications.sort((a, b) => {
+        if (a.status === 'available' && b.status !== 'available') return -1;
+        if (a.status !== 'available' && b.status === 'available') return 1;
+        return a.name.localeCompare(b.name);
       });
+      setCertifications(sortedCertifications);
 
-      // Get stats for Tableau Consultant certification
-      const stats = quizSampler.getQuestionBankStats();
-      const coverage = await quizSampler.getDomainCoverage('tableau-consultant');
-      const totalQuestions = Object.values(stats).reduce((sum, stat) => sum + stat.questionCount, 0);
-
-      // Calculate average coverage
-      const totalCoverage = Object.values(coverage).reduce((sum, data: any) => sum + data.coveragePercentage, 0);
-      const avgCoverage = Math.round(totalCoverage / Object.keys(coverage).length);
-
-      // Update certification data with question bank stats
-      setCertifications(prev =>
-        prev.map(cert =>
-          cert.id === 'tableau-consultant'
-            ? { ...cert, availableQuestions: totalQuestions, coverage: avgCoverage }
-            : cert
-        )
-      );
+      // Load question bank data for authenticated users (but don't override API data)
+      if (session?.user) {
+        const quizSampler = getQuizSampler();
+        await quizSampler.loadQuestionBanks((loaded, total, message) => {
+          setLoadingMessage(message);
+        });
+      }
 
       setSamplerReady(true);
     } catch (error) {

@@ -13,6 +13,7 @@ interface QuizGenerationRequest {
   questionCount?: number
   questionTypes?: string[]
   userId?: string
+  certification?: string
 }
 
 export async function POST(request: NextRequest) {
@@ -20,13 +21,18 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession()
     const body: QuizGenerationRequest = await request.json()
 
+    // Get certification from URL parameter if not in body
+    const { searchParams } = new URL(request.url);
+    const certificationFromUrl = searchParams.get('certification');
+
     const {
       topicIds = [],
       sectionIds = [],
       difficultyLevel = 'mixed',
       questionCount = 10,
-      questionTypes = ['multiple_choice'],
-      userId = (session?.user as any)?.id
+      questionTypes = ['multiple_choice', 'Object Manager and Lightning App Builder'],
+      userId = (session?.user as any)?.id,
+      certification = certificationFromUrl
     } = body
 
     // Validate inputs
@@ -44,8 +50,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Add topic or section filters
+    // Add hierarchical topic and section filters
     if (topicIds.length > 0) {
+      // If topics are specified, filter by those topics
+      // If sections are also specified, the topics should already be filtered to those sections by the frontend
       where.topicQuestions = {
         some: {
           topicId: {
@@ -54,6 +62,7 @@ export async function POST(request: NextRequest) {
         }
       }
     } else if (sectionIds.length > 0) {
+      // If only sections are specified (no topics), filter by sections
       where.topicQuestions = {
         some: {
           topic: {
@@ -61,6 +70,33 @@ export async function POST(request: NextRequest) {
               some: {
                 sectionId: {
                   in: sectionIds
+                }
+              }
+            }
+          }
+        }
+      }
+    } else if (certification) {
+      // When no specific topics/sections but certification is specified, filter by certification
+      where.topicQuestions = {
+        some: {
+          topic: {
+            sectionTopics: {
+              some: {
+                section: {
+                  testSections: {
+                    some: {
+                      test: {
+                        certificationTests: {
+                          some: {
+                            certification: {
+                              tracks: certification
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -75,8 +111,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get test configuration for section-based distribution
-    const testConfig = await prisma.test.findFirst({
-      where: { name: 'Tableau Consultant Exam' },
+    let testConfigQuery: any = {
       include: {
         testSections: {
           include: {
@@ -84,11 +119,34 @@ export async function POST(request: NextRequest) {
           }
         }
       }
-    });
+    };
+
+    if (certification) {
+      // Filter by certification
+      testConfigQuery.where = {
+        certificationTests: {
+          some: {
+            certification: {
+              tracks: certification
+            }
+          }
+        }
+      };
+    } else {
+      // Fallback to the first test (for backward compatibility)
+      testConfigQuery.where = { name: 'Tableau Consultant Exam' };
+    }
+
+    const testConfig = await prisma.test.findFirst(testConfigQuery);
 
     let shuffledQuestions: any[] = [];
 
-    if (testConfig && testConfig.testSections.length > 0) {
+    // Skip section-based distribution if specific topics are selected
+    // When topics are selected, use simple random selection from those topics
+    if (topicIds.length > 0) {
+      console.log(`Specific topics selected: ${topicIds.length} topics, using direct topic filtering`);
+      // Fall through to the simple random selection logic below
+    } else if (testConfig && testConfig.testSections.length > 0) {
       // Use section-based distribution with proportional scaling
       console.log('Using section-based question distribution with proportional scaling');
 
@@ -385,19 +443,46 @@ const getCachedQuizOptions = unstable_cache(
     }
 
     // Return available quiz generation options
-    const [topics, sections] = await Promise.all([
-      prisma.topic.findMany({
-        select: {
-          id: true,
-          name: true,
-          _count: {
-            select: {
-              topicQuestions: true
+    let topicsQuery: any = {
+      select: {
+        id: true,
+        name: true,
+        _count: {
+          select: {
+            topicQuestions: true
+          }
+        }
+      },
+      orderBy: { name: 'asc' }
+    };
+
+    if (certification) {
+      // Filter topics that belong to the specified certification
+      topicsQuery.where = {
+        sectionTopics: {
+          some: {
+            section: {
+              testSections: {
+                some: {
+                  test: {
+                    certificationTests: {
+                      some: {
+                        certification: {
+                          tracks: certification
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
-        },
-        orderBy: { name: 'asc' }
-      }),
+        }
+      };
+    }
+
+    const [topics, sections] = await Promise.all([
+      prisma.topic.findMany(topicsQuery),
       prisma.section.findMany(sectionsQuery)
     ]);
 
@@ -438,7 +523,7 @@ export async function GET(request: NextRequest) {
         questionCount: topic._count.topicQuestions
       })),
       sections: sectionsWithCounts,
-      questionTypes: ['multiple_choice'],
+      questionTypes: ['multiple_choice', 'Object Manager and Lightning App Builder'],
       difficultyLevels: [
         { value: 1, label: 'Beginner', description: 'Basic concepts and terminology' },
         { value: 3, label: 'Intermediate', description: 'Practical application and analysis' },
